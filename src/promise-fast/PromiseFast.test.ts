@@ -1,5 +1,6 @@
 import {PromiseFast} from './PromiseFast'
 import {createTestVariants} from '@flemist/test-variants'
+import {rejectAsResolve} from 'src/custom-promise/rejectAsResolve'
 
 enum CompleteType {
   resolvedCreate = 'resolvedCreate',
@@ -38,29 +39,55 @@ describe('promise-fast > PromiseFast', function () {
     _finally: CallbackType,
   }) {
     const results: string[] = []
-    let resolve: (value: string|Promise<string>) => void
-    let reject: (value: string|Promise<string>) => void
-    let promise: Promise<string> = new Prom iseClass((_resolve, _reject) => {
-      resolve = (value: string) => {
-        _resolve(value)
-        _reject('ERROR')
-        _resolve('ERROR')
-        results.push('resolved: ' + value)
+    let resolve: (value: string | Promise<string>) => void
+    let reject: (value: string | Promise<string>) => void
+    let promise: Promise<string>
+
+    function createPromiseRejected(reason: string): Promise<string> {
+      if (PromiseClass === Promise) {
+        return new PromiseClass((_resolve) => {
+          rejectAsResolve(_resolve, reason)
+        })
       }
-      reject = (value: string) => {
-        _reject(value)
-        _resolve('ERROR')
-        _reject('ERROR')
-        results.push('rejected: ' + value)
-      }
-      results.push('executor')
-      if (completeType === CompleteType.resolvedInExecutor) {
-        resolve(completeType)
-      }
-      else if (completeType === CompleteType.rejectedInExecutor) {
-        reject(completeType)
-      }
-    })
+      return PromiseClass.reject(reason)
+    }
+
+    if (completeType === CompleteType.resolvedCreate) {
+      promise = PromiseClass.resolve(completeType + ' => resolved')
+    }
+    else if (completeType === CompleteType.rejectedCreate) {
+      promise = createPromiseRejected(completeType + ' => rejected')
+    }
+    else {
+      promise = new PromiseClass((_resolve, _reject) => {
+        const __reject = PromiseClass === Promise
+          ? (reason) => {
+            rejectAsResolve(_resolve, reason)
+          }
+          : _reject
+        // const __reject = _reject
+
+        resolve = (value: string) => {
+          results.push(value + ' => resolved')
+          _resolve(value)
+          __reject('ERROR')
+          _resolve('ERROR')
+        }
+        reject = (value: string) => {
+          results.push(value + ' => rejected')
+          __reject(value)
+          _resolve('ERROR')
+          __reject('ERROR')
+        }
+        results.push('executor')
+        if (completeType === CompleteType.resolvedInExecutor) {
+          resolve(completeType)
+        }
+        else if (completeType === CompleteType.rejectedInExecutor) {
+          reject(completeType)
+        }
+      })
+    }
 
     if (completeType === CompleteType.resolvedBeforeThen) {
       resolve(completeType)
@@ -68,26 +95,35 @@ describe('promise-fast > PromiseFast', function () {
     else if (completeType === CompleteType.rejectedBeforeThen) {
       reject(completeType)
     }
-    
+
     function createCallback(name: string, type: CallbackType) {
       switch (type) {
+        case null:
         case CallbackType.null:
           return null
         case CallbackType.value:
           return (value) => {
-            results.push(`${name}: ${value}`)
+            const result = `${value} => ${name}`
+            results.push(result)
+            return result
           }
         case CallbackType.throw:
           return (value) => {
-            throw `${name}: ${value}`
+            const result = `${value} => ${name} => throw`
+            results.push(result)
+            throw result
           }
         case CallbackType.promise:
           return (value) => {
-            PromiseClass.resolve(`${name}: ${value}`)
+            const result = `${value} => ${name} => resolve`
+            results.push(result)
+            return PromiseClass.resolve(result)
           }
         case CallbackType.promiseRejected:
           return (value) => {
-            PromiseClass.reject(`${name}: ${value}`)
+            const result = `${value} => ${name} => reject`
+            results.push(result)
+            return createPromiseRejected(result)
           }
         default:
           throw new Error('Unknown CallbackType: ' + type)
@@ -95,11 +131,13 @@ describe('promise-fast > PromiseFast', function () {
     }
 
     const nextPromises: Promise<any>[] = []
+
     function addNextPromise(nextPromise: Promise<any>) {
       assert.notStrictEqual(nextPromise, promise)
       assert.strictEqual(nextPromise.constructor, promise.constructor)
       nextPromises.push(nextPromise)
     }
+
     if (thenFulfilled || thenRejected) {
       addNextPromise(promise.then(
         createCallback('promise.then onfulfilled', thenFulfilled),
@@ -120,47 +158,67 @@ describe('promise-fast > PromiseFast', function () {
     for (let i = 0, len = nextPromises.length; i < len; i++) {
       nextPromises[i] = nextPromises[i].then(
         (value) => {
-          results.push('next promise.then onfulfilled:' + value)
+          results.push(`${value} => next promise.then onfulfilled ${i}`)
         },
         (value) => {
-          results.push('next promise.then onrejected:' + value)
+          results.push(`${value} => next promise.then onrejected ${i}`)
           throw value
         },
       )
     }
-    
+
     if (completeType === CompleteType.resolvedAfterThen) {
       resolve(completeType)
     }
     else if (completeType === CompleteType.rejectedAfterThen) {
       reject(completeType)
     }
-    
-    try {
-      let value = await promise
-      results.push('await promise: ' + value)
-    }
-    catch (err) {
-      results.push('await promise catch: ' + err)
+
+    for (let i = 0; i < 10; i++) {
+      await Promise.resolve().then(() => {
+      })
     }
 
     for (let i = 0, len = nextPromises.length; i < len; i++) {
       try {
         let value = await nextPromises[i]
-        results.push('await next promise: ' + value)
+        results.push(`${value} => await next promise ${i}`)
       }
       catch (err) {
-        results.push('await next promise catch: ' + err)
+        results.push(`${err} => await next promise catch ${i}`)
       }
     }
 
+    try {
+      let value = await promise
+      results.push(value + ' => await promise')
+    }
+    catch (err) {
+      results.push(err + ' => await promise catch')
+    }
+
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {})
+      await Promise.resolve().then(() => {
+      })
     }
 
     return results
   }
-  
+
+  function usingTimeout<TArgs extends any[], TResult>(
+    timeout: number,
+    func: (...args: TArgs) => TResult|Promise<TResult>,
+  ): ((...args: TArgs) => Promise<TResult>) {
+    return function (...args) {
+      return Promise.race<TResult>([
+        Promise.resolve().then(() => func.call(this, ...args)),
+        new Promise((resolve, reject) => {
+          setTimeout(reject, timeout)
+        }),
+      ])
+    } as any
+  }
+
   const testVariants = createTestVariants(async ({
     completeType,
     thenFulfilled,
@@ -174,13 +232,13 @@ describe('promise-fast > PromiseFast', function () {
     _catch: CallbackType,
     _finally: CallbackType,
   }) => {
-    console.log({
-      completeType,
-      thenFulfilled,
-      thenRejected,
-      _catch,
-      _finally,
-    })
+    // console.log({
+    //   completeType,
+    //   thenFulfilled,
+    //   thenRejected,
+    //   _catch,
+    //   _finally,
+    // })
 
     const results: string[] = await calcBehavior({
       PromiseClass: PromiseFast as any,
@@ -200,18 +258,42 @@ describe('promise-fast > PromiseFast', function () {
       _finally,
     })
 
-    assert.deepStrictEqual(results, checkResults)
+    assert.deepStrictEqual(
+      results.sort(),
+      checkResults.sort(),
+    )
   })
-  
+
+
+  const completeTypes = [
+    CompleteType.resolvedCreate,
+    CompleteType.resolvedInExecutor,
+    CompleteType.resolvedBeforeThen,
+    CompleteType.resolvedAfterThen,
+
+    CompleteType.rejectedCreate,
+    CompleteType.rejectedInExecutor,
+    CompleteType.rejectedBeforeThen,
+    CompleteType.rejectedAfterThen,
+  ]
+
+  const callbackTypes = [
+    CallbackType.null,
+    CallbackType.value,
+    CallbackType.throw,
+    CallbackType.promise,
+    CallbackType.promiseRejected,
+  ]
+
   it('base', async function () {
     this.timeout(600000)
 
     await testVariants({
-      completeType : Object.values(CompleteType),
-      thenFulfilled: Object.values(CallbackType),
-      thenRejected : Object.values(CallbackType),
-      _catch       : Object.values(CallbackType),
-      _finally     : Object.values(CallbackType),
+      completeType : completeTypes,
+      thenFulfilled: [null, ...callbackTypes],
+      thenRejected : [null, ...callbackTypes],
+      _catch       : [null, ...callbackTypes],
+      _finally     : [null, CallbackType.null, CallbackType.value, CallbackType.throw],
     })()
   })
 })

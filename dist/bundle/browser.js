@@ -1,67 +1,78 @@
-!function(e){"use strict";function t(e,t){
-var n="function"==typeof Symbol&&e[Symbol.iterator]
-;if(!n)return e;var r,s,i=n.call(e),o=[];try{
-for(;(void 0===t||t-- >0)&&!(r=i.next()).done;)o.push(r.value)
-}catch(e){s={error:e}}finally{try{
-r&&!r.done&&(n=i.return)&&n.call(i)}finally{
-if(s)throw s.error}}return o}function n(e){
-return null!=e&&"object"==typeof e&&"function"==typeof e.then
-}function r(e,t,n){try{var r=t?t(e):e;n.resolve(r)
-}catch(e){n.reject(e)}}var s=function(){
-function e(e){var t=this
-;this.status="pending",this.value=void 0,this.reason=void 0,
-this._handlers=null
-;var n=this.resolve,r=this.reject,s=this._resolveAsync,i=this._rejectAsync
-;this.resolve=function(e){n.call(t,e)
-},this.reject=function(e){r.call(t,e)
-},this._resolveAsync=function(e){s.call(t,e)
-},this._rejectAsync=function(e){i.call(t,e)
-},e&&e(this.resolve,this.reject)}
-return e.prototype.resolve=function(e){
+!function(t){"use strict";function e(t,e){
+var n="function"==typeof Symbol&&t[Symbol.iterator]
+;if(!n)return t;var r,i,o=n.call(t),s=[];try{
+for(;(void 0===e||e-- >0)&&!(r=o.next()).done;)s.push(r.value)
+}catch(t){i={error:t}}finally{try{
+r&&!r.done&&(n=o.return)&&n.call(o)}finally{
+if(i)throw i.error}}return s}function n(t){
+return null!=t&&"object"==typeof t&&"function"==typeof t.then
+}function r(t,e,n){try{var r=e?e(t):t
+;n._resolve(r)}catch(t){n._reject(t)}}
+function i(t,e,n){e||n._reject(t);try{var r=e(t)
+;n._resolve(r)}catch(t){n._reject(t)}}
+var o=function(){},s=function(){function t(t){
+var e=this
+;this.status="pending",this.value=void 0,this.reason=void 0,this._handlers=null
+;var n=this._resolve,r=this._reject,i=this._resolveAsync,o=this._rejectAsync
+;this._resolve=function(t){n.call(e,t)
+},this._reject=function(t){r.call(e,t)
+},this._resolveAsync=function(t){i.call(e,t)
+},this._rejectAsync=function(t){o.call(e,t)
+},t(this._resolve,this._reject)}
+return t.prototype._resolve=function(t){
 "pending"===this.status&&(this.status="fulfilled",
-this._resolveAsync(e))
-},e.prototype._resolveAsync=function(e){
-n(e)?e.then(this._resolveAsync,this._rejectAsync):this._resolve(e)
-},e.prototype._resolve=function(e){
-var n=this._handlers
-;if(this._handlers=null,this.value=e,n)for(var s=0,i=n.length;s<i;s++){
-var o=t(n[s],3);r(e,o[0],o[2])}
-},e.prototype.reject=function(e){
-"pending"===this.status&&(this.status="rejected",
-this._rejectAsync(e))
-},e.prototype._rejectAsync=function(e){
-n(e)?e.then(this._resolveAsync,this._rejectAsync):this._resolve(e)
-},e.prototype._reject=function(e){
-var n=this._handlers
-;if(this._handlers=null,this.reason=e,n)for(var s=0,i=n.length;s<i;s++){
-var o=t(n[s],3);r(e,o[1],o[2])}
-},e.prototype.then=function(t,n){var s=new e
-;return"pending"===this.status?this._handlers.push([t,n,s]):"fulfilled"===this.status?function(e,t,n){
-try{var r=t?t(e):e;n.resolve(r)}catch(e){
-n.reject(e)}}(this.value,t,s):r(this.value,n,s),s
-},e.prototype.catch=function(e){
-return this.then(void 0,e)},e.resolve=function(t){
-var n=new e;return n.resolve(t),n
-},e.reject=function(t){var n=new e
-;return n.reject(t),n},e}();global.Promise=s
-;var i=function(){},o=function(e){var t,n
-;if(e&&e.aborted)this.promise=Promise.reject(e.reason),
-this.resolve=i,this.reject=i;else if(this.promise=new Promise((function(e,r){
-t=e,n=r})),e){var r=e.subscribe((function(e){n(e)
-}));this.resolve=function(e){r(),t(e)
-},this.reject=function(e){r(),n(e)}
-}else this.resolve=t,this.reject=n}
-;const c=setTimeout,u=clearTimeout,l={
+this._resolveAsync(t))
+},t.prototype._resolveAsync=function(t){
+n(t)?t.then(this._resolveAsync,this._rejectAsync):this._resolveSync(t)
+},t.prototype._resolveSync=function(t){
+var n=this._handlers;if(this.value=t,null!=n){
+this._handlers=null
+;for(var i=0,o=n.length;i<o;i++){var s=e(n[i],3)
+;r(t,s[0],s[2])}}
+},t.prototype._reject=function(t){
+"pending"===this.status&&this._rejectAsync(t)
+},t.prototype._rejectAsync=function(t){
+this.status="rejected",n(t)?t.then(this._rejectAsync,this._rejectAsync):this._rejectSync(t)
+},t.prototype._rejectSync=function(t){
+var n=this._handlers;if(this.reason=t,null!=n){
+this._handlers=null
+;for(var r=0,o=n.length;r<o;r++){var s=e(n[r],3)
+;i(t,s[1],s[2])}}},t.prototype.then=function(e,n){
+var s=new t(o)
+;return"pending"===this.status?(null==this._handlers&&(this._handlers=[]),
+this._handlers.push([e,n,s])):"fulfilled"===this.status?r(this.value,e,s):i(this.reason,n,s),
+s},t.prototype.catch=function(t){
+return this.then(void 0,t)
+},t.prototype.finally=function(t){
+var e=t&&function(e){return t(),e
+},n=t&&function(e){throw t(),e}
+;return this.then(e,n)},t.resolve=function(e){
+var n=new t(o);return n._resolve(e),n
+},t.reject=function(e){var n=new t(o)
+;return n._reject(e),n
+},Object.defineProperty(t.prototype,Symbol.toStringTag,{
+get:function(){return"Promise"},enumerable:!1,
+configurable:!0}),t}()
+;var c=function(){},u=function(t){var e,n
+;if(t&&t.aborted)this.promise=s.reject(t.reason),
+this.resolve=c,this.reject=c;else if(this.promise=new Promise((function(t,r){
+e=t,n=function(e){!function(t,e){t(function(t){
+return{then:function(e,n){n(t)}}}(e))}(t,e)}
+})),t){var r=t.subscribe((function(t){n(t)}))
+;this.resolve=function(t){r(),e(t)
+},this.reject=function(t){r(),n(t)}
+}else this.resolve=e,this.reject=n}
+;const l=setTimeout,h=clearTimeout,a={
 now:function(){return Date.now()},
 setTimeout:"undefined"==typeof window?setTimeout:function(){
-return c.apply(window,arguments)},
+return l.apply(window,arguments)},
 clearTimeout:"undefined"==typeof window?clearTimeout:function(){
-return u.apply(window,arguments)}}
-;e.CustomPromise=o,e.PromiseFast=s,e.delay=function(e,t,n){
-return new Promise((function(r,s){
-if(t&&t.aborted)s(t.reason);else{
-var i,o=n||l,c=o.setTimeout((function(){i&&i(),r()
-}),e);t&&(i=t.subscribe((function(e){
-o.clearTimeout(c),s(e)})))}}))
-},Object.defineProperty(e,"__esModule",{value:!0})
+return h.apply(window,arguments)}}
+;t.CustomPromise=u,t.delay=function(t,e,n){
+return new Promise((function(r,i){
+if(e&&e.aborted)i(e.reason);else{
+var o,s=n||a,c=s.setTimeout((function(){o&&o(),r()
+}),t);e&&(o=e.subscribe((function(t){
+s.clearTimeout(c),i(t)})))}}))
+},Object.defineProperty(t,"__esModule",{value:!0})
 }({});
