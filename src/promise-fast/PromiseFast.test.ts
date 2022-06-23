@@ -22,13 +22,15 @@ enum CallbackType {
 }
 
 describe('promise-fast > PromiseFast', function () {
-  function test({
+  async function calcBehavior({
+    PromiseClass,
     completeType,
     thenFulfilled,
     thenRejected,
     _catch,
     _finally,
   }: {
+    PromiseClass: typeof Promise,
     completeType: CompleteType,
     thenFulfilled: CallbackType,
     thenRejected: CallbackType,
@@ -38,7 +40,7 @@ describe('promise-fast > PromiseFast', function () {
     const results: string[] = []
     let resolve: (value: string|Promise<string>) => void
     let reject: (value: string|Promise<string>) => void
-    const promise = new Promise((_resolve, _reject) => {
+    let promise: Promise<string> = new Prom iseClass((_resolve, _reject) => {
       resolve = (value: string) => {
         _resolve(value)
         _reject('ERROR')
@@ -81,31 +83,49 @@ describe('promise-fast > PromiseFast', function () {
           }
         case CallbackType.promise:
           return (value) => {
-            Promise.resolve(`${name}: ${value}`)
+            PromiseClass.resolve(`${name}: ${value}`)
           }
         case CallbackType.promiseRejected:
           return (value) => {
-            Promise.reject(`${name}: ${value}`)
+            PromiseClass.reject(`${name}: ${value}`)
           }
         default:
           throw new Error('Unknown CallbackType: ' + type)
       }
     }
 
+    const nextPromises: Promise<any>[] = []
+    function addNextPromise(nextPromise: Promise<any>) {
+      assert.notStrictEqual(nextPromise, promise)
+      assert.strictEqual(nextPromise.constructor, promise.constructor)
+      nextPromises.push(nextPromise)
+    }
     if (thenFulfilled || thenRejected) {
-      promise.then(
+      addNextPromise(promise.then(
         createCallback('promise.then onfulfilled', thenFulfilled),
         createCallback('promise.then onrejected', thenRejected),
-      )
+      ))
     }
     if (_catch) {
-      promise.catch(
+      addNextPromise(promise.catch(
         createCallback('promise.catch', _catch),
-      )
+      ))
     }
     if (_finally) {
-      promise.catch(
-        createCallback('promise.finally', _finally),
+      addNextPromise(promise.finally(
+        createCallback('promise.finally', _finally) as any,
+      ))
+    }
+
+    for (let i = 0, len = nextPromises.length; i < len; i++) {
+      nextPromises[i] = nextPromises[i].then(
+        (value) => {
+          results.push('next promise.then onfulfilled:' + value)
+        },
+        (value) => {
+          results.push('next promise.then onrejected:' + value)
+          throw value
+        },
       )
     }
     
@@ -115,19 +135,83 @@ describe('promise-fast > PromiseFast', function () {
     else if (completeType === CompleteType.rejectedAfterThen) {
       reject(completeType)
     }
+    
+    try {
+      let value = await promise
+      results.push('await promise: ' + value)
+    }
+    catch (err) {
+      results.push('await promise catch: ' + err)
+    }
+
+    for (let i = 0, len = nextPromises.length; i < len; i++) {
+      try {
+        let value = await nextPromises[i]
+        results.push('await next promise: ' + value)
+      }
+      catch (err) {
+        results.push('await next promise catch: ' + err)
+      }
+    }
+
+    for (let i = 0; i < 10; i++) {
+      await Promise.resolve().then(() => {})
+    }
+
+    return results
   }
   
-  const test = createTestVariants(({
-    
+  const testVariants = createTestVariants(async ({
+    completeType,
+    thenFulfilled,
+    thenRejected,
+    _catch,
+    _finally,
   }: {
-    
+    completeType: CompleteType,
+    thenFulfilled: CallbackType,
+    thenRejected: CallbackType,
+    _catch: CallbackType,
+    _finally: CallbackType,
   }) => {
-    const checkResults: string[] = []
-    const results: string[] = []
-    
+    console.log({
+      completeType,
+      thenFulfilled,
+      thenRejected,
+      _catch,
+      _finally,
+    })
+
+    const results: string[] = await calcBehavior({
+      PromiseClass: PromiseFast as any,
+      completeType,
+      thenFulfilled,
+      thenRejected,
+      _catch,
+      _finally,
+    })
+
+    const checkResults: string[] = await calcBehavior({
+      PromiseClass: Promise,
+      completeType,
+      thenFulfilled,
+      thenRejected,
+      _catch,
+      _finally,
+    })
+
+    assert.deepStrictEqual(results, checkResults)
   })
   
-  it('base', function () {
-    new PromiseFast()
+  it('base', async function () {
+    this.timeout(600000)
+
+    await testVariants({
+      completeType : Object.values(CompleteType),
+      thenFulfilled: Object.values(CallbackType),
+      thenRejected : Object.values(CallbackType),
+      _catch       : Object.values(CallbackType),
+      _finally     : Object.values(CallbackType),
+    })()
   })
 })
