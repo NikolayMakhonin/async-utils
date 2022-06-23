@@ -38,8 +38,8 @@ describe('promise-fast > PromiseFast', function () {
     _finally: CallbackType,
   }) {
     const results: string[] = []
-    let resolve: (value: string|Promise<string>) => void
-    let reject: (value: string|Promise<string>) => void
+    let resolve: (value: string | Promise<string>) => void
+    let reject: (value: string | Promise<string>) => void
     let promise: Promise<string>
     if (completeType === CompleteType.resolvedCreate) {
       promise = PromiseClass.resolve(completeType + ' => resolved')
@@ -77,7 +77,7 @@ describe('promise-fast > PromiseFast', function () {
     else if (completeType === CompleteType.rejectedBeforeThen) {
       reject(completeType)
     }
-    
+
     function createCallback(name: string, type: CallbackType) {
       switch (type) {
         case null:
@@ -105,11 +105,13 @@ describe('promise-fast > PromiseFast', function () {
     }
 
     const nextPromises: Promise<any>[] = []
+
     function addNextPromise(nextPromise: Promise<any>) {
       assert.notStrictEqual(nextPromise, promise)
       assert.strictEqual(nextPromise.constructor, promise.constructor)
       nextPromises.push(nextPromise)
     }
+
     if (thenFulfilled || thenRejected) {
       addNextPromise(promise.then(
         createCallback('promise.then onfulfilled', thenFulfilled),
@@ -138,7 +140,7 @@ describe('promise-fast > PromiseFast', function () {
         },
       )
     }
-    
+
     if (completeType === CompleteType.resolvedAfterThen) {
       resolve(completeType)
     }
@@ -147,7 +149,8 @@ describe('promise-fast > PromiseFast', function () {
     }
 
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {})
+      await Promise.resolve().then(() => {
+      })
     }
 
     for (let i = 0, len = nextPromises.length; i < len; i++) {
@@ -169,12 +172,13 @@ describe('promise-fast > PromiseFast', function () {
     }
 
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {})
+      await Promise.resolve().then(() => {
+      })
     }
 
     return results
   }
-  
+
   const testVariants = createTestVariants(async ({
     completeType,
     thenFulfilled,
@@ -219,7 +223,7 @@ describe('promise-fast > PromiseFast', function () {
       checkResults.sort(),
     )
   })
-  
+
   it('base', async function () {
     this.timeout(600000)
 

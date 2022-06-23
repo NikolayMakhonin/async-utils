@@ -10,14 +10,14 @@ describe('promise-fast > PromiseFast', function () {
       // for (let i = 0; i < 20; i++) {
       //   await promise
       // }
-      return Promise.resolve('Promise').catch(emptyFunc)
+      return Promise.resolve('Promise').then(emptyFunc, emptyFunc)
     }
 
     async function runPromiseFast() {
       // for (let i = 0; i < 20; i++) {
       //   await promiseFast
       // }
-      return PromiseFast.resolve('PromiseFast').catch(emptyFunc)
+      return PromiseFast.resolve('PromiseFast').then(emptyFunc, emptyFunc)
     }
 
     assert.strictEqual(await runPromise(), 'Promise')
@@ -29,10 +29,10 @@ describe('promise-fast > PromiseFast', function () {
 
       },
       () => {
-        return runPromiseFast()
+        return runPromise()
       },
       () => {
-        return runPromise()
+        return runPromiseFast()
       },
     )
 
