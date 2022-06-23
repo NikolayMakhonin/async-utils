@@ -219,7 +219,7 @@ describe('promise-fast > PromiseFast', function () {
     } as any
   }
 
-  const testVariants = createTestVariants(usingTimeout(10000, async ({
+  const testVariants = createTestVariants(async ({
     completeType,
     thenFulfilled,
     thenRejected,
@@ -262,7 +262,7 @@ describe('promise-fast > PromiseFast', function () {
       results.sort(),
       checkResults.sort(),
     )
-  }))
+  })
 
 
   const completeTypes = [

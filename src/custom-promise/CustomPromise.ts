@@ -20,7 +20,7 @@ export class CustomPromise<TResult> {
       let reject: (error: any) => void
       this.promise = new Promise<TResult>(function executor(_resolve, _reject) {
         resolve = _resolve
-        reject = (reason) => {
+        reject = function _rejectAsResolve(reason) {
           rejectAsResolve(_resolve, reason)
         }
       })

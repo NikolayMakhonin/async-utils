@@ -47,7 +47,7 @@ describe('custom-promise > CustomPromise > million of Promise reject', function 
       const promise = new CustomPromise()
       promise.reject('err')
       await promise.promise
-        .catch(o => {})
+        .then(o => {}, o => {})
     })({
       a: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       b: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
