@@ -293,7 +293,7 @@ describe('promise-fast > PromiseFast', function () {
       thenFulfilled: [null, ...callbackTypes],
       thenRejected : [null, ...callbackTypes],
       _catch       : [null, ...callbackTypes],
-      _finally     : [null, CallbackType.null, CallbackType.value], // , CallbackType.throw],
+      _finally     : [null, CallbackType.null, CallbackType.value, CallbackType.throw],
     })()
   })
 })

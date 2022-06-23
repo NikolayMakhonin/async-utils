@@ -1,8 +1,11 @@
+import { PromiseFast } from '../promise-fast/PromiseFast.mjs';
+import { rejectAsResolve } from './rejectAsResolve.mjs';
+
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {
     constructor(abortSignal) {
         if (abortSignal && abortSignal.aborted) {
-            this.promise = Promise.reject(abortSignal.reason);
+            this.promise = PromiseFast.reject(abortSignal.reason);
             this.resolve = emptyFunc;
             this.reject = emptyFunc;
         }
@@ -11,7 +14,9 @@ class CustomPromise {
             let reject;
             this.promise = new Promise(function executor(_resolve, _reject) {
                 resolve = _resolve;
-                reject = _reject;
+                reject = (reason) => {
+                    rejectAsResolve(_resolve, reason);
+                };
             });
             if (abortSignal) {
                 const unsubscribe = abortSignal.subscribe(function abortListener(reason) {

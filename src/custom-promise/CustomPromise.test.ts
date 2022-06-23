@@ -54,7 +54,7 @@ describe('custom-promise > CustomPromise > million of Promise reject', function 
       c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       d: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       e: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-      f: [0, 1], // , 2, 3, 4, 5, 6, 7, 8, 9],
+      f: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     })()
 
     console.log('try delay')
