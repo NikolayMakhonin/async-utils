@@ -126,12 +126,12 @@ export class PromiseFast<TValue> implements Promise<TValue> {
     if (this.status !== 'pending') {
       return
     }
-    // @ts-expect-error
-    this.status = 'rejected'
     this._rejectAsync(reason)
   }
 
   private _rejectAsync(reason: PromiseLikeOrValue<any>) {
+    // @ts-expect-error
+    this.status = 'rejected'
     if (isPromiseLike(reason)) {
       (reason as PromiseLike<any>).then(this._rejectAsync, this._rejectAsync)
       return

@@ -54,10 +54,8 @@ describe('custom-promise > CustomPromise > million of Promise reject', function 
       c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       d: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       e: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-      f: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    })({
-      pauseInterval: 0,
-    })
+      f: [0, 1], // , 2, 3, 4, 5, 6, 7, 8, 9],
+    })()
 
     console.log('try delay')
     for (let i = 0; i < 100; i++) {
@@ -66,7 +64,7 @@ describe('custom-promise > CustomPromise > million of Promise reject', function 
         setTimeout(resolve, 0)
       })
       const time = Date.now() - time0
-      assert.ok(time < 50, 'delay real time: ' + 50)
+      assert.ok(time < 1000, 'delay real time: ' + time)
     }
 
     millionRejectTime = Date.now()

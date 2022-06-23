@@ -1,7 +1,7 @@
 import {calcPerformanceAsync} from 'src/test/calcPerformanceAsync'
 import {PromiseFast} from 'src/promise-fast/PromiseFast'
 
-describe('promise-fast > PromiseFast', function () {
+describe('promise-fast > PromiseFast perf', function () {
   this.timeout(600000)
 
   it('base', async function () {
