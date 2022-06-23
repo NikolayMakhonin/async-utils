@@ -1,4 +1,5 @@
 import {IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {PromiseFast} from 'src/promise-fast'
 
 const emptyFunc = function emptyFunc() {}
 
@@ -9,14 +10,14 @@ export class CustomPromise<TResult> {
 
   constructor(abortSignal?: IAbortSignalFast) {
     if (abortSignal && abortSignal.aborted) {
-      this.promise = Promise.reject(abortSignal.reason)
+      this.promise = PromiseFast.reject(abortSignal.reason)
       this.resolve = emptyFunc
       this.reject = emptyFunc
     }
     else {
       let resolve: (result: TResult) => void
       let reject: (error: any) => void
-      this.promise = new Promise<TResult>(function executor(_resolve, _reject) {
+      this.promise = new PromiseFast<TResult>(function executor(_resolve, _reject) {
         resolve = _resolve
         reject = _reject
       })

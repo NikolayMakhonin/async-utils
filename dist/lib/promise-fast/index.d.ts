@@ -1,0 +1,1 @@
+export { PromiseFast } from './PromiseFast';
