@@ -45,10 +45,13 @@ function callReject(
   reject: OnRejected<any>,
   nextPromise: PromiseFast<any>,
 ) {
+  if (!reject) {
+    // @ts-expect-error
+    nextPromise._reject(reason)
+  }
+
   try {
-    const result = reject
-      ? reject(reason)
-      : reason
+    const result = reject(reason)
     // @ts-expect-error
     nextPromise._resolve(result)
   }
@@ -114,7 +117,7 @@ export class PromiseFast<TValue> implements Promise<TValue> {
       this._handlers = null
       for (let i = 0, len = handlers.length; i < len; i++) {
         const [fulfill, , nextPromise] = handlers[i]
-        callReject(value, fulfill, nextPromise)
+        callFulfill(value, fulfill, nextPromise)
       }
     }
   }
@@ -165,7 +168,7 @@ export class PromiseFast<TValue> implements Promise<TValue> {
       callFulfill(this.value, onfulfilled, nextPromise)
     }
     else {
-      callReject(this.value, onrejected, nextPromise)
+      callReject(this.reason, onrejected, nextPromise)
     }
     return nextPromise
   }
@@ -177,11 +180,15 @@ export class PromiseFast<TValue> implements Promise<TValue> {
   }
 
   finally(onfinally?: (() => void) | undefined | null): Promise<TValue> {
-    const _onfinally = o => {
+    const onfulfilled = onfinally && (o => {
       onfinally()
       return o
-    }
-    return this.then(_onfinally, _onfinally)
+    })
+    const onrejected = onfinally && (o => {
+      onfinally()
+      throw o
+    })
+    return this.then(onfulfilled, onrejected)
   }
 
   static resolve<TValue>(value: PromiseLikeOrValue<TValue>) {

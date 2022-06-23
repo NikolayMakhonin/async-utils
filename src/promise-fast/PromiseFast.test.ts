@@ -40,27 +40,36 @@ describe('promise-fast > PromiseFast', function () {
     const results: string[] = []
     let resolve: (value: string|Promise<string>) => void
     let reject: (value: string|Promise<string>) => void
-    let promise: Promise<string> = new Prom iseClass((_resolve, _reject) => {
-      resolve = (value: string) => {
-        _resolve(value)
-        _reject('ERROR')
-        _resolve('ERROR')
-        results.push('resolved: ' + value)
-      }
-      reject = (value: string) => {
-        _reject(value)
-        _resolve('ERROR')
-        _reject('ERROR')
-        results.push('rejected: ' + value)
-      }
-      results.push('executor')
-      if (completeType === CompleteType.resolvedInExecutor) {
-        resolve(completeType)
-      }
-      else if (completeType === CompleteType.rejectedInExecutor) {
-        reject(completeType)
-      }
-    })
+    let promise: Promise<string>
+    if (completeType === CompleteType.resolvedCreate) {
+      promise = PromiseClass.resolve(completeType + ' => resolved')
+    }
+    else if (completeType === CompleteType.rejectedCreate) {
+      promise = PromiseClass.reject(completeType + ' => rejected')
+    }
+    else {
+      promise = new PromiseClass((_resolve, _reject) => {
+        resolve = (value: string) => {
+          results.push(value + ' => resolved')
+          _resolve(value)
+          _reject('ERROR')
+          _resolve('ERROR')
+        }
+        reject = (value: string) => {
+          results.push(value + ' => rejected')
+          _reject(value)
+          _resolve('ERROR')
+          _reject('ERROR')
+        }
+        results.push('executor')
+        if (completeType === CompleteType.resolvedInExecutor) {
+          resolve(completeType)
+        }
+        else if (completeType === CompleteType.rejectedInExecutor) {
+          reject(completeType)
+        }
+      })
+    }
 
     if (completeType === CompleteType.resolvedBeforeThen) {
       resolve(completeType)
@@ -71,23 +80,24 @@ describe('promise-fast > PromiseFast', function () {
     
     function createCallback(name: string, type: CallbackType) {
       switch (type) {
+        case null:
         case CallbackType.null:
           return null
         case CallbackType.value:
           return (value) => {
-            results.push(`${name}: ${value}`)
+            results.push(`${value} => ${name}`)
           }
         case CallbackType.throw:
           return (value) => {
-            throw `${name}: ${value}`
+            throw `${value} => ${name} => throw`
           }
         case CallbackType.promise:
           return (value) => {
-            PromiseClass.resolve(`${name}: ${value}`)
+            PromiseClass.resolve(`${value} => ${name} => resolve`)
           }
         case CallbackType.promiseRejected:
           return (value) => {
-            PromiseClass.reject(`${name}: ${value}`)
+            PromiseClass.reject(`${value} => ${name} => reject`)
           }
         default:
           throw new Error('Unknown CallbackType: ' + type)
@@ -120,10 +130,10 @@ describe('promise-fast > PromiseFast', function () {
     for (let i = 0, len = nextPromises.length; i < len; i++) {
       nextPromises[i] = nextPromises[i].then(
         (value) => {
-          results.push('next promise.then onfulfilled:' + value)
+          results.push(`${value} => next promise.then onfulfilled ${i}`)
         },
         (value) => {
-          results.push('next promise.then onrejected:' + value)
+          results.push(`${value} => next promise.then onrejected ${i}`)
           throw value
         },
       )
@@ -135,23 +145,27 @@ describe('promise-fast > PromiseFast', function () {
     else if (completeType === CompleteType.rejectedAfterThen) {
       reject(completeType)
     }
-    
-    try {
-      let value = await promise
-      results.push('await promise: ' + value)
-    }
-    catch (err) {
-      results.push('await promise catch: ' + err)
+
+    for (let i = 0; i < 10; i++) {
+      await Promise.resolve().then(() => {})
     }
 
     for (let i = 0, len = nextPromises.length; i < len; i++) {
       try {
         let value = await nextPromises[i]
-        results.push('await next promise: ' + value)
+        results.push(`${value} => await next promise ${i}`)
       }
       catch (err) {
-        results.push('await next promise catch: ' + err)
+        results.push(`${err} => await next promise catch ${i}`)
       }
+    }
+
+    try {
+      let value = await promise
+      results.push(value + ' => await promise')
+    }
+    catch (err) {
+      results.push(err + ' => await promise catch')
     }
 
     for (let i = 0; i < 10; i++) {
@@ -174,13 +188,13 @@ describe('promise-fast > PromiseFast', function () {
     _catch: CallbackType,
     _finally: CallbackType,
   }) => {
-    console.log({
-      completeType,
-      thenFulfilled,
-      thenRejected,
-      _catch,
-      _finally,
-    })
+    // console.log({
+    //   completeType,
+    //   thenFulfilled,
+    //   thenRejected,
+    //   _catch,
+    //   _finally,
+    // })
 
     const results: string[] = await calcBehavior({
       PromiseClass: PromiseFast as any,
@@ -200,7 +214,10 @@ describe('promise-fast > PromiseFast', function () {
       _finally,
     })
 
-    assert.deepStrictEqual(results, checkResults)
+    assert.deepStrictEqual(
+      results.sort(),
+      checkResults.sort(),
+    )
   })
   
   it('base', async function () {
@@ -208,10 +225,10 @@ describe('promise-fast > PromiseFast', function () {
 
     await testVariants({
       completeType : Object.values(CompleteType),
-      thenFulfilled: Object.values(CallbackType),
-      thenRejected : Object.values(CallbackType),
-      _catch       : Object.values(CallbackType),
-      _finally     : Object.values(CallbackType),
+      thenFulfilled: [null, ...Object.values(CallbackType)],
+      thenRejected : [null, ...Object.values(CallbackType)],
+      _catch       : [null, ...Object.values(CallbackType)],
+      _finally     : [null, CallbackType.null, CallbackType.value, CallbackType.throw],
     })()
   })
 })
