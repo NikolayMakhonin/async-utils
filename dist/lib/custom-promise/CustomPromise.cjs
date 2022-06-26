@@ -18,7 +18,7 @@ class CustomPromise {
             let reject;
             this.promise = new Promise(function executor(_resolve, _reject) {
                 resolve = _resolve;
-                reject = (reason) => {
+                reject = function _rejectAsResolve(reason) {
                     customPromise_rejectAsResolve.rejectAsResolve(_resolve, reason);
                 };
             });

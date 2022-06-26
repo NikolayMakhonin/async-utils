@@ -51,17 +51,18 @@ class PromiseFast {
         const reject = this._reject;
         const resolveAsync = this._resolveAsync;
         const rejectAsync = this._rejectAsync;
-        this._resolve = (value) => {
-            resolve.call(this, value);
+        const _this = this;
+        this._resolve = function _resolve(value) {
+            resolve.call(_this, value);
         };
-        this._reject = (reason) => {
-            reject.call(this, reason);
+        this._reject = function _reject(reason) {
+            reject.call(_this, reason);
         };
-        this._resolveAsync = (value) => {
-            resolveAsync.call(this, value);
+        this._resolveAsync = function _resolveAsync(value) {
+            resolveAsync.call(_this, value);
         };
-        this._rejectAsync = (reason) => {
-            rejectAsync.call(this, reason);
+        this._rejectAsync = function _rejectAsync(reason) {
+            rejectAsync.call(_this, reason);
         };
         executor(this._resolve, this._reject);
     }
@@ -139,11 +140,11 @@ class PromiseFast {
         return this.then(void 0, onrejected);
     }
     finally(onfinally) {
-        const onfulfilled = onfinally && (o => {
+        const onfulfilled = onfinally && (function _onfulfilled(o) {
             onfinally();
             return o;
         });
-        const onrejected = onfinally && (o => {
+        const onrejected = onfinally && (function _onrejected(o) {
             onfinally();
             throw o;
         });

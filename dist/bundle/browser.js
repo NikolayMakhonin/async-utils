@@ -11,13 +11,13 @@ return null!=t&&"object"==typeof t&&"function"==typeof t.then
 function i(t,e,n){e||n._reject(t);try{var r=e(t)
 ;n._resolve(r)}catch(t){n._reject(t)}}
 var o=function(){},s=function(){function t(t){
-var e=this
-;this.status="pending",this.value=void 0,this.reason=void 0,this._handlers=null
-;var n=this._resolve,r=this._reject,i=this._resolveAsync,o=this._rejectAsync
-;this._resolve=function(t){n.call(e,t)
-},this._reject=function(t){r.call(e,t)
-},this._resolveAsync=function(t){i.call(e,t)
-},this._rejectAsync=function(t){o.call(e,t)
+this.status="pending",this.value=void 0,
+this.reason=void 0,this._handlers=null
+;var e=this._resolve,n=this._reject,r=this._resolveAsync,i=this._rejectAsync,o=this
+;this._resolve=function(t){e.call(o,t)
+},this._reject=function(t){n.call(o,t)
+},this._resolveAsync=function(t){r.call(o,t)
+},this._rejectAsync=function(t){i.call(o,t)
 },t(this._resolve,this._reject)}
 return t.prototype._resolve=function(t){
 "pending"===this.status&&(this.status="fulfilled",
