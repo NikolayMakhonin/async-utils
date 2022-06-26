@@ -42,7 +42,7 @@ specifiers:
   mocha: 9.2.2
   nodemon: 2.0.16
   nyc: 15.1.0
-  rdtsc: 3.0.0
+  rdtsc: 3.0.2
   rimraf: 3.0.2
   rollup: 2.75.7
   rollup-plugin-delete: 2.0.0
@@ -100,7 +100,7 @@ devDependencies:
   mocha: 9.2.2
   nodemon: 2.0.16
   nyc: 15.1.0
-  rdtsc: 3.0.0
+  rdtsc: 3.0.2
   rimraf: 3.0.2
   rollup: 2.75.7
   rollup-plugin-delete: 2.0.0
@@ -1331,6 +1331,7 @@ packages:
     engines: {node: '>=10.4.0', pnpm: ^7.1.6}
     dependencies:
       tslib: 2.4.0
+    dev: false
 
   /@flemist/test-utils/0.0.7:
     resolution: {integrity: sha512-HJxyDzk0JzTmroizBpnyUfFxTS+Zklwta2jyVbSljiykH8xgNF/M6Y8WXLUrF8c6bw2dhvD0ZzGdivR3yU2Ihg==}
@@ -5273,9 +5274,10 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /rdtsc/3.0.0:
-    resolution: {integrity: sha512-VrHxlpsl9rM04sLnZ0ezIC9Ne6LrtIQLfS4FuM+SkaR7PUKU/rlBnSyFw1XRRHqu9wPTORTiGRQxgTIRAKQLJg==}
+  /rdtsc/3.0.2:
+    resolution: {integrity: sha512-eIhpW6lOSu2HLMOMUdKb0UjUehVWoy2r5t+yj6QY9ob0T/+80WxQ8L3GM3c0BbHlhk3svr6JN9yQ1fd9YpUB0A==}
     engines: {node: '>=12.4.0', pnpm: ^7.1.6}
+    requiresBuild: true
     dependencies:
       tslib: 2.4.0
     dev: true
