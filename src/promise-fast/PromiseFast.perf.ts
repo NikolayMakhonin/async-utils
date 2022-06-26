@@ -1,4 +1,4 @@
-import {calcPerformanceAsync} from 'src/test/calcPerformanceAsync'
+import {calcPerformanceAsync} from 'rdtsc'
 import {PromiseFast} from 'src/promise-fast/PromiseFast'
 
 describe('promise-fast > PromiseFast perf', function () {
