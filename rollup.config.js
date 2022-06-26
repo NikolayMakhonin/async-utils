@@ -115,7 +115,7 @@ const nodeConfig = ({
   ],
   onwarn  : onwarnRollup,
   external: createFilter([
-    'src/**/*.{js,cjs,mjs}',
+    'src/**/*.{js,cjs,mjs,node}',
     ...Object.keys(pkg.dependencies),
     ...Object.keys(pkg.devDependencies),
     ...require('module').builtinModules || Object.keys(process.binding('natives')),
