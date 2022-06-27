@@ -92,43 +92,43 @@ var r=new t(u);return r._resolve(e),r
 ;return r._reject(e),r
 },Object.defineProperty(t.prototype,Symbol.toStringTag,{
 get:function(){return"Promise"},enumerable:!1,
-configurable:!0}),t}()
-;var h=function(){},b=function(t){var e,r
+configurable:!0}),t}();function h(t){return{
+then:function(e,r){r(t)}}}function b(t,e){t(h(e))}
+var v=function(){},d=function(t){var e,r
 ;if(t&&t.aborted)this.promise=f.reject(t.reason),
-this.resolve=h,this.reject=h;else if(this.promise=new Promise((function(t,n){
-e=t,r=function(e){!function(t,e){t(function(t){
-return{then:function(e,r){r(t)}}}(e))}(t,e)}
-})),t){var n=t.subscribe((function(t){r(t)}))
+this.resolve=v,this.reject=v;else if(this.promise=new Promise((function(t,n){
+e=t,r=function(e){b(t,e)}})),t){
+var n=t.subscribe((function(t){r(t)}))
 ;this.resolve=function(t){n(),e(t)
 },this.reject=function(t){n(),r(t)}
-}else this.resolve=e,this.reject=r},v={},d={},y={}
-;Object.defineProperty(y,"__esModule",{value:!0})
-;class p extends Error{constructor(t,e){
-super(t),Object.setPrototypeOf(this,p.prototype),
+}else this.resolve=e,this.reject=r},p={},y={},_={}
+;Object.defineProperty(_,"__esModule",{value:!0})
+;class A extends Error{constructor(t,e){
+super(t),Object.setPrototypeOf(this,A.prototype),
 this.reason=e,this.name="AbortError",
 this._internal=!1}}
-y.AbortError=p,Object.defineProperty(d,"__esModule",{
-value:!0});var _=y
-;d.toAbortController=function(t,e){
+_.AbortError=A,Object.defineProperty(y,"__esModule",{
+value:!0});var w=_
+;y.toAbortController=function(t,e){
 return t.signal.subscribe((t=>{
-t instanceof _.AbortError&&t._internal&&(t=t.reason),
+t instanceof w.AbortError&&t._internal&&(t=t.reason),
 e.abort(t)})),e
-},d.toAbortControllerFast=function(t,e){
+},y.toAbortControllerFast=function(t,e){
 return t.signal.addEventListener("abort",(function(){
 e.abort(this.reason)})),e
-},d.toAbortSignal=function(t,e){
+},y.toAbortSignal=function(t,e){
 return t.subscribe((t=>{e.abort(t)})),e.signal
-},d.toAbortSignalFast=function(t,e){
+},y.toAbortSignalFast=function(t,e){
 return t.addEventListener("abort",(function(t){
-e.abort(t)})),e.signal};var A={},w={}
-;Object.defineProperty(w,"__esModule",{value:!0})
-;const j=()=>{};w.AbortSignalFast=class{
+e.abort(t)})),e.signal};var j={},g={}
+;Object.defineProperty(g,"__esModule",{value:!0})
+;const m=()=>{};g.AbortSignalFast=class{
 constructor(){
 this.aborted=!1,this.reason=void 0,this._callbacks=void 0
 }subscribe(t){var e
 ;if(null===(e=this._callbacks)||void 0===e?void 0:e.has(t))throw new Error("Already subscribed: "+t)
 ;return this.aborted?(t.call(this,this.reason),
-j):(this._callbacks||(this._callbacks=new Set),
+m):(this._callbacks||(this._callbacks=new Set),
 this._callbacks.add(t),()=>{var e
 ;null===(e=this._callbacks)||void 0===e||e.delete(t)
 })}abort(t){var e
@@ -136,22 +136,22 @@ this._callbacks.add(t),()=>{var e
 t.call(this,this.reason)})),this._callbacks=void 0
 }throwIfAborted(){
 if(this.aborted)throw this.reason}
-},Object.defineProperty(A,"__esModule",{value:!0})
-;var g=w,m=y;A.AbortControllerFast=class{
-constructor(){this.signal=new g.AbortSignalFast}
+},Object.defineProperty(j,"__esModule",{value:!0})
+;var S=g,P=_;j.AbortControllerFast=class{
+constructor(){this.signal=new S.AbortSignalFast}
 abort(t){
-this.signal.aborted||(void 0===t&&((t=new m.AbortError("Aborted with no reason",t))._internal=!0),
+this.signal.aborted||(void 0===t&&((t=new P.AbortError("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}
-},Object.defineProperty(v,"__esModule",{value:!0})
-;var S=d,P=A,k=y
-;v.toAbortController=S.toAbortController,v.toAbortControllerFast=S.toAbortControllerFast,
-v.toAbortSignal=S.toAbortSignal,
-v.toAbortSignalFast=S.toAbortSignalFast
-;var E=v.AbortControllerFast=P.AbortControllerFast
-;v.AbortError=k.AbortError,t.CustomPromise=b,
+},Object.defineProperty(p,"__esModule",{value:!0})
+;var k=y,E=j,T=_
+;p.toAbortController=k.toAbortController,p.toAbortControllerFast=k.toAbortControllerFast,
+p.toAbortSignal=k.toAbortSignal,
+p.toAbortSignalFast=k.toAbortSignalFast
+;var C=p.AbortControllerFast=E.AbortControllerFast
+;p.AbortError=T.AbortError,t.CustomPromise=d,
 t.combineAbortSignals=function(){
 for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e]
-;var r=new E;function n(t){r.abort(t)}
+;var r=new C;function n(t){r.abort(t)}
 for(var o=0;o<t.length;o++){var i=t[o];if(i){
 if(i.aborted){n.call(i);break}i.subscribe(n)}}
 return r.signal},t.delay=function(t,e,r){
@@ -166,19 +166,21 @@ function r(t){n.reject(t)}var n,o
 ;return i(this,(function(i){switch(i.label){
 case 0:if(!t)return[2,e()]
 ;if(t.aborted)return[2,Promise.reject(t.reason)]
-;n=new b,o=t.subscribe(r),i.label=1;case 1:
+;n=new d,o=t.subscribe(r),i.label=1;case 1:
 return i.trys.push([1,,3,4]),[4,e(n.promise)]
 ;case 2:return[2,i.sent()];case 3:return o(),[7]
 ;case 4:return[2]}}))}))
+},t.promiseRejected=function(t){
+return Promise.resolve(h(t))
 },t.promiseToAbortable=function(t,e){
 return new Promise((function(r,n){var o,i
 ;t&&t.aborted?n(t.reason):(e.then((function(t){
 o&&o(),r(t)})).catch(s),t&&(o=t.subscribe(s)))
 ;function s(t){i||(i=!0,o&&o(),n(t))}}))
-},t.useAbortController=function(t){
+},t.rejectAsResolve=b,t.useAbortController=function(t){
 return o(this,void 0,void 0,(function(){var e
 ;return i(this,(function(r){switch(r.label){
-case 0:e=new E,r.label=1;case 1:
+case 0:e=new C,r.label=1;case 1:
 return r.trys.push([1,,3,4]),[4,t(e.signal)]
 ;case 2:return[2,r.sent()];case 3:
 return e.abort(),[7];case 4:return[2]}}))}))
