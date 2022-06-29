@@ -131,9 +131,9 @@ describe('object-pool > ObjectPool', function () {
     this.timeout(600000)
     await testVariants({
       preAllocateSize: [void 0, null, 0, 1, 2, 9, 10],
-      abort  : [false, true],
-      async  : [false, true],
-      maxSize: [1, 2, 10],
+      abort          : [false, true],
+      async          : [false, true],
+      maxSize        : [1, 2, 10],
     })()
   })
 })

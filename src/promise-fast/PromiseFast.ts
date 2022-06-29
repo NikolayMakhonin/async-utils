@@ -1,7 +1,7 @@
 /* eslint-disable node/no-sync */
 // noinspection JSConstantReassignment
 
-import {isPromiseLike} from "src/isPromiseLike";
+import {isPromiseLike} from 'src/isPromiseLike'
 
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>
