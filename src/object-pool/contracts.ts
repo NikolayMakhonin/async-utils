@@ -3,14 +3,18 @@ import {IAbortSignalFast} from '@flemist/abort-controller-fast'
 export interface IPool {
 	size: number
 	readonly maxSize: number
+
 	hold(count: number): number
 	/** it returns false if the obj cannot be pushed into the object pool (if size >= maxSize) */
+
+	maxReleaseCount: number
 	release(count: number): number
+
 	/** it will resolve when size > 0 */
 	tick(abortSignal?: IAbortSignalFast): Promise<void>
 }
 
-export interface ICachePool<TObject> {
+export interface IStackPool<TObject> {
 	size: number
 	get(): TObject
 	release(obj: TObject): void
@@ -18,6 +22,7 @@ export interface ICachePool<TObject> {
 
 export interface IObjectPool<TObject> {
 	pool: IPool
+	objects: IStackPool<TObject>
 	size: number
 	readonly maxSize: number
 	readonly available: number

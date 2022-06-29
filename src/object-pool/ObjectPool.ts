@@ -1,18 +1,18 @@
-import {ICachePool, IObjectPool, IPool} from './contracts'
+import {IStackPool, IObjectPool, IPool} from './contracts'
 import {IAbortSignalFast} from '@flemist/abort-controller-fast'
-import {CachePool} from 'src/object-pool/CachePool'
+import {StackPool} from 'src/object-pool/StackPool'
 
 export class ObjectPool<TObject> implements IObjectPool<TObject> {
   readonly pool: IPool
-  private readonly _cachePool: ICachePool<TObject>
+  readonly objects: IStackPool<TObject>
 
   constructor(pool: IPool) {
     this.pool = pool
-    this._cachePool = new CachePool()
+    this.objects = new StackPool()
   }
 
   get size() {
-    return this._cachePool.size
+    return this.objects.size
   }
 
   get maxSize() {
@@ -25,21 +25,18 @@ export class ObjectPool<TObject> implements IObjectPool<TObject> {
 
   get(): TObject {
     if (this.pool.hold(1)) {
-      return this._cachePool.get()
+      return this.objects.get()
     }
     return null
   }
 
   release(obj: TObject) {
-    if (this.pool.size >= this.pool.maxSize) {
-      return false
+    if (this.pool.maxReleaseCount > 0) {
+      this.objects.release(obj)
+      this.pool.release(1)
+      return true
     }
-
-    this._cachePool.release(obj)
-
-    this.pool.release(1)
-
-    return true
+    return false
   }
 
   tick(abortSignal?: IAbortSignalFast): Promise<void> {

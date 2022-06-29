@@ -1,6 +1,6 @@
-import {ICachePool} from './contracts'
+import {IStackPool} from './contracts'
 
-export class CachePool<TObject> implements ICachePool<TObject> {
+export class StackPool<TObject> implements IStackPool<TObject> {
   private readonly _stack: TObject[] = []
 
   get size() {

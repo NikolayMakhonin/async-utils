@@ -19,6 +19,10 @@ export class Pool implements IPool {
     return this._size
   }
 
+  get holdAvailable() {
+    return this._size
+  }
+
   hold(count: number): number {
     const size = this._size
     if (count > size) {
@@ -28,6 +32,10 @@ export class Pool implements IPool {
       this._size = size - count
     }
     return count
+  }
+
+  get maxReleaseCount() {
+    return this.maxSize - this._size
   }
 
   release(count: number): number {

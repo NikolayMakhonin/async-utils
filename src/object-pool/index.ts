@@ -1,3 +1,6 @@
-export type {IObjectPool} from './contracts'
-export {ObjectPool} from './ObjectPool'
+export type {
+  IPool,
+  IStackPool,
+} from './contracts'
+export {StackPool} from './StackPool'
 export * from './helpers'
