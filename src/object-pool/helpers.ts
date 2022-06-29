@@ -13,10 +13,14 @@ export async function objectPoolWait<TObject>(
 
 export async function objectPoolUsing<TObject, TResult>(
   objectPool: IObjectPool<TObject>,
+  createObject: () => Promise<TObject>|TObject,
   func: (obj: TObject, abortSignal?: IAbortSignalFast) => Promise<TResult> | TResult,
   abortSignal?: IAbortSignalFast,
 ): Promise<TResult> {
-  const obj = await objectPoolWait(objectPool, abortSignal)
+  let obj = await objectPoolWait(objectPool, abortSignal)
+  if (obj == null) {
+    obj = await createObject()
+  }
   try {
     const result = await func(obj, abortSignal)
     return result

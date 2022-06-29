@@ -5,11 +5,12 @@ import {CustomPromise} from 'src/custom-promise'
 
 export class ObjectPool<TObject> implements IObjectPool<TObject> {
   size: number = 0
-  maxSize: number
+  readonly maxSize: number
   private readonly _stack = [null]
 
   constructor(maxSize: number) {
     this.maxSize = maxSize
+    this.size = maxSize
   }
 
   get(): TObject {
@@ -18,9 +19,6 @@ export class ObjectPool<TObject> implements IObjectPool<TObject> {
       const obj = this._stack[lastIndex]
       this._stack[lastIndex] = null
       this.size = lastIndex
-      if (obj === null) {
-        throw new Error('obj === null')
-      }
       return obj
     }
 

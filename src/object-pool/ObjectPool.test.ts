@@ -14,6 +14,12 @@ describe('object-pool > ObjectPool', function () {
     async: boolean,
     maxSize: number,
   }) => {
+    // console.log({
+    //   abort,
+    //   async,
+    //   maxSize,
+    // })
+
     const objectPool = new ObjectPool<IObject>(maxSize)
     const promises: Promise<number>[] = []
 
@@ -43,14 +49,6 @@ describe('object-pool > ObjectPool', function () {
     function createFunc(result: number) {
       return async
         ? async function func(obj: IObject, abortSignal: IAbortSignalFast) {
-          if (abort) {
-            assert.ok(!abortSignal.aborted)
-          }
-
-          if (!obj) {
-            obj = await createObject()
-          }
-
           assert.ok(obj)
           assert.ok(typeof obj.id === 'number')
           assert.ok(obj.id <= maxSize)
@@ -76,10 +74,6 @@ describe('object-pool > ObjectPool', function () {
             assert.ok(abortSignal.aborted)
           }
 
-          if (!obj) {
-            obj = createObject() as IObject
-          }
-
           assert.ok(obj)
           assert.ok(typeof obj.id === 'number')
           assert.ok(obj.id <= maxSize)
@@ -98,7 +92,7 @@ describe('object-pool > ObjectPool', function () {
       if (abortController && !async) {
         abortController.abort(i)
       }
-      let promise = objectPoolUsing(objectPool, func, abortController.signal)
+      let promise = objectPoolUsing(objectPool, createObject, func, abortController.signal)
       if (abort) {
         promise = promise.catch(o => o)
       }
@@ -115,6 +109,7 @@ describe('object-pool > ObjectPool', function () {
   })
 
   it('variants', async function () {
+    this.timeout(600000)
     await testVariants({
       abort  : [false, true],
       async  : [false, true],
