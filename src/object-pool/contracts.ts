@@ -10,6 +10,12 @@ export interface IPool {
 	tick(abortSignal?: IAbortSignalFast): Promise<void>
 }
 
+export interface ICachePool<TObject> {
+	size: number
+	get(): TObject
+	release(obj: TObject): void
+}
+
 export interface IObjectPool<TObject> {
 	pool: IPool
 	size: number
