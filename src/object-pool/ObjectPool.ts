@@ -4,8 +4,8 @@ import {promiseToAbortable} from 'src/abort-controller-fast'
 import {CustomPromise} from 'src/custom-promise'
 
 export class ObjectPool<TObject> implements IObjectPool<TObject> {
-  size = 0
-  maxSize
+  size: number = 0
+  maxSize: number
   private readonly _stack = [null]
 
   constructor(maxSize: number) {
@@ -28,24 +28,25 @@ export class ObjectPool<TObject> implements IObjectPool<TObject> {
   }
 
   release(obj: TObject) {
-    if (this.size < this.maxSize) {
-      this._stack[this.size] = obj
-      this.size++
-      if (this._tickPromise) {
-        const tickPromise = this._tickPromise
-        this._tickPromise = null
-        tickPromise.resolve()
-      }
+    if (this.size >= this.maxSize) {
+      return false
     }
-  }
 
-  available(): boolean {
-    return this.size > 0
+    this._stack[this.size] = obj
+    this.size++
+
+    if (this._tickPromise) {
+      const tickPromise = this._tickPromise
+      this._tickPromise = null
+      tickPromise.resolve()
+    }
+
+    return true
   }
 
   private _tickPromise: CustomPromise<void> = new CustomPromise()
   tick(abortSignal?: IAbortSignalFast): Promise<void> {
-    if (this.available()) {
+    if (this.size > 0) {
       return
     }
     if (!this._tickPromise) {

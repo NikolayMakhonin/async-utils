@@ -14,7 +14,7 @@ describe('object-pool > ObjectPool', function () {
     async: boolean,
     maxSize: number,
   }) => {
-    const objectPool = new ObjectPool(maxSize)
+    const objectPool = new ObjectPool<IObject>(maxSize)
     const promises: Promise<number>[] = []
 
     type IObject = {
@@ -22,20 +22,33 @@ describe('object-pool > ObjectPool', function () {
     }
 
     let objectsCount = 0
-    function createObject(): IObject {
-      objectsCount++
-      assert.ok(objectsCount <= maxSize)
-      return {
-        id: objectsCount,
+    const createObject = async
+      ? async function createObject(): Promise<IObject> {
+        objectsCount++
+        assert.ok(objectsCount <= maxSize)
+        await delay(1)
+        return {
+          id: objectsCount,
+        }
       }
-    }
+      : function createObject(): IObject {
+        objectsCount++
+        assert.ok(objectsCount <= maxSize)
+        return {
+          id: objectsCount,
+        }
+      }
 
     const activeObjects = new Set<IObject>()
     function createFunc(result: number) {
       return async
-        ? async function func(obj: any, abortSignal: IAbortSignalFast) {
+        ? async function func(obj: IObject, abortSignal: IAbortSignalFast) {
           if (abort) {
             assert.ok(!abortSignal.aborted)
+          }
+
+          if (!obj) {
+            obj = await createObject()
           }
 
           assert.ok(obj)
@@ -58,9 +71,13 @@ describe('object-pool > ObjectPool', function () {
 
           return result
         }
-        : function func(obj: any, abortSignal: IAbortSignalFast) {
+        : function func(obj: IObject, abortSignal: IAbortSignalFast) {
           if (abort) {
             assert.ok(abortSignal.aborted)
+          }
+
+          if (!obj) {
+            obj = createObject() as IObject
           }
 
           assert.ok(obj)
@@ -70,7 +87,7 @@ describe('object-pool > ObjectPool', function () {
           assert.ok(!activeObjects.has(obj))
           assert.ok(activeObjects.size < maxSize)
 
-          return obj
+          return result
         }
     }
 

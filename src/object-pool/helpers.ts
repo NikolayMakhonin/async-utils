@@ -5,10 +5,10 @@ export async function objectPoolWait<TObject>(
   objectPool: IObjectPool<TObject>,
   abortSignal?: IAbortSignalFast,
 ): Promise<TObject> {
-  while (!this.available()) {
-    await this.tick()
+  while (objectPool.size <= 0) {
+    await objectPool.tick()
   }
-  return this.get()
+  return objectPool.get()
 }
 
 export async function objectPoolUsing<TObject, TResult>(
@@ -16,12 +16,12 @@ export async function objectPoolUsing<TObject, TResult>(
   func: (obj: TObject, abortSignal?: IAbortSignalFast) => Promise<TResult> | TResult,
   abortSignal?: IAbortSignalFast,
 ): Promise<TResult> {
-  const obj = await this.wait(abortSignal)
+  const obj = await objectPoolWait(objectPool, abortSignal)
   try {
     const result = await func(obj, abortSignal)
     return result
   }
   finally {
-    this.release(obj)
+    objectPool.release(obj)
   }
 }
