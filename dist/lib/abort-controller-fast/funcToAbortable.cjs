@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var tslib = require('tslib');
 var customPromise_CustomPromise = require('../custom-promise/CustomPromise.cjs');
 require('../promise-fast/PromiseFast.cjs');
+require('../isPromiseLike.cjs');
 require('../custom-promise/rejectAsResolve.cjs');
 
 function funcToAbortable(abortSignal, func) {

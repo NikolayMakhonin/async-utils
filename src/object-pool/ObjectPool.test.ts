@@ -1,15 +1,17 @@
 import {ObjectPool} from 'src/object-pool/ObjectPool'
 import {createTestVariants} from '@flemist/test-variants'
 import {delay} from 'src/delay'
-import {objectPoolUsing} from 'src/object-pool/helpers'
+import {objectPoolAllocate, objectPoolUsing} from 'src/object-pool/helpers'
 import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
 
 describe('object-pool > ObjectPool', function () {
   const testVariants = createTestVariants(async ({
+    preAllocateSize,
     abort,
     async,
     maxSize,
   }: {
+    preAllocateSize: number,
     abort: boolean,
     async: boolean,
     maxSize: number,
@@ -28,7 +30,7 @@ describe('object-pool > ObjectPool', function () {
     }
 
     let objectsCount = 0
-    const createObject = async
+    const createObject: () => Promise<IObject>|IObject = async
       ? async function createObject(): Promise<IObject> {
         objectsCount++
         assert.ok(objectsCount <= maxSize)
@@ -44,6 +46,18 @@ describe('object-pool > ObjectPool', function () {
           id: objectsCount,
         }
       }
+
+    assert.strictEqual(objectPool.size, 0)
+    assert.strictEqual(objectPool.maxSize, maxSize)
+    assert.strictEqual(objectPool.available, maxSize)
+    if (preAllocateSize !== void 0) {
+      await objectPoolAllocate(objectPool, createObject, preAllocateSize)
+      assert.strictEqual(objectPool.maxSize, maxSize)
+      assert.strictEqual(objectPool.available, maxSize)
+      assert.strictEqual(objectPool.size, preAllocateSize == null
+        ? maxSize
+        : Math.min(maxSize, preAllocateSize))
+    }
 
     const activeObjects = new Set<IObject>()
     function createFunc(result: number) {
@@ -103,6 +117,11 @@ describe('object-pool > ObjectPool', function () {
     }
 
     const results = await Promise.all(promises)
+
+    assert.strictEqual(objectPool.size, maxSize)
+    assert.strictEqual(objectPool.maxSize, maxSize)
+    assert.strictEqual(objectPool.available, maxSize)
+
     for (let i = 0; i < totalCount; i++) {
       assert.strictEqual(results[i], i)
     }
@@ -111,6 +130,7 @@ describe('object-pool > ObjectPool', function () {
   it('variants', async function () {
     this.timeout(600000)
     await testVariants({
+      preAllocateSize: [void 0, null, 0, 1, 2, 9, 10],
       abort  : [false, true],
       async  : [false, true],
       maxSize: [1, 2, 10],

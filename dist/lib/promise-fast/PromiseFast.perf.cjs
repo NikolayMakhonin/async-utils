@@ -3,6 +3,7 @@
 var tslib = require('tslib');
 var rdtsc = require('rdtsc');
 var promiseFast_PromiseFast = require('./PromiseFast.cjs');
+require('../isPromiseLike.cjs');
 
 describe('promise-fast > PromiseFast perf', function () {
     this.timeout(600000);

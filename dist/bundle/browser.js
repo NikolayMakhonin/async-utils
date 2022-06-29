@@ -170,7 +170,7 @@ case 0:if(!t)return[2,e()]
 return i.trys.push([1,,3,4]),[4,e(n.promise)]
 ;case 2:return[2,i.sent()];case 3:return o(),[7]
 ;case 4:return[2]}}))}))
-},t.promiseRejected=function(t){
+},t.isPromiseLike=a,t.promiseRejected=function(t){
 return Promise.resolve(h(t))
 },t.promiseToAbortable=function(t,e){
 return new Promise((function(r,n){var o,i

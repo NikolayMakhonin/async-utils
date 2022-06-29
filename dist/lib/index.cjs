@@ -9,6 +9,7 @@ var abortControllerFast_funcToAbortable = require('./abort-controller-fast/funcT
 var abortControllerFast_promiseToAbortable = require('./abort-controller-fast/promiseToAbortable.cjs');
 var abortControllerFast_useAbortController = require('./abort-controller-fast/useAbortController.cjs');
 var customPromise_rejectAsResolve = require('./custom-promise/rejectAsResolve.cjs');
+var isPromiseLike = require('./isPromiseLike.cjs');
 require('@flemist/time-controller');
 require('./promise-fast/PromiseFast.cjs');
 require('@flemist/abort-controller-fast');
@@ -24,3 +25,4 @@ exports.promiseToAbortable = abortControllerFast_promiseToAbortable.promiseToAbo
 exports.useAbortController = abortControllerFast_useAbortController.useAbortController;
 exports.promiseRejected = customPromise_rejectAsResolve.promiseRejected;
 exports.rejectAsResolve = customPromise_rejectAsResolve.rejectAsResolve;
+exports.isPromiseLike = isPromiseLike.isPromiseLike;

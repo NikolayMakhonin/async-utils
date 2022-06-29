@@ -1,13 +1,6 @@
+import { isPromiseLike } from '../isPromiseLike.mjs';
+
 /* eslint-disable node/no-sync */
-// noinspection JSConstantReassignment
-function isPromiseLike(obj) {
-    if (obj != null
-        && typeof obj === 'object'
-        && typeof obj.then === 'function') {
-        return true;
-    }
-    return false;
-}
 function callFulfill(value, fulfill, nextPromise) {
     try {
         const result = fulfill

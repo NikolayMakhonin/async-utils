@@ -5,6 +5,7 @@ export { funcToAbortable } from './abort-controller-fast/funcToAbortable.mjs';
 export { promiseToAbortable } from './abort-controller-fast/promiseToAbortable.mjs';
 export { useAbortController } from './abort-controller-fast/useAbortController.mjs';
 export { promiseRejected, rejectAsResolve } from './custom-promise/rejectAsResolve.mjs';
+export { isPromiseLike } from './isPromiseLike.mjs';
 import '@flemist/time-controller';
 import './promise-fast/PromiseFast.mjs';
 import '@flemist/abort-controller-fast';

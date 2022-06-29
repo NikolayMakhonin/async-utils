@@ -1,6 +1,7 @@
 import { __awaiter } from 'tslib';
 import { CustomPromise } from '../custom-promise/CustomPromise.mjs';
 import '../promise-fast/PromiseFast.mjs';
+import '../isPromiseLike.mjs';
 import '../custom-promise/rejectAsResolve.mjs';
 
 function funcToAbortable(abortSignal, func) {

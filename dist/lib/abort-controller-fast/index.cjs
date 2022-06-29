@@ -10,6 +10,7 @@ require('@flemist/abort-controller-fast');
 require('tslib');
 require('../custom-promise/CustomPromise.cjs');
 require('../promise-fast/PromiseFast.cjs');
+require('../isPromiseLike.cjs');
 require('../custom-promise/rejectAsResolve.cjs');
 
 

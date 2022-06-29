@@ -2,16 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var isPromiseLike = require('../isPromiseLike.cjs');
+
 /* eslint-disable node/no-sync */
-// noinspection JSConstantReassignment
-function isPromiseLike(obj) {
-    if (obj != null
-        && typeof obj === 'object'
-        && typeof obj.then === 'function') {
-        return true;
-    }
-    return false;
-}
 function callFulfill(value, fulfill, nextPromise) {
     try {
         const result = fulfill
@@ -75,7 +68,7 @@ class PromiseFast {
         this._resolveAsync(value);
     }
     _resolveAsync(value) {
-        if (isPromiseLike(value)) {
+        if (isPromiseLike.isPromiseLike(value)) {
             value.then(this._resolveAsync, this._rejectAsync);
             return;
         }
@@ -102,7 +95,7 @@ class PromiseFast {
     _rejectAsync(reason) {
         // @ts-expect-error
         this.status = 'rejected';
-        if (isPromiseLike(reason)) {
+        if (isPromiseLike.isPromiseLike(reason)) {
             reason.then(this._rejectAsync, this._rejectAsync);
             return;
         }

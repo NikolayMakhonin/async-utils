@@ -1,5 +1,6 @@
 import { PromiseFast } from '../promise-fast/PromiseFast.mjs';
 import { rejectAsResolve } from './rejectAsResolve.mjs';
+import '../isPromiseLike.mjs';
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {

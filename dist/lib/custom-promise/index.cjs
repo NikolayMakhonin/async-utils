@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var customPromise_CustomPromise = require('./CustomPromise.cjs');
 require('../promise-fast/PromiseFast.cjs');
+require('../isPromiseLike.cjs');
 require('./rejectAsResolve.cjs');
 
 
