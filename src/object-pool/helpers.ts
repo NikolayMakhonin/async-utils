@@ -4,23 +4,24 @@ import {isPromiseLike} from 'src/isPromiseLike'
 import {Pool} from 'src/object-pool/Pool'
 import {StackPool} from '~/src'
 
-export function createObjectPool<TObject>({
-  maxSize,
-  withHoldObjects,
-  create,
-  destroy,
-}: {
+export function createObjectPool<TObject>(params: ({
   maxSize: number,
-  withHoldObjects: boolean,
+  pool?: never
+} | {
+  maxSize?: never,
+  pool: IPool
+}) & {
+  availableObjects?: IStackPool<TObject>
+  holdObjects?: boolean | Set<TObject>,
   create?: () => Promise<TObject>|TObject,
   destroy?: (obj: TObject) => Promise<void>|void,
 }): IObjectPool2<TObject> {
   return {
-    pool            : new Pool(maxSize),
-    availableObjects: new StackPool(),
-    holdObjects     : withHoldObjects ? new Set<TObject>() : void 0,
-    create,
-    destroy,
+    pool            : params.pool || new Pool(params.maxSize),
+    availableObjects: params.availableObjects || new StackPool(),
+    holdObjects     : params.holdObjects === true ? new Set<TObject>() : params.holdObjects || void 0,
+    create          : params.create,
+    destroy         : params.destroy,
   }
 }
 
@@ -32,7 +33,6 @@ export async function poolWait(
     await pool.tick()
   }
 }
-
 
 export function objectPoolRelease<TObject>(
   objectPool: {
@@ -48,7 +48,6 @@ export function objectPoolRelease<TObject>(
   }
   return false
 }
-
 
 export async function objectPoolUsing<TObject, TResult>(
   objectPool: IObjectPool2<TObject>,

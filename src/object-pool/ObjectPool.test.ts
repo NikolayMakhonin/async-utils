@@ -47,9 +47,9 @@ describe('object-pool > ObjectPool', function () {
 
     const objectPool = createObjectPool<IObject>({
       maxSize,
-      withHoldObjects: false,
-      create         : createObject,
-      destroy        : null,
+      holdObjects: false,
+      create     : createObject,
+      destroy    : null,
     })
 
     assert.strictEqual(objectPool.pool.maxSize, maxSize)
