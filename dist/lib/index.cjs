@@ -10,6 +10,8 @@ var abortControllerFast_promiseToAbortable = require('./abort-controller-fast/pr
 var abortControllerFast_useAbortController = require('./abort-controller-fast/useAbortController.cjs');
 var customPromise_rejectAsResolve = require('./custom-promise/rejectAsResolve.cjs');
 var isPromiseLike = require('./isPromiseLike.cjs');
+var objectPool_ObjectPool = require('./object-pool/ObjectPool.cjs');
+var objectPool_helpers = require('./object-pool/helpers.cjs');
 require('@flemist/time-controller');
 require('./promise-fast/PromiseFast.cjs');
 require('@flemist/abort-controller-fast');
@@ -26,3 +28,7 @@ exports.useAbortController = abortControllerFast_useAbortController.useAbortCont
 exports.promiseRejected = customPromise_rejectAsResolve.promiseRejected;
 exports.rejectAsResolve = customPromise_rejectAsResolve.rejectAsResolve;
 exports.isPromiseLike = isPromiseLike.isPromiseLike;
+exports.ObjectPool = objectPool_ObjectPool.ObjectPool;
+exports.objectPoolAllocate = objectPool_helpers.objectPoolAllocate;
+exports.objectPoolUsing = objectPool_helpers.objectPoolUsing;
+exports.objectPoolWait = objectPool_helpers.objectPoolWait;

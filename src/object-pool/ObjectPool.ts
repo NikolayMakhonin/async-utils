@@ -1,69 +1,51 @@
-import {IObjectPool} from './contracts'
+import {IObjectPool, IPool} from './contracts'
 import {IAbortSignalFast} from '@flemist/abort-controller-fast'
-import {promiseToAbortable} from 'src/abort-controller-fast'
-import {CustomPromise} from 'src/custom-promise'
 
 export class ObjectPool<TObject> implements IObjectPool<TObject> {
-  readonly maxSize: number = 0
-  private _available: number = 0
+  readonly pool: IPool
   private readonly _stack: TObject[] = []
 
-  constructor(maxSize: number) {
-    if (!maxSize) {
-      throw new Error('maxSize should be > 0')
-    }
-    this.maxSize = maxSize
-    this._available = maxSize
+  constructor(pool: IPool) {
+    this.pool = pool
   }
 
   get size() {
     return this._stack.length
   }
 
+  get maxSize() {
+    return this.pool.maxSize
+  }
+
   get available() {
-    return this._available
+    return this.pool.size
   }
 
   get(): TObject {
-    const lastIndex = this._available - 1
-    if (lastIndex >= 0) {
-      this._available--
-      if (lastIndex >= this._stack.length) {
-        return null
+    if (this.pool.hold(1)) {
+      const lastIndex = this._stack.length - 1
+      if (lastIndex >= 0) {
+        const obj = this._stack[lastIndex]
+        this._stack.length = lastIndex
+        return obj
       }
-      const obj = this._stack[lastIndex]
-      this._stack.length = lastIndex
-      return obj
     }
-
     return null
   }
 
   release(obj: TObject) {
-    if (this._stack.length >= this.maxSize) {
+    if (this.pool.size >= this.pool.maxSize) {
       return false
     }
 
     this._stack.push(obj)
-    this._available = Math.min(this.maxSize, this._available + 1)
 
-    if (this._tickPromise) {
-      const tickPromise = this._tickPromise
-      this._tickPromise = null
-      tickPromise.resolve()
-    }
+    this.pool.release(1)
 
     return true
   }
 
-  private _tickPromise: CustomPromise<void> = new CustomPromise()
   tick(abortSignal?: IAbortSignalFast): Promise<void> {
-    if (this._available > 0) {
-      return
-    }
-    if (!this._tickPromise) {
-      this._tickPromise = new CustomPromise()
-    }
-    return promiseToAbortable(abortSignal, this._tickPromise.promise)
+    return this.pool.tick(abortSignal)
   }
 }

@@ -3,6 +3,7 @@ import {createTestVariants} from '@flemist/test-variants'
 import {delay} from 'src/delay'
 import {objectPoolAllocate, objectPoolUsing} from 'src/object-pool/helpers'
 import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {Pool} from "src/object-pool/Pool";
 
 describe('object-pool > ObjectPool', function () {
   const testVariants = createTestVariants(async ({
@@ -22,7 +23,7 @@ describe('object-pool > ObjectPool', function () {
     //   maxSize,
     // })
 
-    const objectPool = new ObjectPool<IObject>(maxSize)
+    const objectPool = new ObjectPool<IObject>(new Pool(maxSize))
     const promises: Promise<number>[] = []
 
     type IObject = {

@@ -37,18 +37,17 @@ export function objectPoolAllocate<TObject, TResult extends PromiseLike<TObject>
   size?: number,
 ): TResult extends PromiseLike<any> ? Promise<void> : void {
   const promises: Promise<void>[] = []
-  let deferSize = 0
-  while (
-    objectPool.size < objectPool.available
-    && (size == null || objectPool.size + deferSize < size)
-  ) {
-    const nullObject = objectPool.get()
-    if (nullObject != null) {
-      throw new Error('Unexpected behavior')
-    }
+  let tryHoldCount = objectPool.available - objectPool.size
+  if (size != null && size < tryHoldCount) {
+    tryHoldCount = size
+  }
+  if (tryHoldCount < 0) {
+    throw new Error('Unexpected behavior')
+  }
+  const holdCount = objectPool.pool.hold(tryHoldCount)
+  for (let i = 0; i < holdCount; i++) {
     const objectOrPromise = createObject()
     if (isPromiseLike(objectOrPromise)) {
-      deferSize++
       promises.push(
         (objectOrPromise as any as Promise<TObject>)
           .then(obj => {

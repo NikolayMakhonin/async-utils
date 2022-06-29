@@ -6,6 +6,8 @@ export { promiseToAbortable } from './abort-controller-fast/promiseToAbortable.m
 export { useAbortController } from './abort-controller-fast/useAbortController.mjs';
 export { promiseRejected, rejectAsResolve } from './custom-promise/rejectAsResolve.mjs';
 export { isPromiseLike } from './isPromiseLike.mjs';
+export { ObjectPool } from './object-pool/ObjectPool.mjs';
+export { objectPoolAllocate, objectPoolUsing, objectPoolWait } from './object-pool/helpers.mjs';
 import '@flemist/time-controller';
 import './promise-fast/PromiseFast.mjs';
 import '@flemist/abort-controller-fast';
