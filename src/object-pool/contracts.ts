@@ -22,7 +22,7 @@ export interface IStackPool<TObject> {
 
 export interface IObjectPool<TObject> {
 	pool: IPool
-	objects: IStackPool<TObject>
+	stack: IStackPool<TObject>
 	size: number
 	readonly maxSize: number
 	readonly available: number
@@ -31,4 +31,12 @@ export interface IObjectPool<TObject> {
 	release(obj: TObject): boolean
 	/** it will resolve when size > 0 */
 	tick(abortSignal?: IAbortSignalFast): Promise<void>
+}
+
+export interface IObjectPool2<TObject> {
+	pool: IPool
+	availableObjects: IStackPool<TObject>
+	holdObjects?: Set<TObject>
+	create?: () => Promise<TObject>|TObject,
+	destroy?: (obj: TObject) => Promise<void>|void,
 }

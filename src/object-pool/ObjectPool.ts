@@ -4,15 +4,15 @@ import {StackPool} from 'src/object-pool/StackPool'
 
 export class ObjectPool<TObject> implements IObjectPool<TObject> {
   readonly pool: IPool
-  readonly objects: IStackPool<TObject>
+  readonly stack: IStackPool<TObject>
 
   constructor(pool: IPool) {
     this.pool = pool
-    this.objects = new StackPool()
+    this.stack = new StackPool()
   }
 
   get size() {
-    return this.objects.size
+    return this.stack.size
   }
 
   get maxSize() {
@@ -25,14 +25,14 @@ export class ObjectPool<TObject> implements IObjectPool<TObject> {
 
   get(): TObject {
     if (this.pool.hold(1)) {
-      return this.objects.get()
+      return this.stack.get()
     }
     return null
   }
 
   release(obj: TObject) {
     if (this.pool.maxReleaseCount > 0) {
-      this.objects.release(obj)
+      this.stack.release(obj)
       this.pool.release(1)
       return true
     }

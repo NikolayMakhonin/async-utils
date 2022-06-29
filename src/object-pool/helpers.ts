@@ -1,43 +1,85 @@
-import {IObjectPool} from 'src/object-pool/contracts'
+import {IObjectPool2, IPool, IStackPool} from 'src/object-pool/contracts'
 import {IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {isPromiseLike} from 'src/isPromiseLike'
+import {Pool} from 'src/object-pool/Pool'
+import {StackPool} from '~/src'
 
-export async function objectPoolWait<TObject>(
-  objectPool: IObjectPool<TObject>,
-  abortSignal?: IAbortSignalFast,
-): Promise<TObject> {
-  while (objectPool.available <= 0) {
-    await objectPool.tick()
+export function createObjectPool<TObject>({
+  maxSize,
+  withHoldObjects,
+  create,
+  destroy,
+}: {
+  maxSize: number,
+  withHoldObjects: boolean,
+  create?: () => Promise<TObject>|TObject,
+  destroy?: (obj: TObject) => Promise<void>|void,
+}): IObjectPool2<TObject> {
+  return {
+    pool            : new Pool(maxSize),
+    availableObjects: new StackPool(),
+    holdObjects     : withHoldObjects ? new Set<TObject>() : void 0,
+    create,
+    destroy,
   }
-  return objectPool.get()
 }
 
+export async function poolWait(
+  pool: IPool,
+  abortSignal?: IAbortSignalFast,
+): Promise<void> {
+  while (!pool.hold(1)) {
+    await pool.tick()
+  }
+}
+
+
+export function objectPoolRelease<TObject>(
+  objectPool: {
+    pool: IPool,
+    availableObjects: IStackPool<TObject>,
+  },
+  obj: TObject,
+): boolean {
+  if (objectPool.pool.maxReleaseCount > 0) {
+    objectPool.availableObjects.release(obj)
+    objectPool.pool.release(1)
+    return true
+  }
+  return false
+}
+
+
 export async function objectPoolUsing<TObject, TResult>(
-  objectPool: IObjectPool<TObject>,
-  createObject: () => Promise<TObject>|TObject,
+  objectPool: IObjectPool2<TObject>,
   func: (obj: TObject, abortSignal?: IAbortSignalFast) => Promise<TResult> | TResult,
   abortSignal?: IAbortSignalFast,
 ): Promise<TResult> {
-  let obj = await objectPoolWait(objectPool, abortSignal)
-  if (obj == null) {
-    obj = await createObject()
+  await poolWait(objectPool.pool, abortSignal)
+  let obj = objectPool.availableObjects.get()
+  if (obj == null && objectPool.create) {
+    obj = await objectPool.create()
   }
   try {
     const result = await func(obj, abortSignal)
     return result
   }
   finally {
-    objectPool.release(obj)
+    if (!objectPoolRelease(objectPool, obj) && objectPool.destroy) {
+      await objectPool.destroy(obj)
+    }
   }
 }
 
 export function objectPoolAllocate<TObject, TResult extends PromiseLike<TObject>|TObject>(
-  objectPool: IObjectPool<TObject>,
-  createObject: () => TResult,
+  objectPool: Omit<IObjectPool2<TObject>, 'destroy'>,
   size?: number,
 ): TResult extends PromiseLike<any> ? Promise<void> : void {
+  if (!objectPool.create) {
+    return
+  }
   const promises: Promise<void>[] = []
-  let tryHoldCount = objectPool.available - objectPool.size
+  let tryHoldCount = objectPool.pool.size - objectPool.availableObjects.size
   if (size != null && size < tryHoldCount) {
     tryHoldCount = size
   }
@@ -46,21 +88,21 @@ export function objectPoolAllocate<TObject, TResult extends PromiseLike<TObject>
   }
   const holdCount = objectPool.pool.hold(tryHoldCount)
   for (let i = 0; i < holdCount; i++) {
-    const objectOrPromise = createObject()
+    const objectOrPromise = objectPool.create()
     if (isPromiseLike(objectOrPromise)) {
       promises.push(
         (objectOrPromise as any as Promise<TObject>)
           .then(obj => {
-            objectPool.release(obj)
+            objectPoolRelease(objectPool, obj)
           })
           .catch(err => {
-            objectPool.release(null)
+            objectPoolRelease(objectPool, null)
             throw err
           }),
       )
     }
     else {
-      objectPool.release(objectOrPromise as TObject)
+      objectPoolRelease(objectPool, objectOrPromise as TObject)
     }
   }
   if (promises.length) {
