@@ -29,4 +29,6 @@ export interface IObjectPool<TObject extends object> {
     tick(abortSignal?: IAbortSignalFast): Promise<void>;
     /** wait available > 0 and get, use this for concurrency get */
     getWait(abortSignal?: IAbortSignalFast): Promise<TObject>;
+    use<TResult>(func: (obj: TObject, abortSignal?: IAbortSignalFast) => Promise<TResult> | TResult, abortSignal?: IAbortSignalFast): Promise<TResult>;
+    allocate<TResult extends PromiseLike<TObject> | TObject>(size?: number): TResult extends PromiseLike<any> ? Promise<void> : void;
 }
