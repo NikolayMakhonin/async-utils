@@ -4,7 +4,7 @@ import {StackPool} from 'src/object-pool/StackPool'
 import {isPromiseLike} from '../isPromiseLike'
 import {Pool} from './Pool'
 
-export type ObjectPoolArgs<TObject> = ({
+export type ObjectPoolArgs<TObject extends object> = ({
   maxSize: number,
   pool?: never
 } | {
@@ -17,7 +17,7 @@ export type ObjectPoolArgs<TObject> = ({
   destroy?: (obj: TObject) => Promise<void>|void,
 }
 
-export class ObjectPool<TObject> implements IObjectPool<TObject> {
+export class ObjectPool<TObject extends object> implements IObjectPool<TObject> {
   private readonly _pool: IPool
   private readonly _availableObjects: IStackPool<TObject>
   private readonly _holdObjects: Set<TObject>
@@ -93,6 +93,9 @@ export class ObjectPool<TObject> implements IObjectPool<TObject> {
     let obj = await this.getWait(abortSignal)
     if (obj == null && this._create) {
       obj = await this._create()
+      if (this._holdObjects) {
+        this._holdObjects.add(obj)
+      }
     }
     try {
       const result = await func(obj, abortSignal)

@@ -47,18 +47,20 @@ describe('object-pool > ObjectPool', function () {
 
     const objectPool = new ObjectPool<IObject>({
       maxSize,
-      holdObjects: false,
+      holdObjects: true,
       create     : createObject,
       destroy    : null,
     })
 
     assert.strictEqual(objectPool.maxSize, maxSize)
     assert.strictEqual(objectPool.available, maxSize)
+    assert.strictEqual(objectPool.holdObjects.size, 0)
     assert.strictEqual(objectPool.availableObjects.length, 0)
     if (preAllocateSize !== void 0) {
       await objectPool.allocate(preAllocateSize)
       assert.strictEqual(objectPool.maxSize, maxSize)
       assert.strictEqual(objectPool.available, maxSize)
+      assert.strictEqual(objectPool.holdObjects.size, 0)
       assert.strictEqual(objectPool.availableObjects.length, preAllocateSize == null
         ? maxSize
         : Math.min(maxSize, preAllocateSize))
@@ -75,6 +77,9 @@ describe('object-pool > ObjectPool', function () {
           assert.ok(!activeObjects.has(obj))
           activeObjects.add(obj)
           assert.ok(activeObjects.size <= maxSize)
+          assert.ok(!objectPool.availableObjects.includes(obj))
+          assert.ok(objectPool.holdObjects.has(obj))
+          assert.ok(objectPool.holdObjects.size <= maxSize)
 
           await delay(1)
 
@@ -85,6 +90,9 @@ describe('object-pool > ObjectPool', function () {
           assert.ok(activeObjects.has(obj))
           activeObjects.delete(obj)
           assert.ok(activeObjects.size < maxSize)
+          assert.ok(!objectPool.availableObjects.includes(obj))
+          assert.ok(objectPool.holdObjects.has(obj))
+          assert.ok(objectPool.holdObjects.size <= maxSize)
 
           return result
         }
@@ -99,6 +107,9 @@ describe('object-pool > ObjectPool', function () {
 
           assert.ok(!activeObjects.has(obj))
           assert.ok(activeObjects.size < maxSize)
+          assert.ok(!objectPool.availableObjects.includes(obj))
+          assert.ok(objectPool.holdObjects.has(obj))
+          assert.ok(objectPool.holdObjects.size <= maxSize)
 
           return result
         }

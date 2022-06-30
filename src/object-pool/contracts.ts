@@ -24,7 +24,7 @@ export interface IStackPool<TObject> {
 	release(obj: TObject): void
 }
 
-export interface IObjectPool<TObject> {
+export interface IObjectPool<TObject extends object> {
 	readonly available: number
 	readonly maxSize: number
 
