@@ -5,11 +5,13 @@ import {ObjectPool} from './ObjectPool'
 
 describe('object-pool > ObjectPool', function () {
   const testVariants = createTestVariants(async ({
+    holdObjects,
     preAllocateSize,
     abort,
     async,
     maxSize,
   }: {
+    holdObjects: boolean,
     preAllocateSize: number,
     abort: boolean,
     async: boolean,
@@ -47,20 +49,30 @@ describe('object-pool > ObjectPool', function () {
 
     const objectPool = new ObjectPool<IObject>({
       maxSize,
-      holdObjects: true,
-      create     : createObject,
-      destroy    : null,
+      holdObjects,
+      create : createObject,
+      destroy: null,
     })
 
     assert.strictEqual(objectPool.maxSize, maxSize)
     assert.strictEqual(objectPool.available, maxSize)
-    assert.strictEqual(objectPool.holdObjects.size, 0)
+    if (holdObjects) {
+      assert.strictEqual(objectPool.holdObjects.size, 0)
+    }
+    else {
+      assert.strictEqual(objectPool.holdObjects, null)
+    }
     assert.strictEqual(objectPool.availableObjects.length, 0)
     if (preAllocateSize !== void 0) {
       await objectPool.allocate(preAllocateSize)
       assert.strictEqual(objectPool.maxSize, maxSize)
       assert.strictEqual(objectPool.available, maxSize)
-      assert.strictEqual(objectPool.holdObjects.size, 0)
+      if (holdObjects) {
+        assert.strictEqual(objectPool.holdObjects.size, 0)
+      }
+      else {
+        assert.strictEqual(objectPool.holdObjects, null)
+      }
       assert.strictEqual(objectPool.availableObjects.length, preAllocateSize == null
         ? maxSize
         : Math.min(maxSize, preAllocateSize))
@@ -77,9 +89,23 @@ describe('object-pool > ObjectPool', function () {
           assert.ok(!activeObjects.has(obj))
           activeObjects.add(obj)
           assert.ok(activeObjects.size <= maxSize)
-          assert.ok(!objectPool.availableObjects.includes(obj))
-          assert.ok(objectPool.holdObjects.has(obj))
-          assert.ok(objectPool.holdObjects.size <= maxSize)
+          assert.ok(objectPool.available < objectPool.maxSize)
+          assert.ok(objectPool.availableObjects.length < maxSize)
+          activeObjects.forEach(o => {
+            assert.ok(!objectPool.availableObjects.includes(o))
+          })
+          if (holdObjects) {
+            activeObjects.forEach(o => {
+              assert.ok(objectPool.holdObjects.has(o))
+            })
+            objectPool.availableObjects.forEach(o => {
+              assert.ok(!objectPool.holdObjects.has(o))
+            })
+            assert.ok(objectPool.holdObjects.size <= maxSize)
+          }
+          else {
+            assert.strictEqual(objectPool.holdObjects, null)
+          }
 
           await delay(1)
 
@@ -87,12 +113,26 @@ describe('object-pool > ObjectPool', function () {
             assert.ok(abortSignal.aborted)
           }
 
+          assert.ok(objectPool.available < objectPool.maxSize)
+          assert.ok(objectPool.availableObjects.length < maxSize)
+          activeObjects.forEach(o => {
+            assert.ok(!objectPool.availableObjects.includes(o))
+          })
+          if (holdObjects) {
+            activeObjects.forEach(o => {
+              assert.ok(objectPool.holdObjects.has(o))
+            })
+            objectPool.availableObjects.forEach(o => {
+              assert.ok(!objectPool.holdObjects.has(o))
+            })
+            assert.ok(objectPool.holdObjects.size <= maxSize)
+          }
+          else {
+            assert.strictEqual(objectPool.holdObjects, null)
+          }
           assert.ok(activeObjects.has(obj))
           activeObjects.delete(obj)
           assert.ok(activeObjects.size < maxSize)
-          assert.ok(!objectPool.availableObjects.includes(obj))
-          assert.ok(objectPool.holdObjects.has(obj))
-          assert.ok(objectPool.holdObjects.size <= maxSize)
 
           return result
         }
@@ -106,10 +146,25 @@ describe('object-pool > ObjectPool', function () {
           assert.ok(obj.id <= maxSize)
 
           assert.ok(!activeObjects.has(obj))
-          assert.ok(activeObjects.size < maxSize)
-          assert.ok(!objectPool.availableObjects.includes(obj))
-          assert.ok(objectPool.holdObjects.has(obj))
-          assert.ok(objectPool.holdObjects.size <= maxSize)
+          activeObjects.add(obj)
+          assert.ok(activeObjects.size <= maxSize)
+          assert.ok(objectPool.availableObjects.length < maxSize)
+          activeObjects.forEach(o => {
+            assert.ok(!objectPool.availableObjects.includes(o))
+          })
+          if (holdObjects) {
+            activeObjects.forEach(o => {
+              assert.ok(objectPool.holdObjects.has(o))
+            })
+            objectPool.availableObjects.forEach(o => {
+              assert.ok(!objectPool.holdObjects.has(o))
+            })
+            assert.ok(objectPool.holdObjects.size <= maxSize)
+          }
+          else {
+            assert.strictEqual(objectPool.holdObjects, null)
+          }
+          activeObjects.delete(obj)
 
           return result
         }
@@ -134,6 +189,7 @@ describe('object-pool > ObjectPool', function () {
 
     const results = await Promise.all(promises)
 
+    assert.strictEqual(activeObjects.size, 0)
     assert.strictEqual(objectPool.availableObjects.length, maxSize)
     assert.strictEqual(objectPool.maxSize, maxSize)
     assert.strictEqual(objectPool.available, maxSize)
@@ -146,6 +202,7 @@ describe('object-pool > ObjectPool', function () {
   it('variants', async function () {
     this.timeout(600000)
     await testVariants({
+      holdObjects    : [false, true],
       preAllocateSize: [void 0, null, 0, 1, 2, 9, 10],
       abort          : [false, true],
       async          : [false, true],

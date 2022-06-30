@@ -34,7 +34,7 @@ export class ObjectPool<TObject extends object> implements IObjectPool<TObject> 
   }: ObjectPoolArgs<TObject>) {
     this._pool = pool || new Pool(maxSize)
     this._availableObjects = availableObjects || new StackPool()
-    this._holdObjects = holdObjects === true ? new Set<TObject>() : holdObjects || void 0
+    this._holdObjects = holdObjects === true ? new Set<TObject>() : holdObjects || null
     this._create = create
     this._destroy = destroy
   }
