@@ -2,66 +2,117 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var tslib = require('tslib');
+var objectPool_StackPool = require('./StackPool.cjs');
+var isPromiseLike = require('../isPromiseLike.cjs');
+var objectPool_Pool = require('./Pool.cjs');
 require('@flemist/abort-controller-fast');
-require('tslib');
-var customPromise_CustomPromise = require('../custom-promise/CustomPromise.cjs');
-var abortControllerFast_promiseToAbortable = require('../abort-controller-fast/promiseToAbortable.cjs');
+require('../custom-promise/CustomPromise.cjs');
 require('../promise-fast/PromiseFast.cjs');
-require('../isPromiseLike.cjs');
 require('../custom-promise/rejectAsResolve.cjs');
+require('../abort-controller-fast/promiseToAbortable.cjs');
 
 class ObjectPool {
-    constructor(maxSize) {
-        this.maxSize = 0;
-        this._available = 0;
-        this._stack = [];
-        this._tickPromise = new customPromise_CustomPromise.CustomPromise();
-        if (!maxSize) {
-            throw new Error('maxSize should be > 0');
-        }
-        this.maxSize = maxSize;
-        this._available = maxSize;
-    }
-    get size() {
-        return this._stack.length;
+    constructor({ maxSize, pool, availableObjects, holdObjects, destroy, create, }) {
+        this._pool = pool || new objectPool_Pool.Pool(maxSize);
+        this._availableObjects = availableObjects || new objectPool_StackPool.StackPool();
+        this._holdObjects = holdObjects === true ? new Set() : holdObjects || null;
+        this._create = create;
+        this._destroy = destroy;
     }
     get available() {
-        return this._available;
+        return this._pool.size;
+    }
+    get maxSize() {
+        return this._pool.maxSize;
+    }
+    get availableObjects() {
+        return this._availableObjects.objects;
+    }
+    get holdObjects() {
+        return this._holdObjects;
     }
     get() {
-        const lastIndex = this._available - 1;
-        if (lastIndex >= 0) {
-            this._available--;
-            if (lastIndex >= this._stack.length) {
-                return null;
-            }
-            const obj = this._stack[lastIndex];
-            this._stack.length = lastIndex;
-            return obj;
+        const obj = this._availableObjects.get();
+        if (obj != null && this._holdObjects) {
+            this._holdObjects.add(obj);
         }
-        return null;
+        return obj;
     }
     release(obj) {
-        if (this._stack.length >= this.maxSize) {
-            return false;
+        if (obj != null && this._holdObjects) {
+            this._holdObjects.delete(obj);
         }
-        this._stack.push(obj);
-        this._available = Math.min(this.maxSize, this._available + 1);
-        if (this._tickPromise) {
-            const tickPromise = this._tickPromise;
-            this._tickPromise = null;
-            tickPromise.resolve();
+        if (this._pool.maxReleaseCount > 0) {
+            if (obj != null) {
+                this._availableObjects.release(obj);
+            }
+            this._pool.release(1);
+            return true;
         }
-        return true;
+        return false;
     }
     tick(abortSignal) {
-        if (this._available > 0) {
-            return;
+        return this._pool.tick();
+    }
+    getWait(abortSignal) {
+        return tslib.__awaiter(this, void 0, void 0, function* () {
+            yield this._pool.holdWait(1, abortSignal);
+            return this.get();
+        });
+    }
+    use(func, abortSignal) {
+        return tslib.__awaiter(this, void 0, void 0, function* () {
+            let obj = yield this.getWait(abortSignal);
+            if (obj == null && this._create) {
+                obj = yield this._create();
+                if (this._holdObjects) {
+                    this._holdObjects.add(obj);
+                }
+            }
+            try {
+                const result = yield func(obj, abortSignal);
+                return result;
+            }
+            finally {
+                if (!this.release(obj) && this._destroy) {
+                    yield this._destroy(obj);
+                }
+            }
+        });
+    }
+    allocate(size) {
+        if (!this._create) {
+            throw new Error('You should specify create function in the constructor');
         }
-        if (!this._tickPromise) {
-            this._tickPromise = new customPromise_CustomPromise.CustomPromise();
+        const promises = [];
+        let tryHoldCount = this._pool.size - this._availableObjects.size;
+        if (size != null && size < tryHoldCount) {
+            tryHoldCount = size;
         }
-        return abortControllerFast_promiseToAbortable.promiseToAbortable(abortSignal, this._tickPromise.promise);
+        if (tryHoldCount < 0) {
+            throw new Error('Unexpected behavior: tryHoldCount < 0');
+        }
+        const holdCount = this._pool.hold(tryHoldCount);
+        for (let i = 0; i < holdCount; i++) {
+            const objectOrPromise = this._create();
+            if (isPromiseLike.isPromiseLike(objectOrPromise)) {
+                promises.push(objectOrPromise
+                    .then(obj => {
+                    this.release(obj);
+                })
+                    .catch(err => {
+                    this.release(null);
+                    throw err;
+                }));
+            }
+            else {
+                this.release(objectOrPromise);
+            }
+        }
+        if (promises.length) {
+            return Promise.all(promises);
+        }
     }
 }
 
