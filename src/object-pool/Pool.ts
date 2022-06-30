@@ -67,4 +67,21 @@ export class Pool implements IPool {
     }
     return promiseToAbortable(abortSignal, this._tickPromise.promise)
   }
+
+  async holdWait(count: number, abortSignal?: IAbortSignalFast) {
+    let holdCount: number = 0
+    try {
+      while (true) {
+        holdCount += this.hold(count - holdCount)
+        if (holdCount === count) {
+          return
+        }
+        await this.tick(abortSignal)
+      }
+    }
+    catch (err) {
+      this.release(holdCount)
+      throw err
+    }
+  }
 }

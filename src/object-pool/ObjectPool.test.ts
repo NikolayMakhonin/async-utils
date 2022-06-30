@@ -1,7 +1,7 @@
 import {createTestVariants} from '@flemist/test-variants'
 import {delay} from 'src/delay'
-import {createObjectPool, objectPoolAllocate, objectPoolUsing} from 'src/object-pool/helpers'
 import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {ObjectPool} from './ObjectPool'
 
 describe('object-pool > ObjectPool', function () {
   const testVariants = createTestVariants(async ({
@@ -45,21 +45,21 @@ describe('object-pool > ObjectPool', function () {
         }
       }
 
-    const objectPool = createObjectPool<IObject>({
+    const objectPool = new ObjectPool<IObject>({
       maxSize,
       holdObjects: false,
       create     : createObject,
       destroy    : null,
     })
 
-    assert.strictEqual(objectPool.pool.maxSize, maxSize)
-    assert.strictEqual(objectPool.pool.size, maxSize)
-    assert.strictEqual(objectPool.availableObjects.size, 0)
+    assert.strictEqual(objectPool.maxSize, maxSize)
+    assert.strictEqual(objectPool.available, maxSize)
+    assert.strictEqual(objectPool.availableObjects.length, 0)
     if (preAllocateSize !== void 0) {
-      await objectPoolAllocate(objectPool, preAllocateSize)
-      assert.strictEqual(objectPool.pool.maxSize, maxSize)
-      assert.strictEqual(objectPool.pool.size, maxSize)
-      assert.strictEqual(objectPool.availableObjects.size, preAllocateSize == null
+      await objectPool.allocate(preAllocateSize)
+      assert.strictEqual(objectPool.maxSize, maxSize)
+      assert.strictEqual(objectPool.available, maxSize)
+      assert.strictEqual(objectPool.availableObjects.length, preAllocateSize == null
         ? maxSize
         : Math.min(maxSize, preAllocateSize))
     }
@@ -111,7 +111,7 @@ describe('object-pool > ObjectPool', function () {
       if (abortController && !async) {
         abortController.abort(i)
       }
-      let promise = objectPoolUsing(objectPool, func, abortController.signal)
+      let promise = objectPool.use(func, abortController.signal)
       if (abort) {
         promise = promise.catch(o => o)
       }
@@ -123,9 +123,9 @@ describe('object-pool > ObjectPool', function () {
 
     const results = await Promise.all(promises)
 
-    assert.strictEqual(objectPool.availableObjects.size, maxSize)
-    assert.strictEqual(objectPool.pool.maxSize, maxSize)
-    assert.strictEqual(objectPool.pool.size, maxSize)
+    assert.strictEqual(objectPool.availableObjects.length, maxSize)
+    assert.strictEqual(objectPool.maxSize, maxSize)
+    assert.strictEqual(objectPool.available, maxSize)
 
     for (let i = 0; i < totalCount; i++) {
       assert.strictEqual(results[i], i)

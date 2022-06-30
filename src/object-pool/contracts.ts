@@ -12,31 +12,31 @@ export interface IPool {
 
 	/** it will resolve when size > 0 */
 	tick(abortSignal?: IAbortSignalFast): Promise<void>
+
+	/** wait size > 0 and hold, use this for concurrency hold */
+	holdWait(count: number, abortSignal?: IAbortSignalFast): Promise<void>
 }
 
 export interface IStackPool<TObject> {
-	size: number
+	readonly objects: ReadonlyArray<TObject>
+	readonly size: number
 	get(): TObject
 	release(obj: TObject): void
 }
 
 export interface IObjectPool<TObject> {
-	pool: IPool
-	stack: IStackPool<TObject>
-	size: number
-	readonly maxSize: number
 	readonly available: number
+	readonly maxSize: number
+
+	readonly availableObjects: ReadonlyArray<TObject>
+	readonly holdObjects?: ReadonlySet<TObject>
+
 	get(): TObject
 	/** it returns false if the obj cannot be pushed into the object pool (if size >= maxSize) */
 	release(obj: TObject): boolean
+
 	/** it will resolve when size > 0 */
 	tick(abortSignal?: IAbortSignalFast): Promise<void>
-}
-
-export interface IObjectPool2<TObject> {
-	pool: IPool
-	availableObjects: IStackPool<TObject>
-	holdObjects?: Set<TObject>
-	create?: () => Promise<TObject>|TObject,
-	destroy?: (obj: TObject) => Promise<void>|void,
+	/** wait available > 0 and get, use this for concurrency get */
+	getWait(abortSignal?: IAbortSignalFast): Promise<TObject>
 }

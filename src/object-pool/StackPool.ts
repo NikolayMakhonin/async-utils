@@ -1,23 +1,30 @@
 import {IStackPool} from './contracts'
 
 export class StackPool<TObject> implements IStackPool<TObject> {
-  private readonly _stack: TObject[] = []
+  private readonly _objects: TObject[] = []
+
+  get objects(): ReadonlyArray<TObject> {
+    return this._objects
+  }
 
   get size() {
-    return this._stack.length
+    return this._objects.length
   }
 
   get(): TObject {
-    const lastIndex = this._stack.length - 1
+    const lastIndex = this._objects.length - 1
     if (lastIndex >= 0) {
-      const obj = this._stack[lastIndex]
-      this._stack.length = lastIndex
+      const obj = this._objects[lastIndex]
+      this._objects.length = lastIndex
       return obj
     }
     return null
   }
 
   release(obj: TObject) {
-    this._stack.push(obj)
+    if (obj == null) {
+      throw new Error('object should not be null')
+    }
+    this._objects.push(obj)
   }
 }
