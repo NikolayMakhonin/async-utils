@@ -59,9 +59,6 @@ export class Pool implements IPool {
 
   private _tickPromise: CustomPromise<void> = new CustomPromise()
   tick(abortSignal?: IAbortSignalFast): Promise<void> {
-    if (this._size > 0) {
-      return
-    }
     if (!this._tickPromise) {
       this._tickPromise = new CustomPromise()
     }
@@ -69,6 +66,9 @@ export class Pool implements IPool {
   }
 
   async holdWait(count: number, abortSignal?: IAbortSignalFast) {
+    if (count > this.maxSize) {
+      throw new Error(`holdCount (${count} > maxSize (${this.maxSize}))`)
+    }
     let holdCount: number = 0
     try {
       while (true) {

@@ -3,15 +3,19 @@ import {delay} from 'src/delay'
 import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {ObjectPool} from './ObjectPool'
 import {IObjectPool} from './contracts'
+import {Pools} from './Pools'
+import {Pool} from './Pool'
 
 describe('object-pool > ObjectPool', function () {
   const testVariants = createTestVariants(async ({
+    usePools,
     holdObjects,
     preAllocateSize,
     abort,
     async,
     maxSize,
   }: {
+    usePools: boolean,
     holdObjects: boolean,
     preAllocateSize: number,
     abort: boolean,
@@ -48,9 +52,21 @@ describe('object-pool > ObjectPool', function () {
         }
       }
 
+    const pool = usePools
+      ? new Pools(
+        new Pool(maxSize),
+        new Pools(
+          new Pool(maxSize),
+          new Pool(maxSize + 1),
+        ),
+        new Pool(maxSize + 2),
+      )
+      : void 0
+
     const objectPool: IObjectPool<IObject> =
       new ObjectPool<IObject>({
         maxSize,
+        pool,
         holdObjects,
         create : createObject,
         destroy: null,
@@ -204,6 +220,7 @@ describe('object-pool > ObjectPool', function () {
   it('variants', async function () {
     this.timeout(600000)
     await testVariants({
+      usePools       : [true, false],
       holdObjects    : [false, true],
       preAllocateSize: [void 0, null, 0, 1, 2, 9, 10],
       abort          : [false, true],

@@ -4,13 +4,9 @@ import {StackPool} from 'src/object-pool/StackPool'
 import {isPromiseLike} from '../isPromiseLike'
 import {Pool} from './Pool'
 
-export type ObjectPoolArgs<TObject extends object> = ({
-  maxSize: number,
-  pool?: never
-} | {
-  maxSize?: never,
-  pool: IPool
-}) & {
+export type ObjectPoolArgs<TObject extends object> = {
+  maxSize?: number,
+  pool?: IPool,
   availableObjects?: IStackPool<TObject>
   holdObjects?: boolean | Set<TObject>,
   create?: () => Promise<TObject>|TObject,
