@@ -108,10 +108,10 @@ super(t),Object.setPrototypeOf(this,j.prototype),
 this.reason=e,this.name="AbortError",
 this._internal=!1}}
 y.AbortError=j,Object.defineProperty(_,"__esModule",{
-value:!0});var g=y
+value:!0});var m=y
 ;_.toAbortController=function(t,e){
 return t.signal.subscribe((t=>{
-t instanceof g.AbortError&&t._internal&&(t=t.reason),
+t instanceof m.AbortError&&t._internal&&(t=t.reason),
 e.abort(t)})),e
 },_.toAbortControllerFast=function(t,e){
 return t.signal.addEventListener("abort",(function(){
@@ -120,7 +120,7 @@ e.abort(this.reason)})),e
 return t.subscribe((t=>{e.abort(t)})),e.signal
 },_.toAbortSignalFast=function(t,e){
 return t.addEventListener("abort",(function(t){
-e.abort(t)})),e.signal};var m={},w={}
+e.abort(t)})),e.signal};var g={},w={}
 ;Object.defineProperty(w,"__esModule",{value:!0})
 ;const A=()=>{};w.AbortSignalFast=class{
 constructor(){
@@ -136,14 +136,14 @@ this._callbacks.add(t),()=>{var e
 t.call(this,this.reason)})),this._callbacks=void 0
 }throwIfAborted(){
 if(this.aborted)throw this.reason}
-},Object.defineProperty(m,"__esModule",{value:!0})
-;var P=w,O=y;m.AbortControllerFast=class{
+},Object.defineProperty(g,"__esModule",{value:!0})
+;var P=w,O=y;g.AbortControllerFast=class{
 constructor(){this.signal=new P.AbortSignalFast}
 abort(t){
 this.signal.aborted||(void 0===t&&((t=new O.AbortError("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}
 },Object.defineProperty(v,"__esModule",{value:!0})
-;var S=_,k=m,z=y
+;var S=_,k=g,z=y
 ;v.toAbortController=S.toAbortController,v.toAbortControllerFast=S.toAbortControllerFast,
 v.toAbortSignal=S.toAbortSignal,
 v.toAbortSignalFast=S.toAbortSignalFast
@@ -174,12 +174,14 @@ var e=this._size,r=this.maxSize-e
 var n=this._tickPromise
 ;this._tickPromise=null,n.resolve()}return t
 },t.prototype.tick=function(t){
-if(!(this._size>0))return this._tickPromise||(this._tickPromise=new d),
+return this._tickPromise||(this._tickPromise=new d),
 E(t,this._tickPromise.promise)
 },t.prototype.holdWait=function(t,e){
 return o(this,void 0,void 0,(function(){var r,n
 ;return i(this,(function(o){switch(o.label){
-case 0:r=0,o.label=1;case 1:
+case 0:
+if(t>this.maxSize)throw new Error("holdCount (".concat(t," > maxSize (").concat(this.maxSize,"))"))
+;r=0,o.label=1;case 1:
 o.trys.push([1,5,,6]),o.label=2;case 2:
 return(r+=this.hold(t-r))===t?[2]:[4,this.tick(e)]
 ;case 3:return o.sent(),[3,2];case 4:return[3,6]

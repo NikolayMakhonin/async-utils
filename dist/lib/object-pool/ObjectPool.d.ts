@@ -1,12 +1,8 @@
 import { IStackPool, IObjectPool, IPool } from './contracts';
 import { IAbortSignalFast } from '@flemist/abort-controller-fast';
-export declare type ObjectPoolArgs<TObject extends object> = ({
-    maxSize: number;
-    pool?: never;
-} | {
-    maxSize?: never;
-    pool: IPool;
-}) & {
+export declare type ObjectPoolArgs<TObject extends object> = {
+    maxSize?: number;
+    pool?: IPool;
     availableObjects?: IStackPool<TObject>;
     holdObjects?: boolean | Set<TObject>;
     create?: () => Promise<TObject> | TObject;

@@ -53,9 +53,6 @@ class Pool {
         return count;
     }
     tick(abortSignal) {
-        if (this._size > 0) {
-            return;
-        }
         if (!this._tickPromise) {
             this._tickPromise = new CustomPromise();
         }
@@ -63,6 +60,9 @@ class Pool {
     }
     holdWait(count, abortSignal) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (count > this.maxSize) {
+                throw new Error(`holdCount (${count} > maxSize (${this.maxSize}))`);
+            }
             let holdCount = 0;
             try {
                 while (true) {
