@@ -1,1 +1,1 @@
-export declare function isPromiseLike<TValue>(obj: TValue): TValue extends PromiseLike<any> ? true : false;
+export declare function isPromiseLike(obj: any): obj is PromiseLike<any>;

@@ -93,11 +93,11 @@ export class PromiseFast<TValue> implements Promise<TValue> {
 
   private _resolveAsync(value: PromiseLikeOrValue<TValue>) {
     if (isPromiseLike(value)) {
-      (value as PromiseLike<TValue>).then(this._resolveAsync, this._rejectAsync)
+      value.then(this._resolveAsync, this._rejectAsync)
       return
     }
 
-    this._resolveSync(value as TValue)
+    this._resolveSync(value)
   }
 
   private _resolveSync(value: TValue) {
@@ -124,7 +124,7 @@ export class PromiseFast<TValue> implements Promise<TValue> {
     // @ts-expect-error
     this.status = 'rejected'
     if (isPromiseLike(reason)) {
-      (reason as PromiseLike<any>).then(this._rejectAsync, this._rejectAsync)
+      (reason).then(this._rejectAsync, this._rejectAsync)
       return
     }
 
