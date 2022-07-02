@@ -1,12 +1,13 @@
 import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
+import {rejectAsResolve} from 'src/custom-promise'
 
 export function promiseToAbortable<T>(
   abortSignal: IAbortSignalFast|null,
   promise: Promise<T>,
 ): Promise<T> {
-  return new Promise<T>(function executor(resolve, reject) {
+  return new Promise<T>(function executor(resolve) {
     if (abortSignal && abortSignal.aborted) {
-      reject(abortSignal.reason)
+      rejectAsResolve(resolve, abortSignal.reason)
       return
     }
 
@@ -30,7 +31,7 @@ export function promiseToAbortable<T>(
         unsubscribe()
       }
 
-      reject(value)
+      rejectAsResolve(resolve, value)
     }
 
     promise

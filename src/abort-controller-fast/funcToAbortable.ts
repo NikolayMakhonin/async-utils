@@ -1,5 +1,6 @@
 import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
 import {CustomPromise} from 'src/custom-promise'
+import {promiseRejected} from "~/src";
 
 export async function funcToAbortable<T>(
   abortSignal: IAbortSignalFast|null,
@@ -8,9 +9,9 @@ export async function funcToAbortable<T>(
   if (!abortSignal) {
     return func()
   }
-  
+
   if (abortSignal.aborted) {
-    return Promise.reject(abortSignal.reason)
+    return promiseRejected(abortSignal.reason)
   }
 
   const promise = new CustomPromise<any>()

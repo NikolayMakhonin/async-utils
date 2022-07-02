@@ -18,7 +18,7 @@ export class CustomPromise<TResult> {
     else {
       let resolve: (result: TResult) => void
       let reject: (error: any) => void
-      this.promise = new Promise<TResult>(function executor(_resolve, _reject) {
+      this.promise = new Promise<TResult>(function executor(_resolve) {
         resolve = _resolve
         reject = function _rejectAsResolve(reason) {
           rejectAsResolve(_resolve, reason)

@@ -1,10 +1,11 @@
 import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
 import {ITimeController, timeControllerDefault} from '@flemist/time-controller'
+import {rejectAsResolve} from 'src/custom-promise'
 
 export function delay(milliseconds: number, abortSignal?: IAbortSignalFast, timeController?: ITimeController) {
-  return new Promise<void>(function executor(resolve, reject) {
+  return new Promise<void>(function executor(resolve) {
     if (abortSignal && abortSignal.aborted) {
-      reject(abortSignal.reason)
+      rejectAsResolve(resolve, abortSignal.reason)
       return
     }
 
@@ -22,7 +23,7 @@ export function delay(milliseconds: number, abortSignal?: IAbortSignalFast, time
     if (abortSignal) {
       unsubscribe = abortSignal.subscribe(function abortListener(reason) {
         _timeController.clearTimeout(handle)
-        reject(reason)
+        rejectAsResolve(resolve, reason)
       })
     }
   })
