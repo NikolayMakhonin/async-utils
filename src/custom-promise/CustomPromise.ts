@@ -6,7 +6,7 @@ const emptyFunc = function emptyFunc() {}
 
 export type CustomPromiseStatus = 'pending' | 'resolved' | 'rejected'
 
-export class CustomPromise<TResult> {
+export class CustomPromise<TResult = void> {
   readonly promise: Promise<TResult>
   readonly resolve: (result?: TResult) => void
   readonly reject: (error?: any) => void
