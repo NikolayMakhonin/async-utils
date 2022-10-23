@@ -1,1 +1,2 @@
-export {CustomPromise} from './CustomPromise'
+export * from './CustomPromise'
+export * from './rejectAsResolve'

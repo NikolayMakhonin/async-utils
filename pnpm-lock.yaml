@@ -10,8 +10,8 @@ specifiers:
   '@flemist/abort-controller-fast': ^0.0.5
   '@flemist/copy-glob-flat': 0.0.5
   '@flemist/karma-custom-launcher': 0.0.0
-  '@flemist/test-utils': 0.0.6
-  '@flemist/test-variants': 0.0.14
+  '@flemist/test-utils': 0.0.9
+  '@flemist/test-variants': 0.0.16
   '@flemist/time-controller': ^0.0.1
   '@rollup/plugin-alias': 3.1.9
   '@rollup/plugin-babel': 5.3.1
@@ -22,13 +22,15 @@ specifiers:
   '@rollup/plugin-node-resolve': 13.3.0
   '@rollup/plugin-replace': 4.0.0
   '@rollup/plugin-typescript': 8.3.3
+  '@rollup/pluginutils': ^4.2.1
   '@types/assert': 1.5.6
   '@types/fs-extra': 9.0.13
   '@types/mocha': 9.1.1
   '@types/node': 18.0.0
-  cpy-cli: 3.1.1
+  '@zerollup/ts-transform-paths': 1.7.18
+  cpy-cli: '=3.1.1'
   eslint: 8.18.0
-  eslint-config-pro: 3.0.14
+  eslint-config-pro: 3.0.16
   fs-extra: 10.1.0
   globby: '=11.1.0'
   karma: 6.4.0
@@ -40,7 +42,7 @@ specifiers:
   mocha: 9.2.2
   nodemon: 2.0.16
   nyc: 15.1.0
-  rdtsc: 2.0.0
+  rdtsc: 3.0.3
   rimraf: 3.0.2
   rollup: 2.75.7
   rollup-plugin-delete: 2.0.0
@@ -67,8 +69,8 @@ devDependencies:
   '@babel/runtime-corejs3': 7.18.3
   '@flemist/copy-glob-flat': 0.0.5
   '@flemist/karma-custom-launcher': 0.0.0
-  '@flemist/test-utils': 0.0.6
-  '@flemist/test-variants': 0.0.14
+  '@flemist/test-utils': 0.0.9
+  '@flemist/test-variants': 0.0.16
   '@rollup/plugin-alias': 3.1.9_rollup@2.75.7
   '@rollup/plugin-babel': 5.3.1_za5spbk65gc2bmrclluhieacz4
   '@rollup/plugin-commonjs': 21.1.0_rollup@2.75.7
@@ -78,13 +80,15 @@ devDependencies:
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.7
   '@rollup/plugin-replace': 4.0.0_rollup@2.75.7
   '@rollup/plugin-typescript': 8.3.3_g4qkabtmybowem44p7ts7jnbqm
+  '@rollup/pluginutils': 4.2.1
   '@types/assert': 1.5.6
   '@types/fs-extra': 9.0.13
   '@types/mocha': 9.1.1
   '@types/node': 18.0.0
+  '@zerollup/ts-transform-paths': 1.7.18_typescript@4.7.4
   cpy-cli: 3.1.1
   eslint: 8.18.0
-  eslint-config-pro: 3.0.14_b5e7v2qnwxfo6hmiq56u52mz3e
+  eslint-config-pro: 3.0.16_b5e7v2qnwxfo6hmiq56u52mz3e
   fs-extra: 10.1.0
   globby: 11.1.0
   karma: 6.4.0
@@ -96,7 +100,7 @@ devDependencies:
   mocha: 9.2.2
   nodemon: 2.0.16
   nyc: 15.1.0
-  rdtsc: 2.0.0
+  rdtsc: 3.0.3
   rimraf: 3.0.2
   rollup: 2.75.7
   rollup-plugin-delete: 2.0.0
@@ -1306,7 +1310,6 @@ packages:
     resolution: {integrity: sha512-ewpqfmNx+V5dqTzVBxi7syhhsFRk5ktNOd0d85tKyGkqwzoMyJSYGBPmycYhlUDSsIN/3Nb2EaE0tPOtfw6PNQ==}
     dependencies:
       tslib: 2.4.0
-    dev: false
 
   /@flemist/copy-glob-flat/0.0.5:
     resolution: {integrity: sha512-nw2x3zS78uRv7jlR709oXiMXhtTlTS2+WJiy3aTabcayv50CNHMKXevv9WR7YjUJzS7743EdPJl5wAKjIq9Fdg==}
@@ -1327,19 +1330,20 @@ packages:
     engines: {node: '>=10.4.0', pnpm: ^7.1.6}
     dependencies:
       tslib: 2.4.0
-    dev: false
 
-  /@flemist/test-utils/0.0.6:
-    resolution: {integrity: sha512-yNTxX/r0YLXwMYao87A1EJSTgCs39N5SBapWTmeE2fIogO+/RdwtNmhyWAZ3qD8C5MrduELppXqNaRvGJKR5aw==}
+  /@flemist/test-utils/0.0.9:
+    resolution: {integrity: sha512-G0WGevCHCyp1BYipmhvnIJMdq6VGVqTZw69teVIhnC9CyA1jXhKXeHdTo8XZDjDJ5MsE5HKYzo50/tKlay/tVA==}
     engines: {node: '>=10.4.0', pnpm: ^7.1.6}
     dependencies:
+      '@flemist/time-controller': 0.0.1
       tslib: 2.4.0
     dev: true
 
-  /@flemist/test-variants/0.0.14:
-    resolution: {integrity: sha512-s2CHX4D2wyeSNTi1wTkpB4HqAuNSlXxiwJwvbQwZCGUclfalOKJxnG5t20S9lMx0y4cGNe8MAptXboD6jYzDDg==}
+  /@flemist/test-variants/0.0.16:
+    resolution: {integrity: sha512-piqTjaT/w5aTAGZyk9zued4nqvd8EsOLsfORMABy+vIpWgx1hWt0D5Anugum5oTPrZ7zUOi8g7aubH2wDiHQpw==}
     engines: {node: '>=10.4.0', pnpm: ^7.1.6}
     dependencies:
+      '@flemist/abort-controller-fast': 0.0.5
       tslib: 2.4.0
     dev: true
 
@@ -1349,7 +1353,6 @@ packages:
     dependencies:
       '@flemist/pairing-heap': 0.0.1
       tslib: 2.4.0
-    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
@@ -1853,6 +1856,24 @@ packages:
 
   /@ungap/promise-all-settled/1.1.2:
     resolution: {integrity: sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==}
+    dev: true
+
+  /@zerollup/ts-helpers/1.7.18_typescript@4.7.4:
+    resolution: {integrity: sha512-S9zN+y+i5yN/evfWquzSO3lubqPXIsPQf6p9OiPMpRxDx/0totPLF39XoRw48Dav5dSvbIE8D2eAPpXXJxvKwg==}
+    peerDependencies:
+      typescript: '>=3.7.2'
+    dependencies:
+      resolve: 1.22.0
+      typescript: 4.7.4
+    dev: true
+
+  /@zerollup/ts-transform-paths/1.7.18_typescript@4.7.4:
+    resolution: {integrity: sha512-YPVUxvWQVzRx1OBN0Pmkd58+R9FcfUJuwTaPUSoi5rKxuXMtxevTXdfi0w5mEaIH8b0DfL+wg0wFDHiJE+S2zA==}
+    peerDependencies:
+      typescript: '>=3.7.2'
+    dependencies:
+      '@zerollup/ts-helpers': 1.7.18_typescript@4.7.4
+      typescript: 4.7.4
     dev: true
 
   /abbrev/1.1.1:
@@ -2905,8 +2926,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /eslint-config-pro/3.0.14_b5e7v2qnwxfo6hmiq56u52mz3e:
-    resolution: {integrity: sha512-kLY4/+5EkzxXbkA9jn7OWw4TgErEcql8zdd5EzHvdhJVUav7+VloR5sdpA8LcAEkM2rDrYm9MJO60Dwa4K9dcw==}
+  /eslint-config-pro/3.0.16_b5e7v2qnwxfo6hmiq56u52mz3e:
+    resolution: {integrity: sha512-kMV643XtFGsA7D4fHM0LHx6gigOOyFZGcr/dqxVxa6S1araegi1E/h5d4zauGP2Na6fVn/9XSb/2pIZ0vON4zw==}
     engines: {node: '>=10.4.0', pnpm: ^7.1.6}
     peerDependencies:
       eslint: '>=7.4.0'
@@ -5252,10 +5273,12 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /rdtsc/2.0.0:
-    resolution: {integrity: sha512-Uol+smiNk1M9zWYZnC0EOAGrogW9IldsKbl1aLS1C5tOOVScLgdozldL5BGsf+wTjtNYOdzeNRiv/WBU2jN0Bw==}
-    engines: {node: '>= 12.4.0'}
+  /rdtsc/3.0.3:
+    resolution: {integrity: sha512-q3aPiS+toAcB5HYykDk6gcl3aZIZ21sJ37qZ+Sa5NRiGOod/9QnP0EyBT25uZV7C0L4xPtstzZ3KkbZjg8yNHw==}
+    engines: {node: '>=12.4.0', pnpm: ^7.1.6}
     requiresBuild: true
+    dependencies:
+      tslib: 2.4.0
     dev: true
 
   /read-pkg-up/7.0.1:

@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var delay_delay = require('./delay.cjs');
 require('@flemist/time-controller');
+require('../custom-promise/rejectAsResolve.cjs');
 
 
 

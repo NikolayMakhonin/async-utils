@@ -4,10 +4,16 @@ import {rejectAsResolve} from 'src/custom-promise/rejectAsResolve'
 
 const emptyFunc = function emptyFunc() {}
 
+export type CustomPromiseStatus = 'pending' | 'resolved' | 'rejected'
+
 export class CustomPromise<TResult> {
   readonly promise: Promise<TResult>
   readonly resolve: (result?: TResult) => void
   readonly reject: (error?: any) => void
+  private _status: CustomPromiseStatus = 'pending'
+  get state(): CustomPromiseStatus {
+    return this._status
+  }
 
   constructor(abortSignal?: IAbortSignalFast) {
     if (abortSignal && abortSignal.aborted) {
@@ -18,7 +24,7 @@ export class CustomPromise<TResult> {
     else {
       let resolve: (result: TResult) => void
       let reject: (error: any) => void
-      this.promise = new Promise<TResult>(function executor(_resolve, _reject) {
+      this.promise = new Promise<TResult>(function executor(_resolve) {
         resolve = _resolve
         reject = function _rejectAsResolve(reason) {
           rejectAsResolve(_resolve, reason)
@@ -43,5 +49,11 @@ export class CustomPromise<TResult> {
         this.reject = reject
       }
     }
+
+    this.promise.then(() => {
+      this._status = 'resolved'
+    }, () => {
+      this._status = 'rejected'
+    })
   }
 }

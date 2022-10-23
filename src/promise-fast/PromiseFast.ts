@@ -1,6 +1,8 @@
 /* eslint-disable node/no-sync */
 // noinspection JSConstantReassignment
 
+import {isPromiseLike} from 'src/isPromiseLike'
+
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>
 export type OnRejected<TResult> = (reason: any) => PromiseLikeOrValue<TResult>
@@ -8,19 +10,6 @@ export type Resolve<TValue> = (value: PromiseLikeOrValue<TValue>) => void
 export type Reject = (reason?: any) => void
 export type Executor<TValue> = (resolve: Resolve<TValue>, reject: Reject) => void
 export type Status = 'pending' | 'fulfilled' | 'rejected'
-
-function isPromiseLike<TValue>(
-  obj: TValue,
-): TValue extends PromiseLike<any> ? true : false {
-  if (
-    obj != null
-    && typeof obj === 'object'
-    && typeof (obj as any).then === 'function'
-  ) {
-    return true as any
-  }
-  return false as any
-}
 
 function callFulfill<TValue>(
   value: TValue,
@@ -104,11 +93,11 @@ export class PromiseFast<TValue> implements Promise<TValue> {
 
   private _resolveAsync(value: PromiseLikeOrValue<TValue>) {
     if (isPromiseLike(value)) {
-      (value as PromiseLike<TValue>).then(this._resolveAsync, this._rejectAsync)
+      value.then(this._resolveAsync, this._rejectAsync)
       return
     }
 
-    this._resolveSync(value as TValue)
+    this._resolveSync(value)
   }
 
   private _resolveSync(value: TValue) {
@@ -135,7 +124,7 @@ export class PromiseFast<TValue> implements Promise<TValue> {
     // @ts-expect-error
     this.status = 'rejected'
     if (isPromiseLike(reason)) {
-      (reason as PromiseLike<any>).then(this._rejectAsync, this._rejectAsync)
+      (reason).then(this._rejectAsync, this._rejectAsync)
       return
     }
 

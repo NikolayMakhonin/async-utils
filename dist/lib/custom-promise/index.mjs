@@ -1,3 +1,4 @@
 export { CustomPromise } from './CustomPromise.mjs';
+export { promiseRejected, rejectAsResolve } from './rejectAsResolve.mjs';
 import '../promise-fast/PromiseFast.mjs';
-import './rejectAsResolve.mjs';
+import '../isPromiseLike.mjs';

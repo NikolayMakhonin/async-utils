@@ -3,11 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var timeController = require('@flemist/time-controller');
+var customPromise_rejectAsResolve = require('../custom-promise/rejectAsResolve.cjs');
 
 function delay(milliseconds, abortSignal, timeController$1) {
-    return new Promise(function executor(resolve, reject) {
+    return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
-            reject(abortSignal.reason);
+            customPromise_rejectAsResolve.rejectAsResolve(resolve, abortSignal.reason);
             return;
         }
         let unsubscribe;
@@ -22,7 +23,7 @@ function delay(milliseconds, abortSignal, timeController$1) {
         if (abortSignal) {
             unsubscribe = abortSignal.subscribe(function abortListener(reason) {
                 _timeController.clearTimeout(handle);
-                reject(reason);
+                customPromise_rejectAsResolve.rejectAsResolve(resolve, reason);
             });
         }
     });

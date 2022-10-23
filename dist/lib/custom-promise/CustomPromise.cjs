@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var promiseFast_PromiseFast = require('../promise-fast/PromiseFast.cjs');
 var customPromise_rejectAsResolve = require('./rejectAsResolve.cjs');
+require('../isPromiseLike.cjs');
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {
@@ -16,9 +17,9 @@ class CustomPromise {
         else {
             let resolve;
             let reject;
-            this.promise = new Promise(function executor(_resolve, _reject) {
+            this.promise = new Promise(function executor(_resolve) {
                 resolve = _resolve;
-                reject = (reason) => {
+                reject = function _rejectAsResolve(reason) {
                     customPromise_rejectAsResolve.rejectAsResolve(_resolve, reason);
                 };
             });

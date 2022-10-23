@@ -1,5 +1,6 @@
 import { PromiseFast } from '../promise-fast/PromiseFast.mjs';
 import { rejectAsResolve } from './rejectAsResolve.mjs';
+import '../isPromiseLike.mjs';
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {
@@ -12,9 +13,9 @@ class CustomPromise {
         else {
             let resolve;
             let reject;
-            this.promise = new Promise(function executor(_resolve, _reject) {
+            this.promise = new Promise(function executor(_resolve) {
                 resolve = _resolve;
-                reject = (reason) => {
+                reject = function _rejectAsResolve(reason) {
                     rejectAsResolve(_resolve, reason);
                 };
             });

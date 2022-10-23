@@ -10,7 +10,7 @@ describe('custom-promise > CustomPromise', function () {
   })
 })
 
-describe('custom-promise > CustomPromise > million of Promise reject', function () {
+xdescribe('custom-promise > CustomPromise > million of Promise reject', function () {
   let millionRejectTime = 0
   it('step 1', async function () {
     this.timeout(600000)

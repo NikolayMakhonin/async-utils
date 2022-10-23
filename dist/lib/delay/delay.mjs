@@ -1,9 +1,10 @@
 import { timeControllerDefault } from '@flemist/time-controller';
+import { rejectAsResolve } from '../custom-promise/rejectAsResolve.mjs';
 
 function delay(milliseconds, abortSignal, timeController) {
-    return new Promise(function executor(resolve, reject) {
+    return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
-            reject(abortSignal.reason);
+            rejectAsResolve(resolve, abortSignal.reason);
             return;
         }
         let unsubscribe;
@@ -18,7 +19,7 @@ function delay(milliseconds, abortSignal, timeController) {
         if (abortSignal) {
             unsubscribe = abortSignal.subscribe(function abortListener(reason) {
                 _timeController.clearTimeout(handle);
-                reject(reason);
+                rejectAsResolve(resolve, reason);
             });
         }
     });

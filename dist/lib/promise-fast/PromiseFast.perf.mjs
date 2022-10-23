@@ -1,7 +1,7 @@
 import { __awaiter } from 'tslib';
-import { calcPerformanceAsync } from '../test/calcPerformanceAsync.mjs';
+import { calcPerformanceAsync } from 'rdtsc';
 import { PromiseFast } from './PromiseFast.mjs';
-import 'rdtsc';
+import '../isPromiseLike.mjs';
 
 describe('promise-fast > PromiseFast perf', function () {
     this.timeout(600000);

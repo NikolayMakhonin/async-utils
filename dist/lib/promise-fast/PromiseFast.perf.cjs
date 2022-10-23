@@ -1,9 +1,9 @@
 'use strict';
 
 var tslib = require('tslib');
-var test_calcPerformanceAsync = require('../test/calcPerformanceAsync.cjs');
+var rdtsc = require('rdtsc');
 var promiseFast_PromiseFast = require('./PromiseFast.cjs');
-require('rdtsc');
+require('../isPromiseLike.cjs');
 
 describe('promise-fast > PromiseFast perf', function () {
     this.timeout(600000);
@@ -28,7 +28,7 @@ describe('promise-fast > PromiseFast perf', function () {
             }
             assert.strictEqual(yield runPromise(), 'Promise');
             assert.strictEqual(yield runPromiseFast(), 'PromiseFast');
-            const result = yield test_calcPerformanceAsync.calcPerformanceAsync(10000, () => {
+            const result = yield rdtsc.calcPerformanceAsync(10000, () => {
             }, () => {
                 return runPromise();
             }, () => {

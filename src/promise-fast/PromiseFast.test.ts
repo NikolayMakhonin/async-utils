@@ -7,7 +7,7 @@ enum CompleteType {
   resolvedInExecutor = 'resolvedInExecutor',
   resolvedBeforeThen = 'resolvedBeforeThen',
   resolvedAfterThen = 'resolvedAfterThen',
-  
+
   rejectedCreate = 'rejectedCreate',
   rejectedInExecutor = 'rejectedInExecutor',
   rejectedBeforeThen = 'rejectedBeforeThen',
@@ -212,8 +212,10 @@ describe('promise-fast > PromiseFast', function () {
     return function (...args) {
       return Promise.race<TResult>([
         Promise.resolve().then(() => func.call(this, ...args)),
-        new Promise((resolve, reject) => {
-          setTimeout(reject, timeout)
+        new Promise((resolve) => {
+          setTimeout(() => {
+            rejectAsResolve(resolve)
+          }, timeout)
         }),
       ])
     } as any
