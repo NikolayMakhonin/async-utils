@@ -95,15 +95,22 @@ get:function(){return"Promise"},enumerable:!1,
 configurable:!0}),t}();function h(t){return{
 then:function(e,r){r(t)}}}function b(t,e){t(h(e))}
 function v(t){return Promise.resolve(h(t))}
-var d=function(){},p=function(t){var e,r
-;if(t&&t.aborted)this.promise=f.reject(t.reason),
-this.resolve=d,this.reject=d;else if(this.promise=new Promise((function(t){
+var d=function(){},p=function(){function t(t){
+var e,r,n=this
+;if(this._status="pending",t&&t.aborted)this.promise=f.reject(t.reason),
+this.resolve=d,
+this.reject=d;else if(this.promise=new Promise((function(t){
 e=t,r=function(e){b(t,e)}})),t){
-var n=t.subscribe((function(t){r(t)}))
-;this.resolve=function(t){n(),e(t)
-},this.reject=function(t){n(),r(t)}
-}else this.resolve=e,this.reject=r}
-;var y={},_={},A={}
+var o=t.subscribe((function(t){r(t)}))
+;this.resolve=function(t){o(),e(t)
+},this.reject=function(t){o(),r(t)}
+}else this.resolve=e,this.reject=r
+;this.promise.then((function(){
+n._status="resolved"}),(function(){
+n._status="rejected"}))}
+return Object.defineProperty(t.prototype,"state",{
+get:function(){return this._status},enumerable:!1,
+configurable:!0}),t}();var y={},_={},A={}
 ;Object.defineProperty(A,"__esModule",{value:!0})
 ;class w extends Error{constructor(t,e){
 super(t),Object.setPrototypeOf(this,w.prototype),

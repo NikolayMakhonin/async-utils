@@ -5,6 +5,7 @@ import '../isPromiseLike.mjs';
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {
     constructor(abortSignal) {
+        this._status = 'pending';
         if (abortSignal && abortSignal.aborted) {
             this.promise = PromiseFast.reject(abortSignal.reason);
             this.resolve = emptyFunc;
@@ -37,6 +38,14 @@ class CustomPromise {
                 this.reject = reject;
             }
         }
+        this.promise.then(() => {
+            this._status = 'resolved';
+        }, () => {
+            this._status = 'rejected';
+        });
+    }
+    get state() {
+        return this._status;
     }
 }
 

@@ -96,7 +96,7 @@ class PromiseFast {
         // @ts-expect-error
         this.status = 'rejected';
         if (isPromiseLike.isPromiseLike(reason)) {
-            reason.then(this._rejectAsync, this._rejectAsync);
+            (reason).then(this._rejectAsync, this._rejectAsync);
             return;
         }
         this._rejectSync(reason);
