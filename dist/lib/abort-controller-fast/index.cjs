@@ -6,7 +6,7 @@ var abortControllerFast_combineAbortSignals = require('./combineAbortSignals.cjs
 var abortControllerFast_funcToAbortable = require('./funcToAbortable.cjs');
 var abortControllerFast_promiseToAbortable = require('./promiseToAbortable.cjs');
 var abortControllerFast_useAbortController = require('./useAbortController.cjs');
-var abortControllerFast_useAbortSignal = require('./useAbortSignal.cjs');
+var abortControllerFast_toFuncWithAbortSignal = require('./toFuncWithAbortSignal.cjs');
 require('@flemist/abort-controller-fast');
 require('tslib');
 require('../custom-promise/CustomPromise.cjs');
@@ -22,4 +22,4 @@ exports.combineAbortSignals = abortControllerFast_combineAbortSignals.combineAbo
 exports.funcToAbortable = abortControllerFast_funcToAbortable.funcToAbortable;
 exports.promiseToAbortable = abortControllerFast_promiseToAbortable.promiseToAbortable;
 exports.useAbortController = abortControllerFast_useAbortController.useAbortController;
-exports.useAbortSignal = abortControllerFast_useAbortSignal.useAbortSignal;
+exports.toFuncWithAbortSignal = abortControllerFast_toFuncWithAbortSignal.toFuncWithAbortSignal;

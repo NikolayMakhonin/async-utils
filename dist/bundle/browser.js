@@ -146,22 +146,22 @@ t.call(this,this.reason)})),this._callbacks=void 0
 }throwIfAborted(){
 if(this.aborted)throw this.reason}
 },Object.defineProperty(j,"__esModule",{value:!0})
-;var P=m,k=A;j.AbortControllerFast=class{
+;var P=m,F=A;j.AbortControllerFast=class{
 constructor(){this.signal=new P.AbortSignalFast}
 abort(t){
-this.signal.aborted||(void 0===t&&((t=new k.AbortError("Aborted with no reason",t))._internal=!0),
+this.signal.aborted||(void 0===t&&((t=new F.AbortError("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}
 },Object.defineProperty(y,"__esModule",{value:!0})
-;var F=_,E=j,T=A
-;y.toAbortController=F.toAbortController,y.toAbortControllerFast=F.toAbortControllerFast,
-y.toAbortSignal=F.toAbortSignal,
-y.toAbortSignalFast=F.toAbortSignalFast
+;var k=_,E=j,T=A
+;y.toAbortController=k.toAbortController,y.toAbortControllerFast=k.toAbortControllerFast,
+y.toAbortSignal=k.toAbortSignal,
+y.toAbortSignalFast=k.toAbortSignalFast
 ;var C=y.AbortControllerFast=E.AbortControllerFast
-;function O(t,e){return t.then((function(t){
-return e(),t}),(function(t){throw e(),t}))}
-function x(t,e){return function(){try{
+;function O(t,e){return e?t.then((function(t){
+return e(),t}),(function(t){throw e(),t})):t}
+function x(t,e){return e?function(){try{
 var r=t.apply(this,arguments);return a(r)?O(r,e):r
-}finally{e()}}}
+}finally{e()}}:t}
 y.AbortError=T.AbortError,t.CustomPromise=p,t.combineAbortSignals=function(){
 for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e]
 ;var r=new C;function n(t){r.abort(t)}
@@ -189,10 +189,10 @@ return new Promise((function(r){var n,o
 ;t&&t.aborted?b(r,t.reason):(e.then((function(t){
 n&&n(),r(t)})).catch(i),t&&(n=t.subscribe(i)))
 ;function i(t){o||(o=!0,n&&n(),b(r,t))}}))
-},t.rejectAsResolve=b,t.toFuncWithFinally=x,
-t.useAbortController=function(t){var e=new C
-;return x(t,(function(){e.abort()}))(e.signal)
-},t.useAbortSignal=function(t,e,r){
-return t?x(r,t.subscribe(e)):r(t)
+},t.rejectAsResolve=b,t.toFuncWithAbortSignal=function(t,e,r){
+return t&&e?x(r,t.subscribe(e)):r
+},t.toFuncWithFinally=x,t.useAbortController=function(t){
+var e=new C;return x(t,(function(){e.abort()
+}))(e.signal)
 },Object.defineProperty(t,"__esModule",{value:!0})
 }({});
