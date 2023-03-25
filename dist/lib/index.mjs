@@ -5,7 +5,10 @@ export { combineAbortSignals } from './abort-controller-fast/combineAbortSignals
 export { funcToAbortable } from './abort-controller-fast/funcToAbortable.mjs';
 export { promiseToAbortable } from './abort-controller-fast/promiseToAbortable.mjs';
 export { useAbortController } from './abort-controller-fast/useAbortController.mjs';
+export { useAbortSignal } from './abort-controller-fast/useAbortSignal.mjs';
 export { isPromiseLike } from './isPromiseLike.mjs';
+export { promiseFinally } from './promise/promiseFinally.mjs';
+export { toFuncWithFinally } from './promise/toFuncWithFinally.mjs';
 import '@flemist/time-controller';
 import './promise-fast/PromiseFast.mjs';
 import '@flemist/abort-controller-fast';

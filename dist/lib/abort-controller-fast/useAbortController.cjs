@@ -2,19 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var tslib = require('tslib');
 var abortControllerFast = require('@flemist/abort-controller-fast');
+var promise_toFuncWithFinally = require('../promise/toFuncWithFinally.cjs');
+require('../isPromiseLike.cjs');
+require('../promise/promiseFinally.cjs');
 
 function useAbortController(func) {
-    return tslib.__awaiter(this, void 0, void 0, function* () {
-        const abortController = new abortControllerFast.AbortControllerFast();
-        try {
-            return yield func(abortController.signal);
-        }
-        finally {
-            abortController.abort();
-        }
-    });
+    const abortController = new abortControllerFast.AbortControllerFast();
+    return promise_toFuncWithFinally.toFuncWithFinally(func, () => {
+        abortController.abort();
+    })(abortController.signal);
 }
 
 exports.useAbortController = useAbortController;

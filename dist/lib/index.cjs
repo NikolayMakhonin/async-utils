@@ -9,7 +9,10 @@ var abortControllerFast_combineAbortSignals = require('./abort-controller-fast/c
 var abortControllerFast_funcToAbortable = require('./abort-controller-fast/funcToAbortable.cjs');
 var abortControllerFast_promiseToAbortable = require('./abort-controller-fast/promiseToAbortable.cjs');
 var abortControllerFast_useAbortController = require('./abort-controller-fast/useAbortController.cjs');
+var abortControllerFast_useAbortSignal = require('./abort-controller-fast/useAbortSignal.cjs');
 var isPromiseLike = require('./isPromiseLike.cjs');
+var promise_promiseFinally = require('./promise/promiseFinally.cjs');
+var promise_toFuncWithFinally = require('./promise/toFuncWithFinally.cjs');
 require('@flemist/time-controller');
 require('./promise-fast/PromiseFast.cjs');
 require('@flemist/abort-controller-fast');
@@ -25,4 +28,7 @@ exports.combineAbortSignals = abortControllerFast_combineAbortSignals.combineAbo
 exports.funcToAbortable = abortControllerFast_funcToAbortable.funcToAbortable;
 exports.promiseToAbortable = abortControllerFast_promiseToAbortable.promiseToAbortable;
 exports.useAbortController = abortControllerFast_useAbortController.useAbortController;
+exports.useAbortSignal = abortControllerFast_useAbortSignal.useAbortSignal;
 exports.isPromiseLike = isPromiseLike.isPromiseLike;
+exports.promiseFinally = promise_promiseFinally.promiseFinally;
+exports.toFuncWithFinally = promise_toFuncWithFinally.toFuncWithFinally;

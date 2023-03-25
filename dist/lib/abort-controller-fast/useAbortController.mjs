@@ -1,16 +1,13 @@
-import { __awaiter } from 'tslib';
 import { AbortControllerFast } from '@flemist/abort-controller-fast';
+import { toFuncWithFinally } from '../promise/toFuncWithFinally.mjs';
+import '../isPromiseLike.mjs';
+import '../promise/promiseFinally.mjs';
 
 function useAbortController(func) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const abortController = new AbortControllerFast();
-        try {
-            return yield func(abortController.signal);
-        }
-        finally {
-            abortController.abort();
-        }
-    });
+    const abortController = new AbortControllerFast();
+    return toFuncWithFinally(func, () => {
+        abortController.abort();
+    })(abortController.signal);
 }
 
 export { useAbortController };
