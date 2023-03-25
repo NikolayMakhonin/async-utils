@@ -4,8 +4,12 @@ import {FuncAny} from 'src/contracts'
 
 export function toFuncWithFinally<TFunc extends FuncAny>(
   func: TFunc,
-  onFinally: () => void,
+  onFinally: (() => void) | null,
 ): TFunc {
+  if (!onFinally) {
+    return func
+  }
+
   return function funcWithFinally() {
     try {
       const resultOrPromise = func.apply(this, arguments)
