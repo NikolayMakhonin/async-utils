@@ -48,9 +48,9 @@ if(o)throw o.error}}return s}function a(t){
 return null!=t&&"object"==typeof t&&"function"==typeof t.then
 }function c(t,e,r){try{var n=e?e(t):t
 ;r._resolve(n)}catch(t){r._reject(t)}}
-function l(t,e,r){e||r._reject(t);try{var n=e(t)
+function u(t,e,r){e||r._reject(t);try{var n=e(t)
 ;r._resolve(n)}catch(t){r._reject(t)}}
-var u=function(){},f=function(){function t(t){
+var l=function(){},f=function(){function t(t){
 this.status="pending",this.value=void 0,
 this.reason=void 0,this._handlers=null
 ;var e=this._resolve,r=this._reject,n=this._resolveAsync,o=this._rejectAsync,i=this
@@ -77,18 +77,18 @@ this.status="rejected",a(t)?t.then(this._rejectAsync,this._rejectAsync):this._re
 var e=this._handlers;if(this.reason=t,null!=e){
 this._handlers=null
 ;for(var r=0,n=e.length;r<n;r++){var o=s(e[r],3)
-;l(t,o[1],o[2])}}},t.prototype.then=function(e,r){
-var n=new t(u)
+;u(t,o[1],o[2])}}},t.prototype.then=function(e,r){
+var n=new t(l)
 ;return"pending"===this.status?(null==this._handlers&&(this._handlers=[]),
-this._handlers.push([e,r,n])):"fulfilled"===this.status?c(this.value,e,n):l(this.reason,r,n),
+this._handlers.push([e,r,n])):"fulfilled"===this.status?c(this.value,e,n):u(this.reason,r,n),
 n},t.prototype.catch=function(t){
 return this.then(void 0,t)
 },t.prototype.finally=function(t){
 var e=t&&function(e){return t(),e
 },r=t&&function(e){throw t(),e}
 ;return this.then(e,r)},t.resolve=function(e){
-var r=new t(u);return r._resolve(e),r
-},t.reject=function(e){var r=new t(u)
+var r=new t(l);return r._resolve(e),r
+},t.reject=function(e){var r=new t(l)
 ;return r._reject(e),r
 },Object.defineProperty(t.prototype,Symbol.toStringTag,{
 get:function(){return"Promise"},enumerable:!1,
@@ -146,16 +146,16 @@ t.call(this,this.reason)})),this._callbacks=void 0
 }throwIfAborted(){
 if(this.aborted)throw this.reason}
 },Object.defineProperty(j,"__esModule",{value:!0})
-;var P=m,F=A;j.AbortControllerFast=class{
-constructor(){this.signal=new P.AbortSignalFast}
+;var k=m,P=A;j.AbortControllerFast=class{
+constructor(){this.signal=new k.AbortSignalFast}
 abort(t){
-this.signal.aborted||(void 0===t&&((t=new F.AbortError("Aborted with no reason",t))._internal=!0),
+this.signal.aborted||(void 0===t&&((t=new P.AbortError("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}
 },Object.defineProperty(y,"__esModule",{value:!0})
-;var k=_,E=j,T=A
-;y.toAbortController=k.toAbortController,y.toAbortControllerFast=k.toAbortControllerFast,
-y.toAbortSignal=k.toAbortSignal,
-y.toAbortSignalFast=k.toAbortSignalFast
+;var F=_,E=j,T=A
+;y.toAbortController=F.toAbortController,y.toAbortControllerFast=F.toAbortControllerFast,
+y.toAbortSignal=F.toAbortSignal,
+y.toAbortSignalFast=F.toAbortSignalFast
 ;var C=y.AbortControllerFast=E.AbortControllerFast
 ;function O(t,e){return e?t.then((function(t){
 return e(),t}),(function(t){throw e(),t})):t}
@@ -173,6 +173,14 @@ if(e&&e.aborted)b(o,e.reason);else{
 var i,s=r||n,a=s.setTimeout((function(){i&&i(),o()
 }),t);e&&(i=e.subscribe((function(t){
 s.clearTimeout(a),b(o,t)})))}}))
+},t.fixAsyncStackTrace=function(t){
+return o(this,void 0,void 0,(function(){var e,r
+;return i(this,(function(n){switch(n.label){
+case 0:e=new Error,n.label=1;case 1:
+return n.trys.push([1,3,,4]),[4,t()];case 2:
+return[2,n.sent()];case 3:
+throw(r=n.sent()).stack+="\n"+e.stack.substring(e.stack.indexOf("\n")),
+r;case 4:return[2]}}))}))
 },t.funcToAbortable=function(t,e){
 return o(this,void 0,void 0,(function(){
 function r(t){n.reject(t)}var n,o

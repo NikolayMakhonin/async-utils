@@ -13,6 +13,7 @@ var abortControllerFast_toFuncWithAbortSignal = require('./abort-controller-fast
 var isPromiseLike = require('./isPromiseLike.cjs');
 var promise_promiseFinally = require('./promise/promiseFinally.cjs');
 var promise_toFuncWithFinally = require('./promise/toFuncWithFinally.cjs');
+var promise_fixAsyncStackTrace = require('./promise/fixAsyncStackTrace.cjs');
 require('@flemist/time-controller');
 require('./promise-fast/PromiseFast.cjs');
 require('@flemist/abort-controller-fast');
@@ -32,3 +33,4 @@ exports.toFuncWithAbortSignal = abortControllerFast_toFuncWithAbortSignal.toFunc
 exports.isPromiseLike = isPromiseLike.isPromiseLike;
 exports.promiseFinally = promise_promiseFinally.promiseFinally;
 exports.toFuncWithFinally = promise_toFuncWithFinally.toFuncWithFinally;
+exports.fixAsyncStackTrace = promise_fixAsyncStackTrace.fixAsyncStackTrace;
