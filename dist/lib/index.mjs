@@ -10,6 +10,8 @@ export { isPromiseLike } from './isPromiseLike.mjs';
 export { promiseFinally } from './promise/promiseFinally.mjs';
 export { toFuncWithFinally } from './promise/toFuncWithFinally.mjs';
 export { fixAsyncStackTrace } from './promise/fixAsyncStackTrace.mjs';
+export { ValueState } from './value-state/ValueState.mjs';
+export { asyncToValueState, createValueState, resolveValueStatesFunc, toValueState, toValueStateError } from './value-state/helpers.mjs';
 import '@flemist/time-controller';
 import './promise-fast/PromiseFast.mjs';
 import '@flemist/abort-controller-fast';

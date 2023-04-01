@@ -1,3 +1,4 @@
+import { PromiseOrValue } from "../types";
 export interface IValueState<TValue> {
     value?: TValue;
     loading?: boolean;
@@ -7,7 +8,6 @@ export interface IValueState<TValue> {
 }
 export declare type ValueStateOrValue<T> = IValueState<T> | T;
 export declare type FuncOrValue<TValue> = (() => TValue) | TValue;
-export declare type PromiseOrValue<TValue> = Promise<TValue> | TValue;
 export declare type StateOrValue<TValue> = IValueState<TValue> | TValue;
 export declare type AsyncOrValue<TValue> = FuncOrValue<PromiseOrValue<StateOrValue<TValue>>>;
 export declare type OfValueStateOrValue<T> = T extends ValueStateOrValue<infer U> ? U : never;

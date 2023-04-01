@@ -5,3 +5,4 @@ export * from './abort-controller-fast';
 export * from './custom-promise/rejectAsResolve';
 export * from './isPromiseLike';
 export * from './promise';
+export * from './value-state';
