@@ -1,6 +1,6 @@
 {
   "name": "@flemist/async-utils",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Simple async utils",
   "main": "dist/lib/index.cjs",
   "module": "dist/lib/index.mjs",
@@ -93,7 +93,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@flemist/abort-controller-fast": "^0.0.5",
+    "@flemist/abort-controller-fast": "^0.0.6",
     "@flemist/time-controller": "^0.0.1",
     "tslib": "^2.4.0"
   }
