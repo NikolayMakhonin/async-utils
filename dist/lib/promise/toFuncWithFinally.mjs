@@ -9,12 +9,14 @@ function toFuncWithFinally(func, onFinally) {
         try {
             const resultOrPromise = func.apply(this, arguments);
             if (!isPromiseLike(resultOrPromise)) {
+                onFinally();
                 return resultOrPromise;
             }
             return promiseFinally(resultOrPromise, onFinally);
         }
-        finally {
+        catch (err) {
             onFinally();
+            throw err;
         }
     };
 }

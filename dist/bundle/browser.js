@@ -95,7 +95,7 @@ get:function(){return"Promise"},enumerable:!1,
 configurable:!0}),t}();function f(t){return{
 then:function(e,r){r(t)}}}function v(t,e){t(f(e))}
 function d(t){return Promise.resolve(f(t))}
-var b=function(){},y=function(){function t(t){
+var b=function(){},p=function(){function t(t){
 var e,r,n=this
 ;if(this._status="pending",t&&t.aborted)this.promise=h.reject(t.reason),
 this.resolve=b,
@@ -110,9 +110,9 @@ n._status="resolved"}),(function(){
 n._status="rejected"}))}
 return Object.defineProperty(t.prototype,"state",{
 get:function(){return this._status},enumerable:!1,
-configurable:!0}),t}();class p extends Error{
+configurable:!0}),t}();class y extends Error{
 constructor(t,e){
-super(t),Object.setPrototypeOf(this,p.prototype),this.reason=e,
+super(t),Object.setPrototypeOf(this,y.prototype),this.reason=e,
 this.name="AbortError",this._internal=!1}}
 const _=()=>{};class w{constructor(){
 this.aborted=!1,this.reason=void 0,this._callbacks=void 0
@@ -128,18 +128,19 @@ t.call(this,this.reason)})),this._callbacks=void 0
 }throwIfAborted(){
 if(this.aborted)throw this.reason}}class g{
 constructor(){this.signal=new w}abort(t){
-this.signal.aborted||(void 0===t&&((t=new p("Aborted with no reason",t))._internal=!0),
+this.signal.aborted||(void 0===t&&((t=new y("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}}function m(t,e){
 return e?t.then((function(t){return e(),t
 }),(function(t){throw e(),t})):t}function j(t,e){
 return e?function(){try{
-var r=t.apply(this,arguments);return a(r)?m(r,e):r
-}finally{e()}}:t}var A=function(t){
+var r=t.apply(this,arguments)
+;return a(r)?m(r,e):(e(),r)}catch(t){throw e(),t}
+}:t}var A=function(t){
 void 0===t&&(t={}),this.value=t.value,this.loading=t.loading||!1,
 this.hasValue=t.hasValue||!1,
 this.error=t.error,this.hasError=t.hasError||!1}
 ;function S(t){return void 0===t&&(t={}),new A(t)}
-t.CustomPromise=y,t.ValueState=A,
+t.CustomPromise=p,t.ValueState=A,
 t.asyncToValueState=function(t,e){
 return o(this,void 0,void 0,(function(){var r,n,o
 ;return i(this,(function(i){switch(i.label){
@@ -181,7 +182,7 @@ function r(t){n.reject(t)}var n,o
 ;return i(this,(function(i){switch(i.label){
 case 0:if(!t)return[2,e()]
 ;if(t.aborted)return[2,d(t.reason)]
-;n=new y,o=t.subscribe(r),i.label=1;case 1:
+;n=new p,o=t.subscribe(r),i.label=1;case 1:
 return i.trys.push([1,,3,4]),[4,e(n.promise)]
 ;case 2:return[2,i.sent()];case 3:return o(),[7]
 ;case 4:return[2]}}))}))
