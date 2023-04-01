@@ -4,9 +4,9 @@ import {
   AsyncOrValue,
   IValueState,
   OfValueStateOrValues,
-  PromiseOrValue,
   StateOrValue,
 } from './contracts'
+import {PromiseOrValue} from 'src/types'
 
 export function createValueState<TValue>(
   props: IValueState<TValue> = {},

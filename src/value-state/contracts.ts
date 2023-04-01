@@ -1,3 +1,5 @@
+import {PromiseOrValue} from 'src/types'
+
 export interface IValueState<TValue> {
   value?: TValue
   loading?: boolean
@@ -8,7 +10,6 @@ export interface IValueState<TValue> {
 
 export type ValueStateOrValue<T> = IValueState<T> | T
 export type FuncOrValue<TValue> = (() => TValue) | TValue
-export type PromiseOrValue<TValue> = Promise<TValue> | TValue
 export type StateOrValue<TValue> = IValueState<TValue> | TValue
 export type AsyncOrValue<TValue> = FuncOrValue<PromiseOrValue<StateOrValue<TValue>>>
 export type OfValueStateOrValue<T> = T extends ValueStateOrValue<infer U>
