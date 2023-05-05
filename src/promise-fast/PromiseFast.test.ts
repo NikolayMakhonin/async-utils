@@ -290,6 +290,7 @@ describe('promise-fast > PromiseFast', function () {
       _finally,
     })
 
+    // TODO: remove sort and test in browsers
     assert.deepStrictEqual(
       results.sort(),
       checkResults.sort(),
