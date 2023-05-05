@@ -12,6 +12,8 @@ require('tslib');
 require('../custom-promise/CustomPromise.cjs');
 require('../promise-fast/PromiseFast.cjs');
 require('../isPromiseLike.cjs');
+require('../promise-fast/promiseSchedulerEnqueue.cjs');
+require('../promise-fast/helpers.cjs');
 require('../custom-promise/rejectAsResolve.cjs');
 require('../promise/toFuncWithFinally.cjs');
 require('../promise/promiseFinally.cjs');

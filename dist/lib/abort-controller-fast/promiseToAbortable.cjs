@@ -2,9 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+require('tslib');
 var customPromise_rejectAsResolve = require('../custom-promise/rejectAsResolve.cjs');
 
 function promiseToAbortable(abortSignal, promise) {
+    if (!abortSignal) {
+        return promise;
+    }
     return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
             customPromise_rejectAsResolve.rejectAsResolve(resolve, abortSignal.reason);

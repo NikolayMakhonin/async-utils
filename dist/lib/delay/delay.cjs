@@ -3,6 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var timeController = require('@flemist/time-controller');
+require('tslib');
 var customPromise_rejectAsResolve = require('../custom-promise/rejectAsResolve.cjs');
 
 function delay(milliseconds, abortSignal, timeController$1) {

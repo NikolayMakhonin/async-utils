@@ -1,33 +1,40 @@
 import { isPromiseLike } from '../isPromiseLike.mjs';
+import { promiseSchedulerEnqueue } from './promiseSchedulerEnqueue.mjs';
+import { promiseAll, promiseAllSettled, promiseAny, promiseRace } from './helpers.mjs';
+import 'tslib';
 
 /* eslint-disable node/no-sync */
 function callFulfill(value, fulfill, nextPromise) {
-    try {
-        const result = fulfill
-            ? fulfill(value)
-            : value;
-        // @ts-expect-error
-        nextPromise._resolve(result);
-    }
-    catch (err) {
-        // @ts-expect-error
-        nextPromise._reject(err);
-    }
+    promiseSchedulerEnqueue(() => {
+        try {
+            const result = fulfill
+                ? fulfill(value)
+                : value;
+            // @ts-expect-error
+            nextPromise._resolve(result);
+        }
+        catch (err) {
+            // @ts-expect-error
+            nextPromise._reject(err);
+        }
+    });
 }
 function callReject(reason, reject, nextPromise) {
-    if (!reject) {
-        // @ts-expect-error
-        nextPromise._reject(reason);
-    }
-    try {
-        const result = reject(reason);
-        // @ts-expect-error
-        nextPromise._resolve(result);
-    }
-    catch (err) {
-        // @ts-expect-error
-        nextPromise._reject(err);
-    }
+    promiseSchedulerEnqueue(() => {
+        if (!reject) {
+            // @ts-expect-error
+            nextPromise._reject(reason);
+        }
+        try {
+            const result = reject(reason);
+            // @ts-expect-error
+            nextPromise._resolve(result);
+        }
+        catch (err) {
+            // @ts-expect-error
+            nextPromise._reject(err);
+        }
+    });
 }
 const emptyFunc = function emptyFunc() { };
 class PromiseFast {
@@ -130,12 +137,18 @@ class PromiseFast {
     }
     finally(onfinally) {
         const onfulfilled = onfinally && (function _onfulfilled(o) {
-            onfinally();
-            return o;
+            const result = onfinally();
+            if (isPromiseLike(result)) {
+                return result.then(() => o);
+            }
+            return PromiseFast.resolve(o);
         });
         const onrejected = onfinally && (function _onrejected(o) {
-            onfinally();
-            throw o;
+            const result = onfinally();
+            if (isPromiseLike(result)) {
+                return result.then(() => PromiseFast.reject(o));
+            }
+            return PromiseFast.reject(o);
         });
         return this.then(onfulfilled, onrejected);
     }
@@ -151,6 +164,21 @@ class PromiseFast {
     }
     get [Symbol.toStringTag]() {
         return 'Promise';
+    }
+    static get [Symbol.species]() {
+        return PromiseFast;
+    }
+    static all(values) {
+        return promiseAll(values, PromiseFast);
+    }
+    static allSettled(values) {
+        return promiseAllSettled(values, PromiseFast);
+    }
+    static any(values) {
+        return promiseAny(values, PromiseFast);
+    }
+    static race(values) {
+        return promiseRace(values, PromiseFast);
     }
 }
 

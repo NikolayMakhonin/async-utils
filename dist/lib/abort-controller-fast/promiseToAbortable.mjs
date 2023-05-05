@@ -1,6 +1,10 @@
+import 'tslib';
 import { rejectAsResolve } from '../custom-promise/rejectAsResolve.mjs';
 
 function promiseToAbortable(abortSignal, promise) {
+    if (!abortSignal) {
+        return promise;
+    }
     return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
             rejectAsResolve(resolve, abortSignal.reason);

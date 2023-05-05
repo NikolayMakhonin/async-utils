@@ -1,4 +1,5 @@
 import { timeControllerDefault } from '@flemist/time-controller';
+import 'tslib';
 import { rejectAsResolve } from '../custom-promise/rejectAsResolve.mjs';
 
 function delay(milliseconds, abortSignal, timeController) {

@@ -19,8 +19,13 @@ export declare class PromiseFast<TValue> implements Promise<TValue> {
     private _rejectSync;
     then<TResult1 = TValue, TResult2 = never>(onfulfilled?: OnFulfilled<TValue, TResult1> | undefined | null, onrejected?: OnFulfilled<TValue, TResult2> | undefined | null): Promise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: OnRejected<TResult> | undefined | null): Promise<TValue | TResult>;
-    finally(onfinally?: (() => void) | undefined | null): Promise<TValue>;
+    finally(onfinally?: (() => PromiseLike<void> | void) | undefined | null): Promise<TValue>;
     static resolve<TValue>(value: PromiseLikeOrValue<TValue>): PromiseFast<TValue>;
     static reject(reason: PromiseLikeOrValue<any>): PromiseFast<never>;
     get [Symbol.toStringTag](): string;
+    static get [Symbol.species](): typeof PromiseFast;
+    static all<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]>;
+    static allSettled<T>(values: readonly (T | PromiseLike<T>)[]): Promise<PromiseSettledResult<T>[]>;
+    static any<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T>;
+    static race<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T>;
 }

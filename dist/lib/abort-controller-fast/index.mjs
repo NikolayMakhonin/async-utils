@@ -8,6 +8,8 @@ import 'tslib';
 import '../custom-promise/CustomPromise.mjs';
 import '../promise-fast/PromiseFast.mjs';
 import '../isPromiseLike.mjs';
+import '../promise-fast/promiseSchedulerEnqueue.mjs';
+import '../promise-fast/helpers.mjs';
 import '../custom-promise/rejectAsResolve.mjs';
 import '../promise/toFuncWithFinally.mjs';
 import '../promise/promiseFinally.mjs';

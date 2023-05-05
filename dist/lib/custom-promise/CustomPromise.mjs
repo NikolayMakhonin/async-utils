@@ -1,6 +1,9 @@
 import { PromiseFast } from '../promise-fast/PromiseFast.mjs';
 import { rejectAsResolve } from './rejectAsResolve.mjs';
 import '../isPromiseLike.mjs';
+import '../promise-fast/promiseSchedulerEnqueue.mjs';
+import 'tslib';
+import '../promise-fast/helpers.mjs';
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {

@@ -6,6 +6,9 @@ var customPromise_CustomPromise = require('./CustomPromise.cjs');
 var customPromise_rejectAsResolve = require('./rejectAsResolve.cjs');
 require('../promise-fast/PromiseFast.cjs');
 require('../isPromiseLike.cjs');
+require('../promise-fast/promiseSchedulerEnqueue.cjs');
+require('tslib');
+require('../promise-fast/helpers.cjs');
 
 
 

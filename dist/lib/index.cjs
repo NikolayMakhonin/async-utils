@@ -17,9 +17,11 @@ var promise_fixAsyncStackTrace = require('./promise/fixAsyncStackTrace.cjs');
 var valueState_ValueState = require('./value-state/ValueState.cjs');
 var valueState_helpers = require('./value-state/helpers.cjs');
 require('@flemist/time-controller');
-require('./promise-fast/PromiseFast.cjs');
-require('@flemist/abort-controller-fast');
 require('tslib');
+require('./promise-fast/PromiseFast.cjs');
+require('./promise-fast/promiseSchedulerEnqueue.cjs');
+require('./promise-fast/helpers.cjs');
+require('@flemist/abort-controller-fast');
 
 
 

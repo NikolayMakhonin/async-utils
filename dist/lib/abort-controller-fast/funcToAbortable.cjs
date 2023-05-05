@@ -7,6 +7,8 @@ var customPromise_CustomPromise = require('../custom-promise/CustomPromise.cjs')
 var customPromise_rejectAsResolve = require('../custom-promise/rejectAsResolve.cjs');
 require('../promise-fast/PromiseFast.cjs');
 require('../isPromiseLike.cjs');
+require('../promise-fast/promiseSchedulerEnqueue.cjs');
+require('../promise-fast/helpers.cjs');
 
 function funcToAbortable(abortSignal, func) {
     return tslib.__awaiter(this, void 0, void 0, function* () {
