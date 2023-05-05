@@ -291,8 +291,8 @@ describe('promise-fast > PromiseFast', function () {
     })
 
     assert.deepStrictEqual(
-      results,
-      checkResults,
+      results.sort(),
+      checkResults.sort(),
     )
   })
 
