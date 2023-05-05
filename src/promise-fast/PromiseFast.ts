@@ -2,7 +2,7 @@
 // noinspection JSConstantReassignment
 
 import {isPromiseLike} from 'src/isPromiseLike'
-import {promiseSchedulerEnqueue} from "src/promise-fast/promiseSchedulerEnqueue";
+import {promiseSchedulerEnqueue} from 'src/promise-fast/promiseSchedulerEnqueue'
 
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>
@@ -47,7 +47,8 @@ function callReject(
       const result = reject(reason)
       // @ts-expect-error
       nextPromise._resolve(result)
-    } catch (err) {
+    }
+    catch (err) {
       // @ts-expect-error
       nextPromise._reject(err)
     }
@@ -211,7 +212,7 @@ export class PromiseFast<TValue> implements Promise<TValue> {
   static all<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]> {
     let resolve: Resolve<T[]>
     let reject: Reject
-    const promise = new Promise<T[]>((_resolve, _reject) => {
+    const promise = new PromiseFast<T[]>((_resolve, _reject) => {
       resolve = _resolve
       reject = _reject
     })
