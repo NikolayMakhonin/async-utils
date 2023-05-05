@@ -6,7 +6,7 @@
   "module": "dist/lib/index.mjs",
   "types": "dist/lib/index.d.ts",
   "engines": {
-    "node": ">=10.4.0",
+    "node": ">=12.9.0",
     "pnpm": "^7.1.6"
   },
   "repository": {

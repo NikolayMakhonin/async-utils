@@ -1,5 +1,6 @@
 import {calcPerformanceAsync} from 'rdtsc'
 import {PromiseFast} from 'src/promise-fast/PromiseFast'
+import {rejectAsResolve} from "src/custom-promise";
 
 describe('promise-fast > PromiseFast perf', function () {
   this.timeout(600000)
@@ -37,5 +38,15 @@ describe('promise-fast > PromiseFast perf', function () {
     )
 
     console.log(result)
+  })
+
+  it('1 million', async function () {
+    await Promise.allSettled(Array.from({length: 2000000}).map((_, i) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          rejectAsResolve(resolve, null)
+        }, 0)
+      })
+    }))
   })
 })
