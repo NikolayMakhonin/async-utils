@@ -3,6 +3,7 @@
 
 import {isPromiseLike} from 'src/isPromiseLike'
 import {promiseSchedulerEnqueue} from 'src/promise-fast/promiseSchedulerEnqueue'
+import {promiseAll, promiseAllSettled, promiseAny, promiseRace} from "src/promise-fast/helpers";
 
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>
@@ -209,105 +210,24 @@ export class PromiseFast<TValue> implements Promise<TValue> {
     return 'Promise'
   }
 
+  static get [Symbol.species]() {
+    return PromiseFast
+  }
+
   static all<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]> {
-    let resolve: Resolve<T[]>
-    let reject: Reject
-    const promise = new PromiseFast<T[]>((_resolve, _reject) => {
-      resolve = _resolve
-      reject = _reject
-    })
-    let count = values.length
-    const results: T[] = []
-    values.forEach((value, i) => {
-      if (isPromiseLike(value)) {
-        value.then((result) => {
-          results[i] = result
-          if (--count === 0) {
-            resolve(results)
-          }
-        }, reject)
-      }
-      else {
-        results[i] = value
-        if (--count === 0) {
-          resolve(results)
-        }
-      }
-    })
-    return promise
+    return promiseAll(values, PromiseFast)
   }
 
-  static allSettled<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<PromiseSettledResult<T>[]> {
-    let resolve: Resolve<PromiseSettledResult<T>[]>
-    const promise = new PromiseFast<PromiseSettledResult<T>[]>((_resolve, _reject) => {
-      resolve = _resolve
-    })
-    let count = values.length
-    const results: PromiseSettledResult<T>[] = []
-    values.forEach((value, i) => {
-      if (isPromiseLike(value)) {
-        value.then((result) => {
-          results[i] = {status: 'fulfilled', value: result}
-          if (--count === 0) {
-            resolve(results)
-          }
-        }, (reason) => {
-          results[i] = {status: 'rejected', reason}
-          if (--count === 0) {
-            resolve(results)
-          }
-        })
-      }
-      else {
-        results[i] = {status: 'fulfilled', value}
-        if (--count === 0) {
-          resolve(results)
-        }
-      }
-    })
-    return promise
+  static allSettled<T>(values: readonly (T | PromiseLike<T>)[]): Promise<PromiseSettledResult<T>[]> {
+    return promiseAllSettled(values, PromiseFast)
   }
 
-  static any<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<T> {
-    let resolve: Resolve<T>
-    let reject: Reject
-    const promise = new PromiseFast<T>((_resolve, _reject) => {
-      resolve = _resolve
-      reject = _reject
-    })
-    let count = values.length
-    const errors: any[] = []
-    values.forEach((value, i) => {
-      if (isPromiseLike(value)) {
-        value.then(resolve, (reason) => {
-          errors[i] = reason
-          if (--count === 0) {
-            reject(new AggregateError(errors))
-          }
-        })
-      }
-      else {
-        resolve(value)
-      }
-    })
-    return promise
+  static any<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T> {
+    return promiseAny(values, PromiseFast)
   }
 
-  static race<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<T> {
-    let resolve: Resolve<T>
-    let reject: Reject
-    const promise = new PromiseFast<T>((_resolve, _reject) => {
-      resolve = _resolve
-      reject = _reject
-    })
-    values.forEach((value) => {
-      if (isPromiseLike(value)) {
-        value.then(resolve, reject)
-      }
-      else {
-        resolve(value)
-      }
-    })
-    return promise
+  static race<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T> {
+    return promiseRace(values, PromiseFast)
   }
 }
+

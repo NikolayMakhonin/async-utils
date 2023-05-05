@@ -3,7 +3,7 @@ import {PromiseFast} from 'src/promise-fast/PromiseFast'
 import {rejectAsResolve} from "src/custom-promise";
 
 describe('promise-fast > PromiseFast perf', function () {
-  this.timeout(600000)
+  this.timeout(60 * 60 * 1000)
 
   // it('base', async function () {
   //   const emptyFunc = o => o
@@ -41,7 +41,9 @@ describe('promise-fast > PromiseFast perf', function () {
   // })
 
   it('1 million', async function () {
-    await PromiseFast.all(Array.from({length: 3000000}).map((_, i) => {
+    // less than 450 bytes per each PromiseFast instance
+    // less than 69 bytes per each Promise instance
+    const promises = Array.from({length: 62_000_000}).map((_, i) => {
       let resolve
 
       const promise = new Promise((_resolve, _reject) => {
@@ -54,6 +56,12 @@ describe('promise-fast > PromiseFast perf', function () {
       resolve(null)
 
       return promise
-    }))
+    })
+
+    console.log('await PromiseFast.all()')
+
+    await Promise.all(promises)
+
+    console.log('COMPLETED')
   })
 })

@@ -2,9 +2,11 @@ import {FuncAny} from 'src/types'
 
 let queue: FuncAny[] = []
 let processPromise: Promise<void>
+let count = 0
 
 async function process() {
   while (queue.length > 0) {
+    console.log(count++)
     // eslint-disable-next-line @typescript-eslint/await-thenable
     await 0
     const _queue = queue
