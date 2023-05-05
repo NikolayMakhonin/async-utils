@@ -39,9 +39,6 @@ describe('promise-fast > PromiseFast', function () {
     _finally: CallbackType,
   }) {
     const results: string[] = []
-    let resolve: (value: string | Promise<string>) => void
-    let reject: (value: string | Promise<string>) => void
-    let promise: Promise<string>
 
     function createPromiseRejected(reason: string): Promise<string> {
       if (PromiseClass === Promise) {
@@ -52,13 +49,20 @@ describe('promise-fast > PromiseFast', function () {
       return PromiseClass.reject(reason)
     }
 
+    // Create promise
+    let resolve: (value: string | Promise<string>) => void
+    let reject: (value: string | Promise<string>) => void
+    let promise: Promise<string>
     if (completeType === CompleteType.resolvedCreate) {
+      results.push('create promise: resolvedCreate')
       promise = PromiseClass.resolve(completeType + ' => resolved')
     }
     else if (completeType === CompleteType.rejectedCreate) {
+      results.push('create promise: rejectedCreate')
       promise = createPromiseRejected(completeType + ' => rejected')
     }
     else {
+      results.push('create promise: executor before')
       promise = new PromiseClass((_resolve, _reject) => {
         const __reject = PromiseClass === Promise
           ? (reason) => {
@@ -81,19 +85,27 @@ describe('promise-fast > PromiseFast', function () {
         }
         results.push('executor')
         if (completeType === CompleteType.resolvedInExecutor) {
+          results.push('executor: resolvedInExecutor')
           resolve(completeType)
         }
         else if (completeType === CompleteType.rejectedInExecutor) {
+          results.push('executor: rejectedInExecutor')
           reject(completeType)
         }
       })
+      results.push('create promise: executor after')
     }
 
+    // resolve / reject before then
     if (completeType === CompleteType.resolvedBeforeThen) {
+      results.push('resolve before then, before')
       resolve(completeType)
+      results.push('resolve before then, after')
     }
     else if (completeType === CompleteType.rejectedBeforeThen) {
+      results.push('reject before then, before')
       reject(completeType)
+      results.push('reject before then, after')
     }
 
     function createCallback(name: string, type: CallbackType) {
@@ -139,24 +151,31 @@ describe('promise-fast > PromiseFast', function () {
     }
 
     if (thenFulfilled || thenRejected) {
+      results.push('promise.then before')
       addNextPromise(promise.then(
         createCallback('promise.then onfulfilled', thenFulfilled),
         createCallback('promise.then onrejected', thenRejected),
       ))
+      results.push('promise.then after')
     }
     if (_catch) {
+      results.push('promise.catch before')
       addNextPromise(promise.catch(
         createCallback('promise.catch', _catch),
       ))
+      results.push('promise.catch after')
     }
     if (_finally) {
+      results.push('promise.finally before')
       addNextPromise(promise.finally(
         createCallback('promise.finally', _finally) as any,
       ))
+      results.push('promise.finally after')
     }
 
-    for (let i = 0, len = nextPromises.length; i < len; i++) {
-      nextPromises[i] = nextPromises[i].then(
+    nextPromises.forEach((nextPromise, i) => {
+      results.push('next promise.then before ' + i)
+      nextPromise.then(
         (value) => {
           results.push(`${value} => next promise.then onfulfilled ${i}`)
         },
@@ -165,30 +184,39 @@ describe('promise-fast > PromiseFast', function () {
           throw value
         },
       )
-    }
+      results.push('next promise.then after ' + i)
+    })
 
     if (completeType === CompleteType.resolvedAfterThen) {
+      results.push('resolve after then, before')
       resolve(completeType)
+      results.push('resolve after then, after')
     }
     else if (completeType === CompleteType.rejectedAfterThen) {
+      results.push('reject after then, before')
       reject(completeType)
+      results.push('reject after then, after')
     }
 
+    results.push('await before')
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {
-      })
+      await Promise.resolve().then(() => {})
     }
+    results.push('await after')
 
-    for (let i = 0, len = nextPromises.length; i < len; i++) {
+    results.push('await next promises before')
+    nextPromises.forEach(async (nextPromise, i) => {
       try {
-        let value = await nextPromises[i]
+        let value = await nextPromise
         results.push(`${value} => await next promise ${i}`)
       }
       catch (err) {
         results.push(`${err} => await next promise catch ${i}`)
       }
-    }
+    })
+    results.push('await next promises after')
 
+    results.push('await promise before')
     try {
       let value = await promise
       results.push(value + ' => await promise')
@@ -196,11 +224,13 @@ describe('promise-fast > PromiseFast', function () {
     catch (err) {
       results.push(err + ' => await promise catch')
     }
+    results.push('await promise after')
 
+    results.push('await last before')
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {
-      })
+      await Promise.resolve().then(() => {})
     }
+    results.push('await last after')
 
     return results
   }
@@ -261,11 +291,10 @@ describe('promise-fast > PromiseFast', function () {
     })
 
     assert.deepStrictEqual(
-      results.sort(),
-      checkResults.sort(),
+      results,
+      checkResults,
     )
   })
-
 
   const completeTypes = [
     CompleteType.resolvedCreate,
@@ -287,15 +316,32 @@ describe('promise-fast > PromiseFast', function () {
     CallbackType.promiseRejected,
   ]
 
+  it('custom 1', async function () {
+    await testVariants({
+      completeType : [CompleteType.resolvedCreate],
+      thenFulfilled: [CallbackType.promise],
+      thenRejected : [null],
+      _catch       : [null],
+      _finally     : [CallbackType.value],
+    })()
+  })
+
   it('base', async function () {
     this.timeout(600000)
 
     await testVariants({
+      _finally: [
+        null,
+        CallbackType.null,
+        CallbackType.throw,
+        CallbackType.value,
+        CallbackType.promise,
+        CallbackType.promiseRejected,
+      ],
       completeType : completeTypes,
       thenFulfilled: [null, ...callbackTypes],
       thenRejected : [null, ...callbackTypes],
       _catch       : [null, ...callbackTypes],
-      _finally     : [null, CallbackType.null, CallbackType.value, CallbackType.throw],
     })()
   })
 })

@@ -2,6 +2,7 @@
 // noinspection JSConstantReassignment
 
 import {isPromiseLike} from 'src/isPromiseLike'
+import {promiseSchedulerEnqueue} from "src/promise-fast/promiseSchedulerEnqueue";
 
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>
@@ -16,17 +17,19 @@ function callFulfill<TValue>(
   fulfill: OnFulfilled<TValue>,
   nextPromise: PromiseFast<any>,
 ) {
-  try {
-    const result = fulfill
-      ? fulfill(value)
-      : value
-    // @ts-expect-error
-    nextPromise._resolve(result)
-  }
-  catch (err) {
-    // @ts-expect-error
-    nextPromise._reject(err)
-  }
+  promiseSchedulerEnqueue(() => {
+    try {
+      const result = fulfill
+        ? fulfill(value)
+        : value
+      // @ts-expect-error
+      nextPromise._resolve(result)
+    }
+    catch (err) {
+      // @ts-expect-error
+      nextPromise._reject(err)
+    }
+  })
 }
 
 function callReject(
@@ -34,20 +37,21 @@ function callReject(
   reject: OnRejected<any>,
   nextPromise: PromiseFast<any>,
 ) {
-  if (!reject) {
-    // @ts-expect-error
-    nextPromise._reject(reason)
-  }
+  promiseSchedulerEnqueue(() => {
+    if (!reject) {
+      // @ts-expect-error
+      nextPromise._reject(reason)
+    }
 
-  try {
-    const result = reject(reason)
-    // @ts-expect-error
-    nextPromise._resolve(result)
-  }
-  catch (err) {
-    // @ts-expect-error
-    nextPromise._reject(err)
-  }
+    try {
+      const result = reject(reason)
+      // @ts-expect-error
+      nextPromise._resolve(result)
+    } catch (err) {
+      // @ts-expect-error
+      nextPromise._reject(err)
+    }
+  })
 }
 
 const emptyFunc = function emptyFunc() {}
@@ -170,14 +174,20 @@ export class PromiseFast<TValue> implements Promise<TValue> {
     return this.then(void 0, onrejected)
   }
 
-  finally(onfinally?: (() => void) | undefined | null): Promise<TValue> {
+  finally(onfinally?: (() => PromiseLike<void>|void) | undefined | null): Promise<TValue> {
     const onfulfilled = onfinally && (function _onfulfilled(o) {
-      onfinally()
-      return o
+      const result = onfinally()
+      if (isPromiseLike(result)) {
+        return result.then(() => o)
+      }
+      return PromiseFast.resolve(o)
     })
     const onrejected = onfinally && (function _onrejected(o) {
-      onfinally()
-      throw o
+      const result = onfinally()
+      if (isPromiseLike(result)) {
+        return result.then(() => PromiseFast.reject(o))
+      }
+      return PromiseFast.reject(o)
     })
     return this.then(onfulfilled, onrejected)
   }
@@ -196,5 +206,107 @@ export class PromiseFast<TValue> implements Promise<TValue> {
 
   get [Symbol.toStringTag]() {
     return 'Promise'
+  }
+
+  static all<T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]> {
+    let resolve: Resolve<T[]>
+    let reject: Reject
+    const promise = new Promise<T[]>((_resolve, _reject) => {
+      resolve = _resolve
+      reject = _reject
+    })
+    let count = values.length
+    const results: T[] = []
+    values.forEach((value, i) => {
+      if (isPromiseLike(value)) {
+        value.then((result) => {
+          results[i] = result
+          if (--count === 0) {
+            resolve(results)
+          }
+        }, reject)
+      }
+      else {
+        results[i] = value
+        if (--count === 0) {
+          resolve(results)
+        }
+      }
+    })
+    return promise
+  }
+
+  static allSettled<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<PromiseSettledResult<T>[]> {
+    let resolve: Resolve<PromiseSettledResult<T>[]>
+    const promise = new PromiseFast<PromiseSettledResult<T>[]>((_resolve, _reject) => {
+      resolve = _resolve
+    })
+    let count = values.length
+    const results: PromiseSettledResult<T>[] = []
+    values.forEach((value, i) => {
+      if (isPromiseLike(value)) {
+        value.then((result) => {
+          results[i] = {status: 'fulfilled', value: result}
+          if (--count === 0) {
+            resolve(results)
+          }
+        }, (reason) => {
+          results[i] = {status: 'rejected', reason}
+          if (--count === 0) {
+            resolve(results)
+          }
+        })
+      }
+      else {
+        results[i] = {status: 'fulfilled', value}
+        if (--count === 0) {
+          resolve(results)
+        }
+      }
+    })
+    return promise
+  }
+
+  static any<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<T> {
+    let resolve: Resolve<T>
+    let reject: Reject
+    const promise = new PromiseFast<T>((_resolve, _reject) => {
+      resolve = _resolve
+      reject = _reject
+    })
+    let count = values.length
+    const errors: any[] = []
+    values.forEach((value, i) => {
+      if (isPromiseLike(value)) {
+        value.then(resolve, (reason) => {
+          errors[i] = reason
+          if (--count === 0) {
+            reject(new AggregateError(errors))
+          }
+        })
+      }
+      else {
+        resolve(value)
+      }
+    })
+    return promise
+  }
+
+  static race<T>(values: readonly (T | PromiseLike<T>)[]): PromiseFast<T> {
+    let resolve: Resolve<T>
+    let reject: Reject
+    const promise = new PromiseFast<T>((_resolve, _reject) => {
+      resolve = _resolve
+      reject = _reject
+    })
+    values.forEach((value) => {
+      if (isPromiseLike(value)) {
+        value.then(resolve, reject)
+      }
+      else {
+        resolve(value)
+      }
+    })
+    return promise
   }
 }
