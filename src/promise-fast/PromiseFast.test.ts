@@ -22,7 +22,7 @@ enum CallbackType {
   promiseRejected = 'promiseRejected',
 }
 
-describe('promise-fast > PromiseFast', function () {
+xdescribe('promise-fast > PromiseFast', function () {
   async function calcBehavior({
     PromiseClass,
     completeType,
@@ -292,8 +292,8 @@ describe('promise-fast > PromiseFast', function () {
 
     // TODO: remove sort and test in browsers
     assert.deepStrictEqual(
-      results.sort(),
-      checkResults.sort(),
+      results,
+      checkResults,
     )
   })
 

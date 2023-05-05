@@ -3,7 +3,7 @@
 
 import {isPromiseLike} from 'src/isPromiseLike'
 import {promiseSchedulerEnqueue} from 'src/promise-fast/promiseSchedulerEnqueue'
-import {promiseAll, promiseAllSettled, promiseAny, promiseRace} from 'src/promise-fast/helpers'
+import {promiseAll, promiseAllSettled, promiseAny, promiseRace} from 'src/promise/helpers'
 
 export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
 export type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>

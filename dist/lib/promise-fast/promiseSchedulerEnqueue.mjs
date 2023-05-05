@@ -2,11 +2,11 @@ import { __awaiter } from 'tslib';
 
 let queue = [];
 let processPromise;
-let count = 0;
+// let count = 0
 function process() {
     return __awaiter(this, void 0, void 0, function* () {
         while (queue.length > 0) {
-            console.log(count++);
+            // console.log(count++)
             // eslint-disable-next-line @typescript-eslint/await-thenable
             yield 0;
             const _queue = queue;

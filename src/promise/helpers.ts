@@ -1,6 +1,6 @@
 import {isPromiseLike} from 'src/isPromiseLike'
 import {Reject, Resolve} from 'src/promise-fast/PromiseFast'
-import {PromiseConstructorBase} from 'src/promise-fast/contracts'
+import {PromiseConstructorBase} from 'src/promise/contracts'
 
 export function promiseAll<T>(
   values: readonly (T | PromiseLike<T>)[],

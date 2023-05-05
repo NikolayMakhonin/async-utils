@@ -1,6 +1,6 @@
 // import {calcPerformanceAsync} from 'rdtsc'
 import {PromiseFast} from 'src/promise-fast/PromiseFast'
-import {rejectAsResolve} from "src/custom-promise";
+import {rejectAsResolve} from 'src/custom-promise'
 
 describe('promise-fast > PromiseFast perf', function () {
   this.timeout(60 * 60 * 1000)
