@@ -5,6 +5,10 @@ export function promiseToAbortable<T>(
   abortSignal: IAbortSignalFast|null,
   promise: Promise<T>,
 ): Promise<T> {
+  if (!abortSignal) {
+    return promise
+  }
+
   return new Promise<T>(function executor(resolve) {
     if (abortSignal && abortSignal.aborted) {
       rejectAsResolve(resolve, abortSignal.reason)
