@@ -7,7 +7,7 @@ var customPromise_rejectAsResolve = require('./rejectAsResolve.cjs');
 require('../isPromiseLike.cjs');
 require('../promise-fast/promiseSchedulerEnqueue.cjs');
 require('tslib');
-require('../promise-fast/helpers.cjs');
+require('../promise/helpers.cjs');
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {

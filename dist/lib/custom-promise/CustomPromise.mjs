@@ -3,7 +3,7 @@ import { rejectAsResolve } from './rejectAsResolve.mjs';
 import '../isPromiseLike.mjs';
 import '../promise-fast/promiseSchedulerEnqueue.mjs';
 import 'tslib';
-import '../promise-fast/helpers.mjs';
+import '../promise/helpers.mjs';
 
 const emptyFunc = function emptyFunc() { };
 class CustomPromise {

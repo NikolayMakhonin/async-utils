@@ -4,7 +4,7 @@ import { promiseRejected } from '../custom-promise/rejectAsResolve.mjs';
 import '../promise-fast/PromiseFast.mjs';
 import '../isPromiseLike.mjs';
 import '../promise-fast/promiseSchedulerEnqueue.mjs';
-import '../promise-fast/helpers.mjs';
+import '../promise/helpers.mjs';
 
 function funcToAbortable(abortSignal, func) {
     return __awaiter(this, void 0, void 0, function* () {

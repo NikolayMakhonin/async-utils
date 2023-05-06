@@ -7,6 +7,7 @@ export { promiseToAbortable } from './abort-controller-fast/promiseToAbortable.m
 export { useAbortController } from './abort-controller-fast/useAbortController.mjs';
 export { toFuncWithAbortSignal } from './abort-controller-fast/toFuncWithAbortSignal.mjs';
 export { isPromiseLike } from './isPromiseLike.mjs';
+export { promiseAll, promiseAllSettled, promiseAny, promiseRace } from './promise/helpers.mjs';
 export { promiseFinally } from './promise/promiseFinally.mjs';
 export { toFuncWithFinally } from './promise/toFuncWithFinally.mjs';
 export { fixAsyncStackTrace } from './promise/fixAsyncStackTrace.mjs';
@@ -16,5 +17,4 @@ import '@flemist/time-controller';
 import 'tslib';
 import './promise-fast/PromiseFast.mjs';
 import './promise-fast/promiseSchedulerEnqueue.mjs';
-import './promise-fast/helpers.mjs';
 import '@flemist/abort-controller-fast';

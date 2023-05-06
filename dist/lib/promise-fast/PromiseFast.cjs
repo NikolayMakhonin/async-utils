@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var isPromiseLike = require('../isPromiseLike.cjs');
 var promiseFast_promiseSchedulerEnqueue = require('./promiseSchedulerEnqueue.cjs');
-var promiseFast_helpers = require('./helpers.cjs');
+var promise_helpers = require('../promise/helpers.cjs');
 require('tslib');
 
 /* eslint-disable node/no-sync */
@@ -173,16 +173,16 @@ class PromiseFast {
         return PromiseFast;
     }
     static all(values) {
-        return promiseFast_helpers.promiseAll(values, PromiseFast);
+        return promise_helpers.promiseAll(values, PromiseFast);
     }
     static allSettled(values) {
-        return promiseFast_helpers.promiseAllSettled(values, PromiseFast);
+        return promise_helpers.promiseAllSettled(values, PromiseFast);
     }
     static any(values) {
-        return promiseFast_helpers.promiseAny(values, PromiseFast);
+        return promise_helpers.promiseAny(values, PromiseFast);
     }
     static race(values) {
-        return promiseFast_helpers.promiseRace(values, PromiseFast);
+        return promise_helpers.promiseRace(values, PromiseFast);
     }
 }
 

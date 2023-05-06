@@ -8,7 +8,7 @@ require('../promise-fast/PromiseFast.cjs');
 require('../isPromiseLike.cjs');
 require('../promise-fast/promiseSchedulerEnqueue.cjs');
 require('tslib');
-require('../promise-fast/helpers.cjs');
+require('../promise/helpers.cjs');
 
 
 

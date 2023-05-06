@@ -1,6 +1,6 @@
 import { isPromiseLike } from '../isPromiseLike.mjs';
 import { promiseSchedulerEnqueue } from './promiseSchedulerEnqueue.mjs';
-import { promiseAll, promiseAllSettled, promiseAny, promiseRace } from './helpers.mjs';
+import { promiseAll, promiseAllSettled, promiseAny, promiseRace } from '../promise/helpers.mjs';
 import 'tslib';
 
 /* eslint-disable node/no-sync */
