@@ -1,13 +1,12 @@
 {
   "name": "@flemist/async-utils",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Simple async utils",
   "main": "dist/lib/index.cjs",
   "module": "dist/lib/index.mjs",
   "types": "dist/lib/index.d.ts",
   "engines": {
-    "node": ">=12.9.0",
-    "pnpm": "^7.1.6"
+    "node": ">=12.9.0"
   },
   "repository": {
     "type": "git",
