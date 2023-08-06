@@ -92,8 +92,8 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@flemist/abort-controller-fast": "^0.0.6",
-    "@flemist/time-controller": "^0.0.3",
+    "@flemist/abort-controller-fast": "1.0.0",
+    "@flemist/time-controller": "1.0.0",
     "tslib": "^2.4.0"
   }
 }
