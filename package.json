@@ -1,6 +1,6 @@
 {
   "name": "@flemist/async-utils",
-  "version": "0.0.23",
+  "version": "1.0.0",
   "description": "Simple async utils",
   "main": "dist/lib/index.cjs",
   "module": "dist/lib/index.mjs",
