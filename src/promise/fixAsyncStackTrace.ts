@@ -4,7 +4,10 @@ export async function fixAsyncStackTrace<T>(func: () => Promise<T> | T): Promise
     return await func()
   }
   catch (err) {
-    err.stack += '\n' + error.stack.substring(error.stack.indexOf('\n'))
+    if (err instanceof Error) {
+      err.stack = (err.stack ? err.stack + '\n' : '')
+        + error.stack?.substring(error.stack.indexOf('\n'))
+    }
     throw err
   }
 }

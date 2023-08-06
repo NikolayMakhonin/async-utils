@@ -1,7 +1,7 @@
 import {FuncAny} from 'src/types'
 
 let queue: FuncAny[] = []
-let processPromise: Promise<void>
+let processPromise: Promise<void>|undefined|null
 // let count = 0
 
 async function process() {

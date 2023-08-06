@@ -24,6 +24,7 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "newLine": "LF",
+    "strictNullChecks": true,
     "typeRoots": [
       "node_modules/@types",
       "@types"

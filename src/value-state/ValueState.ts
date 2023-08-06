@@ -9,9 +9,9 @@ export class ValueState<TValue> implements IValueState<TValue> {
     this.hasError = props.hasError || false
   }
 
-  value?: TValue
-  loading?: boolean
-  hasValue?: boolean
+  value?: TValue|null
+  loading?: boolean|null
+  hasValue?: boolean|null
   error?: any
-  hasError?: boolean
+  hasError?: boolean|null
 }

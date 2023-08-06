@@ -8,7 +8,7 @@ export type CustomPromiseStatus = 'pending' | 'resolved' | 'rejected'
 
 export class CustomPromise<TResult = void> {
   readonly promise: Promise<TResult>
-  readonly resolve: (result?: TResult) => void
+  readonly resolve: (result: TResult) => void
   readonly reject: (error?: any) => void
   private _status: CustomPromiseStatus = 'pending'
   get state(): CustomPromiseStatus {
@@ -45,8 +45,8 @@ export class CustomPromise<TResult = void> {
         }
       }
       else {
-        this.resolve = resolve
-        this.reject = reject
+        this.resolve = resolve!
+        this.reject = reject!
       }
     }
 

@@ -15,7 +15,7 @@ export type Status = 'pending' | 'fulfilled' | 'rejected'
 
 function callFulfill<TValue>(
   value: TValue,
-  fulfill: OnFulfilled<TValue>,
+  fulfill: OnFulfilled<TValue>|undefined|null,
   nextPromise: PromiseFast<any>,
 ) {
   promiseSchedulerEnqueue(() => {
@@ -35,13 +35,14 @@ function callFulfill<TValue>(
 
 function callReject(
   reason: any,
-  reject: OnRejected<any>,
+  reject: OnRejected<any>|undefined|null,
   nextPromise: PromiseFast<any>,
 ) {
   promiseSchedulerEnqueue(() => {
     if (!reject) {
       // @ts-expect-error
       nextPromise._reject(reason)
+      return
     }
 
     try {
@@ -60,9 +61,13 @@ const emptyFunc = function emptyFunc() {}
 
 export class PromiseFast<TValue> implements Promise<TValue> {
   readonly status: Status = 'pending'
-  readonly value: TValue = void 0
+  readonly value: TValue|undefined|null = void 0
   readonly reason: any = void 0
-  private _handlers: [fulfill: OnFulfilled<TValue>, reject: OnRejected<any>, nextPromise: PromiseFast<any>][] = null
+  private _handlers: [
+    fulfill: OnFulfilled<TValue>|undefined|null,
+    reject: OnRejected<any>|undefined|null,
+    nextPromise: PromiseFast<any>,
+  ][]|undefined|null = null
 
   constructor(executor: Executor<TValue>) {
     const resolve = this._resolve

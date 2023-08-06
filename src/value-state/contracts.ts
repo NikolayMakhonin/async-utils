@@ -1,11 +1,11 @@
 import {PromiseOrValue} from 'src/types'
 
 export interface IValueState<TValue> {
-  value?: TValue
-  loading?: boolean
-  hasValue?: boolean
+  value?: TValue|null
+  loading?: boolean|null
+  hasValue?: boolean|null
   error?: any
-  hasError?: boolean
+  hasError?: boolean|null
 }
 
 export type ValueStateOrValue<T> = IValueState<T> | T

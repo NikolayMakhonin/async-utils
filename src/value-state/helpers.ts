@@ -28,7 +28,7 @@ export function toValueStateError<TValue = any>(error: any) {
   })
 }
 
-function resolveValueStates<TValues extends ValueState<any>[]>(
+function resolveValueStates<TValues extends IValueState<any>[]>(
   values: TValues,
 ): ValueState<OfValueStateOrValues<TValues>> {
   const state = createValueState<OfValueStateOrValues<TValues>>({
@@ -43,10 +43,10 @@ function resolveValueStates<TValues extends ValueState<any>[]>(
       state.loading ||= value.loading
       state.hasError ||= value.hasError
       state.error ||= value.error
-      state.value[i] = value.value
+      state.value![i] = value.value
     }
     else {
-      state.value[i] = void 0
+      state.value![i] = void 0
       state.hasValue = false
     }
   }

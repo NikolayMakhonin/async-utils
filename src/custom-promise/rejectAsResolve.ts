@@ -1,7 +1,7 @@
 function _promiseRejected(reason?: any): PromiseLike<never> {
   return {
     then(_, reject): any {
-      void reject(reason)
+      void reject!(reason)
     },
   }
 }

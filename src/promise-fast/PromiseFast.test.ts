@@ -32,11 +32,11 @@ xdescribe('promise-fast > PromiseFast', function () {
     _finally,
   }: {
     PromiseClass: typeof Promise,
-    completeType: CompleteType,
-    thenFulfilled: CallbackType,
-    thenRejected: CallbackType,
-    _catch: CallbackType,
-    _finally: CallbackType,
+    completeType: CompleteType|undefined|null,
+    thenFulfilled: CallbackType|undefined|null,
+    thenRejected: CallbackType|undefined|null,
+    _catch: CallbackType|undefined|null,
+    _finally: CallbackType|undefined|null,
   }) {
     const results: string[] = []
 
@@ -99,16 +99,16 @@ xdescribe('promise-fast > PromiseFast', function () {
     // resolve / reject before then
     if (completeType === CompleteType.resolvedBeforeThen) {
       results.push('resolve before then, before')
-      resolve(completeType)
+      resolve!(completeType)
       results.push('resolve before then, after')
     }
     else if (completeType === CompleteType.rejectedBeforeThen) {
       results.push('reject before then, before')
-      reject(completeType)
+      reject!(completeType)
       results.push('reject before then, after')
     }
 
-    function createCallback(name: string, type: CallbackType) {
+    function createCallback(name: string, type: CallbackType|undefined|null) {
       switch (type) {
         case null:
         case CallbackType.null:
@@ -189,12 +189,12 @@ xdescribe('promise-fast > PromiseFast', function () {
 
     if (completeType === CompleteType.resolvedAfterThen) {
       results.push('resolve after then, before')
-      resolve(completeType)
+      resolve!(completeType)
       results.push('resolve after then, after')
     }
     else if (completeType === CompleteType.rejectedAfterThen) {
       results.push('reject after then, before')
-      reject(completeType)
+      reject!(completeType)
       results.push('reject after then, after')
     }
 
@@ -258,11 +258,11 @@ xdescribe('promise-fast > PromiseFast', function () {
     _catch,
     _finally,
   }: {
-    completeType: CompleteType,
-    thenFulfilled: CallbackType,
-    thenRejected: CallbackType,
-    _catch: CallbackType,
-    _finally: CallbackType,
+    completeType: CompleteType|undefined|null,
+    thenFulfilled: CallbackType|undefined|null,
+    thenRejected: CallbackType|undefined|null,
+    _catch: CallbackType|undefined|null,
+    _finally: CallbackType|undefined|null,
   }) => {
     // console.log({
     //   completeType,
