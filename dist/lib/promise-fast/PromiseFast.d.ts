@@ -7,7 +7,7 @@ export declare type Executor<TValue> = (resolve: Resolve<TValue>, reject: Reject
 export declare type Status = 'pending' | 'fulfilled' | 'rejected';
 export declare class PromiseFast<TValue> implements Promise<TValue> {
     readonly status: Status;
-    readonly value: TValue;
+    readonly value: TValue | undefined | null;
     readonly reason: any;
     private _handlers;
     constructor(executor: Executor<TValue>);

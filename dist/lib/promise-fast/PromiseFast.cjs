@@ -28,6 +28,7 @@ function callReject(reason, reject, nextPromise) {
         if (!reject) {
             // @ts-expect-error
             nextPromise._reject(reason);
+            return;
         }
         try {
             const result = reject(reason);
