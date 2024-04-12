@@ -14,10 +14,9 @@ export function combineAbortSignals(...abortSignals: (IAbortSignalFast|null|unde
       continue
     }
     if (abortSignal.aborted) {
-      onAbort.call(abortSignal)
-      break
+      return abortSignal
     }
-    else if (!prevAbortSignal) {
+    if (!prevAbortSignal) {
       prevAbortSignal = abortSignal
     }
     else {
