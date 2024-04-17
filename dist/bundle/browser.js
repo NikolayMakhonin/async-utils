@@ -175,24 +175,30 @@ return e?t.then((function(t){var n=e()
 ;return a(n)?n.then((function(){return t})):t
 }),(function(t){var n=e();if(!a(n))throw t
 ;return n.then((function(){throw t}))})):t}
-function T(t,e){return e?function(){try{
+function T(t,e,n){function r(t){if(!n)return e(t)
+;try{var r=e(t)
+;return a(r)?P(r,n):a(o=n())?o.then((function(){
+return r})):r}catch(t){var o;if(!a(o=n()))throw t
+;return o.then((function(){throw t}))}}
+var o=t?t():void 0;return a(o)?o.then(r):r(o)}
+function x(t,e){return e?function(){try{
 var n=t.apply(this,arguments)
 ;return a(n)?P(n,e):(e(),n)}catch(t){throw e(),t}
-}:t}var x=function(t){
+}:t}var O=function(t){
 void 0===t&&(t={}),this.value=t.value,this.loading=t.loading||!1,
 this.hasValue=t.hasValue||!1,
 this.error=t.error,this.hasError=t.hasError||!1}
-;function O(t){return void 0===t&&(t={}),new x(t)}
-t.CustomPromise=A,t.ValueState=x,
+;function F(t){return void 0===t&&(t={}),new O(t)}
+t.CustomPromise=A,t.ValueState=O,
 t.asyncToValueState=function(t,e){
 return o(this,void 0,void 0,(function(){var n,r,o
 ;return i(this,(function(i){switch(i.label){
-case 0:e||(e=O()),i.label=1;case 1:
+case 0:e||(e=F()),i.label=1;case 1:
 return i.trys.push([1,5,,6]),e.loading=!0,n="function"==typeof t?t():t,
 r=void 0,a(n)?[4,n]:[3,3];case 2:
 return r=i.sent(),[3,4];case 3:r=n,i.label=4
 ;case 4:
-return r instanceof x?(e.value=r.value,e.hasValue=r.hasValue,e.error=r.error,
+return r instanceof O?(e.value=r.value,e.hasValue=r.hasValue,e.error=r.error,
 e.hasError=r.hasError,
 e.loading=r.loading):(e.value=r,e.hasValue=!0,e.error=null,
 e.hasError=!1,e.loading=!1),[3,6];case 5:
@@ -206,7 +212,7 @@ for(var i=0;i<n.length;i++){var s=n[i];if(s){
 if(s.aborted)return s
 ;e?(t||(t=new V,e.subscribe(o)),s.subscribe(o)):e=s
 }}return t?t.signal:e||(new V).signal
-},t.createValueState=O,t.delay=function(t,e,n){
+},t.createValueState=F,t.delay=function(t,e,n){
 return new Promise((function(o){
 if(e&&e.aborted)g(o,e.reason);else{
 var i,s=n||r,a=s.setTimeout((function(){i&&i(),o()
@@ -238,9 +244,9 @@ return t?new Promise((function(n){var r,o
 r&&r(),n(t)})).catch(i),t&&(r=t.subscribe(i)))
 ;function i(t){o||(o=!0,r&&r(),g(n,t))}})):e
 },t.rejectAsResolve=g,t.resolveValueStatesFunc=function(t,e){
-var n=function(t){for(var e=O({value:[],
+var n=function(t){for(var e=F({value:[],
 hasValue:!0}),n=0;n<t.length;n++){var r=t[n]
-;r instanceof x?(e.hasValue&&(e.hasValue=r.hasValue),
+;r instanceof O?(e.hasValue&&(e.hasValue=r.hasValue),
 e.loading||(e.loading=r.loading),
 e.hasError||(e.hasError=r.hasError),e.error||(e.error=r.error),
 e.value[n]=r.value):(e.value[n]=void 0,
@@ -249,20 +255,14 @@ n.value=e.apply(void 0,n.value)}catch(t){
 console.error(t),n.value=void 0,n.hasValue=!1,
 n.error=t,n.hasError=!0}else n.value=void 0
 ;return n
-},t.toFuncWithAbortSignal=function(t,e,n){
-return t&&e?T(n,t.subscribe(e)):n
-},t.toFuncWithFinally=T,t.toValueState=function(t){
-return O({value:t,hasValue:!0})
-},t.toValueStateError=function(t){return O({
+},t.runWithFinally=T,t.toFuncWithAbortSignal=function(t,e,n){
+return t&&e?x(n,t.subscribe(e)):n
+},t.toFuncWithFinally=x,t.toValueState=function(t){
+return F({value:t,hasValue:!0})
+},t.toValueStateError=function(t){return F({
 error:t,hasError:!0})
 },t.useAbortController=function(t){var e=new V
-;return function(t,e,n){function r(t){
-if(!n)return e(t);try{var r=e(t)
-;return a(r)?P(r,n):a(o=n())?o.then((function(){
-return r})):r}catch(t){var o;if(!a(o=n()))throw t
-;return o.then((function(){throw t}))}}
-var o=t?t():void 0;return a(o)?o.then(r):r(o)
-}(null,(function(){return t(e.signal)
+;return T(null,(function(){return t(e.signal)
 }),(function(){e.abort()}))
 },Object.defineProperty(t,"__esModule",{value:!0})
 }({});

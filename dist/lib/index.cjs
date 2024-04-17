@@ -15,6 +15,7 @@ var promise_helpers = require('./promise/helpers.cjs');
 var promise_promiseFinally = require('./promise/promiseFinally.cjs');
 var promise_toFuncWithFinally = require('./promise/toFuncWithFinally.cjs');
 var promise_fixAsyncStackTrace = require('./promise/fixAsyncStackTrace.cjs');
+var promise_runWithFinally = require('./promise/runWithFinally.cjs');
 var valueState_ValueState = require('./value-state/ValueState.cjs');
 var valueState_helpers = require('./value-state/helpers.cjs');
 require('@flemist/time-controller');
@@ -22,7 +23,6 @@ require('tslib');
 require('./promise-fast/PromiseFast.cjs');
 require('./promise-fast/promiseSchedulerEnqueue.cjs');
 require('@flemist/abort-controller-fast');
-require('./promise/runWithFinally.cjs');
 
 
 
@@ -43,6 +43,7 @@ exports.promiseRace = promise_helpers.promiseRace;
 exports.promiseFinally = promise_promiseFinally.promiseFinally;
 exports.toFuncWithFinally = promise_toFuncWithFinally.toFuncWithFinally;
 exports.fixAsyncStackTrace = promise_fixAsyncStackTrace.fixAsyncStackTrace;
+exports.runWithFinally = promise_runWithFinally.runWithFinally;
 exports.ValueState = valueState_ValueState.ValueState;
 exports.asyncToValueState = valueState_helpers.asyncToValueState;
 exports.createValueState = valueState_helpers.createValueState;
