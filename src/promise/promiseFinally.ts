@@ -1,6 +1,9 @@
+import {PromiseLikeOrValue} from 'src/promise-fast/PromiseFast'
+import {isPromiseLike} from 'src/isPromiseLike'
+
 export function promiseFinally<TPromise extends PromiseLike<any>>(
   promise: TPromise,
-  onFinally: (() => void) | null,
+  onFinally: (() => PromiseLikeOrValue<void>) | null | undefined,
 ): TPromise {
   if (!onFinally) {
     return promise
@@ -8,12 +11,20 @@ export function promiseFinally<TPromise extends PromiseLike<any>>(
 
   return promise.then(
     (result) => {
-      onFinally()
-      return result
+      const voidOrPromise = onFinally()
+      if (!isPromiseLike(voidOrPromise)) {
+        return result
+      }
+      return voidOrPromise.then(() => result)
     },
     (err) => {
-      onFinally()
-      throw err
+      const voidOrPromise = onFinally()
+      if (!isPromiseLike(voidOrPromise)) {
+        throw err
+      }
+      return voidOrPromise.then(() => {
+        throw err
+      })
     },
   ) as TPromise
 }

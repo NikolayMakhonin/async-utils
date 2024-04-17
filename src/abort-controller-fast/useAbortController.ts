@@ -1,11 +1,15 @@
 import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
-import {toFuncWithFinally} from 'src/promise/toFuncWithFinally'
+import {runWithFinally} from 'src/promise/runWithFinally'
 
 export function useAbortController<T>(
   func: (abortSignal: IAbortSignalFast) => T,
 ): T {
   const abortController = new AbortControllerFast()
-  return toFuncWithFinally(func, () => {
-    abortController.abort()
-  })(abortController.signal)
+  return runWithFinally(
+    null,
+    () => func(abortController.signal),
+    () => {
+      abortController.abort()
+    },
+  )
 }

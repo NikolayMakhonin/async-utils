@@ -2,9 +2,10 @@ import {isPromiseLike} from 'src/isPromiseLike'
 import {promiseFinally} from 'src/promise/promiseFinally'
 import {FuncAny} from 'src/contracts'
 
+/** @deprecated */
 export function toFuncWithFinally<TFunc extends FuncAny>(
   func: TFunc,
-  onFinally: (() => void) | null,
+  onFinally: (() => void) | null | undefined,
 ): TFunc {
   if (!onFinally) {
     return func

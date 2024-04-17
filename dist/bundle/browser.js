@@ -201,8 +201,8 @@ return[2,e]}}))}))
 for(var t,e,n=[],r=0;r<arguments.length;r++)n[r]=arguments[r]
 ;function o(e){t.abort(e)}
 for(var i=0;i<n.length;i++){var s=n[i];if(s){
-if(s.aborted){o.call(s);break}
-e?(t||(t=new V,e.subscribe(o)),s.subscribe(o)):e=s
+if(s.aborted)return s
+;e?(t||(t=new V,e.subscribe(o)),s.subscribe(o)):e=s
 }}return t?t.signal:e||(new V).signal
 },t.createValueState=O,t.delay=function(t,e,n){
 return new Promise((function(o){

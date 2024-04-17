@@ -2,6 +2,7 @@ import {IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {toFuncWithFinally} from 'src/promise/toFuncWithFinally'
 import {FuncAny} from 'src/contracts'
 
+/** @deprecated */
 export function toFuncWithAbortSignal<TFunc extends FuncAny>(
   abortSignal: IAbortSignalFast | null,
   onAbort: (() => void) | null,
