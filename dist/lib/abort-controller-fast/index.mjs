@@ -11,5 +11,6 @@ import '../isPromiseLike.mjs';
 import '../promise-fast/promiseSchedulerEnqueue.mjs';
 import '../promise/helpers.mjs';
 import '../custom-promise/rejectAsResolve.mjs';
-import '../promise/toFuncWithFinally.mjs';
+import '../promise/runWithFinally.mjs';
 import '../promise/promiseFinally.mjs';
+import '../promise/toFuncWithFinally.mjs';

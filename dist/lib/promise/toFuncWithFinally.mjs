@@ -1,6 +1,7 @@
 import { isPromiseLike } from '../isPromiseLike.mjs';
 import { promiseFinally } from './promiseFinally.mjs';
 
+/** @deprecated */
 function toFuncWithFinally(func, onFinally) {
     if (!onFinally) {
         return func;

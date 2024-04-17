@@ -1,13 +1,13 @@
 import { AbortControllerFast } from '@flemist/abort-controller-fast';
-import { toFuncWithFinally } from '../promise/toFuncWithFinally.mjs';
+import { runWithFinally } from '../promise/runWithFinally.mjs';
 import '../isPromiseLike.mjs';
 import '../promise/promiseFinally.mjs';
 
 function useAbortController(func) {
     const abortController = new AbortControllerFast();
-    return toFuncWithFinally(func, () => {
+    return runWithFinally(null, () => func(abortController.signal), () => {
         abortController.abort();
-    })(abortController.signal);
+    });
 }
 
 export { useAbortController };

@@ -82,7 +82,7 @@ l((function(){try{var r=e?e(t):t;n._resolve(r)
 }catch(t){n._reject(t)}}))}function p(t,e,n){
 l((function(){if(e)try{var r=e(t);n._resolve(r)
 }catch(t){n._reject(t)}else n._reject(t)}))}
-var y=function(){},_=function(){function t(t){
+var y=function(){},w=function(){function t(t){
 this.status="pending",this.value=void 0,
 this.reason=void 0,this._handlers=null
 ;var e=this._resolve,n=this._reject,r=this._resolveAsync,o=this._rejectAsync,i=this
@@ -133,12 +133,12 @@ configurable:!0}),t.all=function(e){return h(e,t)
 },t.allSettled=function(e){return f(e,t)
 },t.any=function(e){return v(e,t)
 },t.race=function(e){return d(e,t)},t}()
-;function w(t){return{then:function(e,n){n(t)}}}
-function g(t,e){t(w(e))}function m(t){
-return Promise.resolve(w(t))}
+;function _(t){return{then:function(e,n){n(t)}}}
+function g(t,e){t(_(e))}function m(t){
+return Promise.resolve(_(t))}
 var j=function(){},A=function(){function t(t){
 var e,n,r=this
-;if(this._status="pending",t&&t.aborted)this.promise=_.reject(t.reason),
+;if(this._status="pending",t&&t.aborted)this.promise=w.reject(t.reason),
 this.resolve=j,
 this.reject=j;else if(this.promise=new Promise((function(t){
 e=t,n=function(e){g(t,e)}})),t){
@@ -171,9 +171,11 @@ if(this.aborted)throw this.reason}}class V{
 constructor(){this.signal=new k}abort(t){
 this.signal.aborted||(void 0===t&&((t=new E("Aborted with no reason",t))._internal=!0),
 this.signal.abort(t))}}function P(t,e){
-return e?t.then((function(t){return e(),t
-}),(function(t){throw e(),t})):t}function T(t,e){
-return e?function(){try{
+return e?t.then((function(t){var n=e()
+;return a(n)?n.then((function(){return t})):t
+}),(function(t){var n=e();if(!a(n))throw t
+;return n.then((function(){throw t}))})):t}
+function T(t,e){return e?function(){try{
 var n=t.apply(this,arguments)
 ;return a(n)?P(n,e):(e(),n)}catch(t){throw e(),t}
 }:t}var x=function(t){
@@ -254,6 +256,13 @@ return O({value:t,hasValue:!0})
 },t.toValueStateError=function(t){return O({
 error:t,hasError:!0})
 },t.useAbortController=function(t){var e=new V
-;return T(t,(function(){e.abort()}))(e.signal)
+;return function(t,e,n){function r(t){
+if(!n)return e(t);try{var r=e(t)
+;return a(r)?P(r,n):a(o=n())?o.then((function(){
+return r})):r}catch(t){var o;if(!a(o=n()))throw t
+;return o.then((function(){throw t}))}}
+var o=t?t():void 0;return a(o)?o.then(r):r(o)
+}(null,(function(){return t(e.signal)
+}),(function(){e.abort()}))
 },Object.defineProperty(t,"__esModule",{value:!0})
 }({});

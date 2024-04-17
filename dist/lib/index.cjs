@@ -22,6 +22,7 @@ require('tslib');
 require('./promise-fast/PromiseFast.cjs');
 require('./promise-fast/promiseSchedulerEnqueue.cjs');
 require('@flemist/abort-controller-fast');
+require('./promise/runWithFinally.cjs');
 
 
 

@@ -1,2 +1,3 @@
 import { FuncAny } from "../contracts";
-export declare function toFuncWithFinally<TFunc extends FuncAny>(func: TFunc, onFinally: (() => void) | null): TFunc;
+/** @deprecated */
+export declare function toFuncWithFinally<TFunc extends FuncAny>(func: TFunc, onFinally: (() => void) | null | undefined): TFunc;

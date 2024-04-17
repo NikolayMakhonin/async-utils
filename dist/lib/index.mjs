@@ -18,3 +18,4 @@ import 'tslib';
 import './promise-fast/PromiseFast.mjs';
 import './promise-fast/promiseSchedulerEnqueue.mjs';
 import '@flemist/abort-controller-fast';
+import './promise/runWithFinally.mjs';

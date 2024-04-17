@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var isPromiseLike = require('../isPromiseLike.cjs');
 var promise_promiseFinally = require('./promiseFinally.cjs');
 
+/** @deprecated */
 function toFuncWithFinally(func, onFinally) {
     if (!onFinally) {
         return func;

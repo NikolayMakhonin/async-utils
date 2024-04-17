@@ -15,8 +15,9 @@ require('../isPromiseLike.cjs');
 require('../promise-fast/promiseSchedulerEnqueue.cjs');
 require('../promise/helpers.cjs');
 require('../custom-promise/rejectAsResolve.cjs');
-require('../promise/toFuncWithFinally.cjs');
+require('../promise/runWithFinally.cjs');
 require('../promise/promiseFinally.cjs');
+require('../promise/toFuncWithFinally.cjs');
 
 
 

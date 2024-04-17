@@ -6,6 +6,7 @@ var promise_toFuncWithFinally = require('../promise/toFuncWithFinally.cjs');
 require('../isPromiseLike.cjs');
 require('../promise/promiseFinally.cjs');
 
+/** @deprecated */
 function toFuncWithAbortSignal(abortSignal, onAbort, func) {
     if (!abortSignal || !onAbort) {
         return func;
