@@ -1,6 +1,6 @@
-import {PromiseLikeOrValue} from 'src/promise-fast/PromiseFast'
 import {isPromiseLike} from 'src/isPromiseLike'
 import {promiseFinally} from 'src/promise/promiseFinally'
+import {PromiseLikeOrValue} from 'src/types'
 
 /** Optimized try finally with sync and async support:
 const context = await init()

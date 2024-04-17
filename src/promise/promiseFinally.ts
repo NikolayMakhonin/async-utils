@@ -1,5 +1,5 @@
-import {PromiseLikeOrValue} from 'src/promise-fast/PromiseFast'
 import {isPromiseLike} from 'src/isPromiseLike'
+import {PromiseLikeOrValue} from 'src/types'
 
 export function promiseFinally<TPromise extends PromiseLike<any>>(
   promise: TPromise,

@@ -1,3 +1,5 @@
+export type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue
+
 export type PromiseOrValue<T> = Promise<T> | T
 
 export type OfPromise<T> = T extends Promise<infer U> ? U : T
