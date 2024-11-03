@@ -1,4 +1,4 @@
-import { PromiseLikeOrValue } from "../promise-fast/PromiseFast";
+import { PromiseLikeOrValue } from "../types";
 /** Optimized try finally with sync and async support:
 const context = await init()
 try {

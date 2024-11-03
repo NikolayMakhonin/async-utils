@@ -57,13 +57,20 @@ function resolveValueStatesFunc(values, func) {
     }
     return state;
 }
-function asyncToValueState(valueAsync, state) {
+function asyncToValueState(valueAsync, stateOrUpdater) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!state) {
-            state = createValueState();
-        }
+        const updater = typeof stateOrUpdater === 'function'
+            ? stateOrUpdater
+            : (update) => {
+                stateOrUpdater = update(stateOrUpdater);
+            };
+        let state;
         try {
-            state.loading = true;
+            updater((o) => {
+                state = o || createValueState();
+                state.loading = true;
+                return state;
+            });
             const valuePromise = typeof valueAsync === 'function'
                 ? valueAsync()
                 : valueAsync;
@@ -75,25 +82,37 @@ function asyncToValueState(valueAsync, state) {
                 value = valuePromise;
             }
             if (value instanceof ValueState) {
-                state.value = value.value;
-                state.hasValue = value.hasValue;
-                state.error = value.error;
-                state.hasError = value.hasError;
-                state.loading = value.loading;
+                updater((o) => {
+                    state = o || createValueState();
+                    state.value = value.value;
+                    state.hasValue = value.hasValue;
+                    state.error = value.error;
+                    state.hasError = value.hasError;
+                    state.loading = value.loading;
+                    return state;
+                });
             }
             else {
-                state.value = value;
-                state.hasValue = true;
-                state.error = null;
-                state.hasError = false;
-                state.loading = false;
+                updater((o) => {
+                    state = o || createValueState();
+                    state.value = value;
+                    state.hasValue = true;
+                    state.error = null;
+                    state.hasError = false;
+                    state.loading = false;
+                    return state;
+                });
             }
         }
         catch (error) {
             console.error(error);
-            state.error = error;
-            state.hasError = true;
-            state.loading = false;
+            updater((o) => {
+                state = o || createValueState();
+                state.error = error;
+                state.hasError = true;
+                state.loading = false;
+                return state;
+            });
         }
         return state;
     });

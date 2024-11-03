@@ -14,3 +14,4 @@ export declare type OfValueStateOrValue<T> = T extends ValueStateOrValue<infer U
 export declare type OfValueStateOrValues<T> = {
     [K in keyof T]: OfValueStateOrValue<T[K]>;
 };
+export declare type Updater<T> = (updater: (value: T) => T) => void;

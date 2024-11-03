@@ -1,4 +1,4 @@
-export declare type PromiseLikeOrValue<TValue> = PromiseLike<TValue> | TValue;
+import { PromiseLikeOrValue } from "../types";
 export declare type OnFulfilled<TValue, TResult = any> = (value: TValue) => PromiseLikeOrValue<TResult>;
 export declare type OnRejected<TResult> = (reason: any) => PromiseLikeOrValue<TResult>;
 export declare type Resolve<TValue> = (value: PromiseLikeOrValue<TValue>) => void;

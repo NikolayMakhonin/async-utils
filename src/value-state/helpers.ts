@@ -5,6 +5,7 @@ import {
   IValueState,
   OfValueStateOrValues,
   StateOrValue,
+  Updater,
 } from './contracts'
 import {PromiseOrValue} from 'src/types'
 
@@ -79,14 +80,22 @@ export function resolveValueStatesFunc<TValues extends ValueState<any>[], TResul
 
 export async function asyncToValueState<TValue>(
   valueAsync: AsyncOrValue<TValue>,
-  state?: ValueState<TValue>,
+  stateOrUpdater?: ValueState<TValue>
+    | Updater<ValueState<TValue>>,
 ): Promise<ValueState<TValue>> {
-  if (!state) {
-    state = createValueState<TValue>()
-  }
+  const updater: Updater<ValueState<TValue>> = typeof stateOrUpdater === 'function'
+    ? stateOrUpdater
+    : (update) => {
+      stateOrUpdater = update(stateOrUpdater as ValueState<TValue>)
+    }
+  let state: ValueState<TValue>
 
   try {
-    state.loading = true
+    updater((o) => {
+      state = o || createValueState<TValue>()
+      state.loading = true
+      return state
+    })
 
     const valuePromise: PromiseOrValue<StateOrValue<TValue>> = typeof valueAsync === 'function'
       ? (valueAsync as any)()
@@ -102,26 +111,38 @@ export async function asyncToValueState<TValue>(
     }
 
     if (value instanceof ValueState) {
-      state.value = value.value
-      state.hasValue = value.hasValue
-      state.error = value.error
-      state.hasError = value.hasError
-      state.loading = value.loading
+      updater((o) => {
+        state = o || createValueState<TValue>()
+        state.value = value.value
+        state.hasValue = value.hasValue
+        state.error = value.error
+        state.hasError = value.hasError
+        state.loading = value.loading
+        return state
+      })
     }
     else {
-      state.value = value
-      state.hasValue = true
-      state.error = null
-      state.hasError = false
-      state.loading = false
+      updater((o) => {
+        state = o || createValueState<TValue>()
+        state.value = value
+        state.hasValue = true
+        state.error = null
+        state.hasError = false
+        state.loading = false
+        return state
+      })
     }
   }
   catch (error) {
     console.error(error)
-    state.error = error
-    state.hasError = true
-    state.loading = false
+    updater((o) => {
+      state = o || createValueState<TValue>()
+      state.error = error
+      state.hasError = true
+      state.loading = false
+      return state
+    })
   }
 
-  return state
+  return state!
 }
