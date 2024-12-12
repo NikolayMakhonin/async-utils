@@ -3,6 +3,9 @@ import {ITimeController, timeControllerDefault} from '@flemist/time-controller'
 import {rejectAsResolve} from 'src/custom-promise'
 
 export function delay(milliseconds: number, abortSignal?: IAbortSignalFast, timeController?: ITimeController) {
+  if (!Number.isFinite(milliseconds)) {
+    throw new TypeError('milliseconds must be a finite number: ' + milliseconds)
+  }
   return new Promise<void>(function executor(resolve) {
     if (abortSignal && abortSignal.aborted) {
       rejectAsResolve(resolve, abortSignal.reason)
