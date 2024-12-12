@@ -7,6 +7,9 @@ require('tslib');
 var customPromise_rejectAsResolve = require('../custom-promise/rejectAsResolve.cjs');
 
 function delay(milliseconds, abortSignal, timeController$1) {
+    if (!Number.isFinite(milliseconds)) {
+        throw new TypeError('milliseconds must be a finite number: ' + milliseconds);
+    }
     return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
             customPromise_rejectAsResolve.rejectAsResolve(resolve, abortSignal.reason);

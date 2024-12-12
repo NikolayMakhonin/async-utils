@@ -3,6 +3,9 @@ import 'tslib';
 import { rejectAsResolve } from '../custom-promise/rejectAsResolve.mjs';
 
 function delay(milliseconds, abortSignal, timeController) {
+    if (!Number.isFinite(milliseconds)) {
+        throw new TypeError('milliseconds must be a finite number: ' + milliseconds);
+    }
     return new Promise(function executor(resolve) {
         if (abortSignal && abortSignal.aborted) {
             rejectAsResolve(resolve, abortSignal.reason);

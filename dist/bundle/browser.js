@@ -134,14 +134,14 @@ configurable:!0}),t.all=function(e){return f(e,t)
 },t.any=function(e){return v(e,t)
 },t.race=function(e){return d(e,t)},t}()
 ;function _(t){return{then:function(e,n){n(t)}}}
-function g(t,e){t(_(e))}function m(t){
+function m(t,e){t(_(e))}function g(t){
 return Promise.resolve(_(t))}
 var j=function(){},A=function(){function t(t){
 var e,n,r=this
 ;if(this._status="pending",t&&t.aborted)this.promise=w.reject(t.reason),
 this.resolve=j,
 this.reject=j;else if(this.promise=new Promise((function(t){
-e=t,n=function(e){g(t,e)}})),t){
+e=t,n=function(e){m(t,e)}})),t){
 var o=t.subscribe((function(t){n(t)}))
 ;this.resolve=function(t){o(),e(t)
 },this.reject=function(t){o(),n(t)}
@@ -184,12 +184,12 @@ var o=t?t():void 0;return u(o)?o.then(r):r(o)}
 function x(t,e){return e?function(){try{
 var n=t.apply(this,arguments)
 ;return u(n)?P(n,e):(e(),n)}catch(t){throw e(),t}
-}:t}var O=function(t){
+}:t}var F=function(t){
 void 0===t&&(t={}),this.value=t.value,this.loading=t.loading||!1,
 this.hasValue=t.hasValue||!1,
 this.error=t.error,this.hasError=t.hasError||!1}
-;function F(t){return void 0===t&&(t={}),new O(t)}
-t.CustomPromise=A,t.ValueState=O,
+;function O(t){return void 0===t&&(t={}),new F(t)}
+t.CustomPromise=A,t.ValueState=F,
 t.asyncToValueState=function(t,e){
 return o(this,void 0,void 0,(function(){
 var n,r,o,s,a;return i(this,(function(i){
@@ -197,18 +197,18 @@ switch(i.label){case 0:
 n="function"==typeof e?e:function(t){e=t(e)
 },i.label=1;case 1:
 return i.trys.push([1,5,,6]),n((function(t){
-return(r=t||F()).loading=!0,r
+return(r=t||O()).loading=!0,r
 })),u(o="function"==typeof t?t():t)?[4,o]:[3,3]
 ;case 2:return s=i.sent(),[3,4];case 3:
 s=o,i.label=4;case 4:
-return n(s instanceof O?function(t){
-return(r=t||F()).value=s.value,r.hasValue=s.hasValue,
+return n(s instanceof F?function(t){
+return(r=t||O()).value=s.value,r.hasValue=s.hasValue,
 r.error=s.error,r.hasError=s.hasError,
 r.loading=s.loading,r}:function(t){
-return(r=t||F()).value=s,r.hasValue=!0,r.error=null,
+return(r=t||O()).value=s,r.hasValue=!0,r.error=null,
 r.hasError=!1,r.loading=!1,r}),[3,6];case 5:
 return a=i.sent(),console.error(a),n((function(t){
-return(r=t||F()).error=a,r.hasError=!0,
+return(r=t||O()).error=a,r.hasError=!0,
 r.loading=!1,r})),[3,6];case 6:return[2,r]}}))}))
 },t.combineAbortSignals=function(){
 for(var t,e,n=[],r=0;r<arguments.length;r++)n[r]=arguments[r]
@@ -217,12 +217,13 @@ for(var i=0;i<n.length;i++){var s=n[i];if(s){
 if(s.aborted)return s
 ;e?(t||(t=new V,e.subscribe(o)),s.subscribe(o)):e=s
 }}return t?t.signal:e||(new V).signal
-},t.createValueState=F,t.delay=function(t,e,n){
-return new Promise((function(o){
-if(e&&e.aborted)g(o,e.reason);else{
+},t.createValueState=O,t.delay=function(t,e,n){
+if(!Number.isFinite(t))throw new TypeError("milliseconds must be a finite number: "+t)
+;return new Promise((function(o){
+if(e&&e.aborted)m(o,e.reason);else{
 var i,s=n||r,u=s.setTimeout((function(){i&&i(),o()
 }),t);e&&(i=e.subscribe((function(t){
-s.clearTimeout(u),g(o,t)})))}}))
+s.clearTimeout(u),m(o,t)})))}}))
 },t.fixAsyncStackTrace=function(t){var e
 ;return o(this,void 0,void 0,(function(){var n,r
 ;return i(this,(function(o){switch(o.label){
@@ -236,22 +237,22 @@ return o(this,void 0,void 0,(function(){
 function n(t){r.reject(t)}var r,o
 ;return i(this,(function(i){switch(i.label){
 case 0:if(!t)return[2,e()]
-;if(t.aborted)return[2,m(t.reason)]
+;if(t.aborted)return[2,g(t.reason)]
 ;r=new A,o=t.subscribe(n),i.label=1;case 1:
 return i.trys.push([1,,3,4]),[4,e(r.promise)]
 ;case 2:return[2,i.sent()];case 3:return o(),[7]
 ;case 4:return[2]}}))}))
 },t.isPromiseLike=u,t.promiseAll=f,t.promiseAllSettled=h,
 t.promiseAny=v,t.promiseFinally=P,
-t.promiseRace=d,t.promiseRejected=m,t.promiseToAbortable=function(t,e){
+t.promiseRace=d,t.promiseRejected=g,t.promiseToAbortable=function(t,e){
 return t?new Promise((function(n){var r,o
-;t&&t.aborted?g(n,t.reason):(e.then((function(t){
+;t&&t.aborted?m(n,t.reason):(e.then((function(t){
 r&&r(),n(t)})).catch(i),t&&(r=t.subscribe(i)))
-;function i(t){o||(o=!0,r&&r(),g(n,t))}})):e
-},t.rejectAsResolve=g,t.resolveValueStatesFunc=function(t,e){
-var n=function(t){for(var e=F({value:[],
+;function i(t){o||(o=!0,r&&r(),m(n,t))}})):e
+},t.rejectAsResolve=m,t.resolveValueStatesFunc=function(t,e){
+var n=function(t){for(var e=O({value:[],
 hasValue:!0}),n=0;n<t.length;n++){var r=t[n]
-;r instanceof O?(e.hasValue&&(e.hasValue=r.hasValue),
+;r instanceof F?(e.hasValue&&(e.hasValue=r.hasValue),
 e.loading||(e.loading=r.loading),
 e.hasError||(e.hasError=r.hasError),e.error||(e.error=r.error),
 e.value[n]=r.value):(e.value[n]=void 0,
@@ -263,8 +264,8 @@ n.error=t,n.hasError=!0}else n.value=void 0
 },t.runWithFinally=T,t.toFuncWithAbortSignal=function(t,e,n){
 return t&&e?x(n,t.subscribe(e)):n
 },t.toFuncWithFinally=x,t.toValueState=function(t){
-return F({value:t,hasValue:!0})
-},t.toValueStateError=function(t){return F({
+return O({value:t,hasValue:!0})
+},t.toValueStateError=function(t){return O({
 error:t,hasError:!0})
 },t.useAbortController=function(t){var e=new V
 ;return T(null,(function(){return t(e.signal)
