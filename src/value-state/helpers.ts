@@ -65,7 +65,7 @@ export function resolveValueStatesFunc<TValues extends ValueState<any>[], TResul
       state.value = func.apply(void 0, state.value)
     }
     catch (error) {
-      console.error(error)
+      // console.error(error)
       state.value = void 0
       state.hasValue = false
       state.error = error
@@ -134,7 +134,7 @@ export async function asyncToValueState<TValue>(
     }
   }
   catch (error) {
-    console.error(error)
+    // console.error(error)
     updater((o) => {
       state = o || createValueState<TValue>()
       state.error = error
