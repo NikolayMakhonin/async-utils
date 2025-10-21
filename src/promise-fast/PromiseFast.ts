@@ -20,7 +20,7 @@ export type Status = 'pending' | 'fulfilled' | 'rejected'
 
 function callFulfill<TValue>(
   value: TValue,
-  fulfill: OnFulfilled<TValue>|undefined|null,
+  fulfill: OnFulfilled<TValue>|null|undefined,
   nextPromise: PromiseFast<any>,
 ) {
   promiseSchedulerEnqueue(() => {
@@ -40,7 +40,7 @@ function callFulfill<TValue>(
 
 function callReject(
   reason: any,
-  reject: OnRejected<any>|undefined|null,
+  reject: OnRejected<any>|null|undefined,
   nextPromise: PromiseFast<any>,
 ) {
   promiseSchedulerEnqueue(() => {
@@ -66,13 +66,13 @@ const emptyFunc = function emptyFunc() {}
 
 export class PromiseFast<TValue> implements Promise<TValue> {
   readonly status: Status = 'pending'
-  readonly value: TValue|undefined|null = void 0
+  readonly value: TValue|null|undefined = void 0
   readonly reason: any = void 0
   private _handlers: [
-    fulfill: OnFulfilled<TValue>|undefined|null,
-    reject: OnRejected<any>|undefined|null,
+    fulfill: OnFulfilled<TValue>|null|undefined,
+    reject: OnRejected<any>|null|undefined,
     nextPromise: PromiseFast<any>,
-  ][]|undefined|null = null
+  ][]|null|undefined = null
 
   constructor(executor: Executor<TValue>) {
     const resolve = this._resolve
@@ -161,8 +161,8 @@ export class PromiseFast<TValue> implements Promise<TValue> {
   }
 
   then<TResult1 = TValue, TResult2 = never>(
-    onfulfilled?: OnFulfilled<TValue, TResult1> | undefined | null,
-    onrejected?: OnFulfilled<TValue, TResult2> | undefined | null,
+    onfulfilled?: OnFulfilled<TValue, TResult1> | null | undefined,
+    onrejected?: OnFulfilled<TValue, TResult2> | null | undefined,
   ): Promise<TResult1 | TResult2> {
     const nextPromise = new PromiseFast<TResult1 | TResult2>(emptyFunc)
     if (this.status === 'pending') {
@@ -181,12 +181,12 @@ export class PromiseFast<TValue> implements Promise<TValue> {
   }
 
   catch<TResult = never>(
-    onrejected?: OnRejected<TResult> | undefined | null,
+    onrejected?: OnRejected<TResult> | null | undefined,
   ): Promise<TValue | TResult> {
     return this.then(void 0, onrejected)
   }
 
-  finally(onfinally?: (() => PromiseLike<void>|void) | undefined | null): Promise<TValue> {
+  finally(onfinally?: (() => PromiseLike<void>|void) | null | undefined): Promise<TValue> {
     const onfulfilled = onfinally && (function _onfulfilled(o) {
       const result = onfinally()
       if (isPromiseLike(result)) {

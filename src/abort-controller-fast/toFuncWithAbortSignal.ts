@@ -4,8 +4,8 @@ import {FuncAny} from 'src/contracts'
 
 /** @deprecated */
 export function toFuncWithAbortSignal<TFunc extends FuncAny>(
-  abortSignal: IAbortSignalFast | null,
-  onAbort: (() => void) | null,
+  abortSignal: IAbortSignalFast | null|undefined,
+  onAbort: (() => void) | null|undefined,
   func: TFunc,
 ): TFunc {
   if (!abortSignal || !onAbort) {

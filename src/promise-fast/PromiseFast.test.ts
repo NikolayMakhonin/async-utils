@@ -32,11 +32,11 @@ xdescribe('promise-fast > PromiseFast', function () {
     _finally,
   }: {
     PromiseClass: typeof Promise,
-    completeType: CompleteType|undefined|null,
-    thenFulfilled: CallbackType|undefined|null,
-    thenRejected: CallbackType|undefined|null,
-    _catch: CallbackType|undefined|null,
-    _finally: CallbackType|undefined|null,
+    completeType: CompleteType|null|undefined,
+    thenFulfilled: CallbackType|null|undefined,
+    thenRejected: CallbackType|null|undefined,
+    _catch: CallbackType|null|undefined,
+    _finally: CallbackType|null|undefined,
   }) {
     const results: string[] = []
 
@@ -108,7 +108,7 @@ xdescribe('promise-fast > PromiseFast', function () {
       results.push('reject before then, after')
     }
 
-    function createCallback(name: string, type: CallbackType|undefined|null) {
+    function createCallback(name: string, type: CallbackType|null|undefined) {
       switch (type) {
         case null:
         case CallbackType.null:
@@ -258,11 +258,11 @@ xdescribe('promise-fast > PromiseFast', function () {
     _catch,
     _finally,
   }: {
-    completeType: CompleteType|undefined|null,
-    thenFulfilled: CallbackType|undefined|null,
-    thenRejected: CallbackType|undefined|null,
-    _catch: CallbackType|undefined|null,
-    _finally: CallbackType|undefined|null,
+    completeType: CompleteType|null|undefined,
+    thenFulfilled: CallbackType|null|undefined,
+    thenRejected: CallbackType|null|undefined,
+    _catch: CallbackType|null|undefined,
+    _finally: CallbackType|null|undefined,
   }) => {
     // console.log({
     //   completeType,

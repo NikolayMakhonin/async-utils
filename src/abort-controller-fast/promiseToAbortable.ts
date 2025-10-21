@@ -2,7 +2,7 @@ import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
 import {rejectAsResolve} from 'src/custom-promise'
 
 export function promiseToAbortable<T>(
-  abortSignal: IAbortSignalFast|null,
+  abortSignal: IAbortSignalFast|null|undefined,
   promise: Promise<T>,
 ): Promise<T> {
   if (!abortSignal) {
