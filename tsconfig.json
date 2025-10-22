@@ -25,6 +25,8 @@
     "downlevelIteration": true,
     "newLine": "LF",
     "strictNullChecks": true,
+    "importsNotUsedAsValues": "remove",
+    "preserveValueImports": false,
     "typeRoots": [
       "node_modules/@types",
       "@types"
