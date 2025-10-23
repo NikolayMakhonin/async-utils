@@ -1,6 +1,7 @@
 import {PromiseFast} from './PromiseFast'
 import {createTestVariants} from '@flemist/test-variants'
 import {rejectAsResolve} from 'src/custom-promise/rejectAsResolve'
+import {EMPTY_FUNC} from 'src/constants'
 
 enum CompleteType {
   resolvedCreate = 'resolvedCreate',
@@ -200,7 +201,7 @@ xdescribe('promise-fast > PromiseFast', function () {
 
     results.push('await before')
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {})
+      await Promise.resolve().then(EMPTY_FUNC)
     }
     results.push('await after')
 
@@ -228,7 +229,7 @@ xdescribe('promise-fast > PromiseFast', function () {
 
     results.push('await last before')
     for (let i = 0; i < 10; i++) {
-      await Promise.resolve().then(() => {})
+      await Promise.resolve().then(EMPTY_FUNC)
     }
     results.push('await last after')
 

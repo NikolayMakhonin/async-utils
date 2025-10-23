@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@flemist/time-controller':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.0.4
+        version: 1.0.4
       tslib:
         specifier: ^2.4.0
         version: 2.8.1
@@ -777,8 +777,8 @@ packages:
     resolution: {integrity: sha512-lrway8vi98Xe/oPsGexhOsoTro8cuJ8/J/J81ZAs6lEaWCcOy+qpOWpp8ulx6F9uN2lU/LSsCsDZ8X9ov5svZQ==}
     engines: {node: '>=10.4.0'}
 
-  '@flemist/time-controller@1.0.2':
-    resolution: {integrity: sha512-5Gn3hc32I4/BvBrBumUi0/TlUL+jgn8Czd/X1F/NXrbsMrH9/B5SoR6M2oIiZwcILgH2EnIGH6ojXbEk0o2eXw==}
+  '@flemist/time-controller@1.0.4':
+    resolution: {integrity: sha512-u/R76Pfq3UOBLXNOMAW+zwL5a9U7UhirAJLFMnmJ3JISmomxb+um0wD3v1l6v6vZi+KbqwEVQYnEpv/o37jQug==}
     engines: {node: '>=10.4.0'}
 
   '@flemist/time-limits@1.0.2':
@@ -4329,7 +4329,7 @@ snapshots:
       '@flemist/abort-controller-fast': 1.0.0
       '@flemist/async-utils': 1.1.3
       '@flemist/pairing-heap': 1.0.0
-      '@flemist/time-controller': 1.0.2
+      '@flemist/time-controller': 1.0.4
       tslib: 2.8.1
 
   '@flemist/test-utils@0.0.9':
@@ -4354,7 +4354,7 @@ snapshots:
       '@flemist/pairing-heap': 1.0.0
       tslib: 2.8.1
 
-  '@flemist/time-controller@1.0.2':
+  '@flemist/time-controller@1.0.4':
     dependencies:
       '@flemist/pairing-heap': 1.0.0
       tslib: 2.8.1
@@ -4364,7 +4364,7 @@ snapshots:
       '@flemist/abort-controller-fast': 1.0.0
       '@flemist/async-utils': 1.1.3
       '@flemist/priority-queue': 1.0.1
-      '@flemist/time-controller': 1.0.2
+      '@flemist/time-controller': 1.0.4
       tslib: 2.8.1
 
   '@humanwhocodes/config-array@0.9.5':

@@ -1,5 +1,6 @@
 import { TimeControllerMock } from '@flemist/time-controller'
 import { waitTimeControllerMock } from './waitTimeControllerMock'
+import {EMPTY_FUNC} from 'src/constants'
 
 describe('waitTimeControllerMock', () => {
   it('base', async () => {
@@ -10,25 +11,25 @@ describe('waitTimeControllerMock', () => {
     // expect(timeController.now()).toBe(1)
     assert.strictEqual(timeController.now(), 1)
 
-    timeController.setTimeout(() => {}, 123)
+    timeController.setTimeout(EMPTY_FUNC, 123)
     await waitTimeControllerMock(timeController)
     // expect(timeController.now()).toBe(124)
     assert.strictEqual(timeController.now(), 124)
     
     timeController.setTime(1000)
-    timeController.setTimeout(() => {}, 5)
-    timeController.setTimeout(() => {}, 17)
-    timeController.setTimeout(() => {}, 11)
-    timeController.setTimeout(() => {}, 16)
+    timeController.setTimeout(EMPTY_FUNC, 5)
+    timeController.setTimeout(EMPTY_FUNC, 17)
+    timeController.setTimeout(EMPTY_FUNC, 11)
+    timeController.setTimeout(EMPTY_FUNC, 16)
     await waitTimeControllerMock(timeController)
     // expect(timeController.now()).toBe(1017)
     assert.strictEqual(timeController.now(), 1017)
 
     timeController.setTime(2000)
-    timeController.setTimeout(() => {}, 5)
-    timeController.setTimeout(() => {}, 17)
-    timeController.setTimeout(() => {}, 11)
-    timeController.setTimeout(() => {}, 16)
+    timeController.setTimeout(EMPTY_FUNC, 5)
+    timeController.setTimeout(EMPTY_FUNC, 17)
+    timeController.setTimeout(EMPTY_FUNC, 11)
+    timeController.setTimeout(EMPTY_FUNC, 16)
     await Promise.all(
       Array.from({ length: 10 }, () => waitTimeControllerMock(timeController)),
     )

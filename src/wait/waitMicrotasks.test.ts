@@ -1,24 +1,8 @@
-// import { getMicrotasksCount } from '$shared/lib/db-new/-test/getMicrotasksCount'
 import { waitMicrotasks } from './waitMicrotasks'
 import { calcPerformanceAsync } from 'rdtsc/node'
+import {EMPTY_FUNC} from 'src/constants'
 
 describe('waitMicrotasks', () => {
-  // it('base', async () => {
-  //   await waitMicrotasks()
-  //
-  //   let microtasksCount = getMicrotasksCount()
-  //   await waitMicrotasks()
-  //   let deltaCountActual = getMicrotasksCount() - microtasksCount
-  //
-  //   expect(deltaCountActual).toBe(2)
-  //
-  //   microtasksCount = getMicrotasksCount()
-  //   await Promise.all(Array.from({ length: 10 }, () => waitMicrotasks()))
-  //   deltaCountActual = getMicrotasksCount() - microtasksCount
-  //
-  //   expect(deltaCountActual).toBe(35)
-  // })
-
   it('stress', async () => {
     let resolvedActual = 0
     function createMicrotasksTree(levels: number, countPerLevel: number) {
@@ -42,68 +26,6 @@ describe('waitMicrotasks', () => {
     }
   })
 
-  // it('create promise', async () => {
-  //   function test(promiseFactory: () => Promise<any>) {
-  //     const microtasksCount = getMicrotasksCount()
-  //     const promise: any = promiseFactory()
-  //     if (promise.id) {
-  //       return
-  //     }
-  //     if (getMicrotasksCount() > microtasksCount) {
-  //       return
-  //     }
-  //     throw new Error('Promise creation is not intercepted')
-  //   }
-  //
-  //   // Via constructor
-  //   test(() => new Promise(() => {}))
-  //
-  //   // Via Promise.resolve
-  //   test(() => Promise.resolve())
-  //
-  //   // Via Promise.reject
-  //   test(() => Promise.reject())
-  //
-  //   // Via Promise.all
-  //   test(() => Promise.all([]))
-  //
-  //   // Via Promise.race
-  //   test(() => Promise.race([]))
-  //
-  //   // Via Promise.allSettled
-  //   test(() => Promise.allSettled([]))
-  //
-  //   // Via Promise.any
-  //   test(() => Promise.any([]))
-  //
-  //   // Via Promise.resolve().then
-  //   const promise = Promise.resolve()
-  //   test(() => promise.then(() => {}))
-  //
-  //   // Via Promise.resolve().catch
-  //   test(() => promise.catch(() => {}))
-  //
-  //   // Via Promise.resolve().finally
-  //   test(() => promise.finally(() => {}))
-  //
-  //   // Via async function call
-  //   test(() => (async () => {})().then(() => {}))
-  //
-  //   // Via async function call
-  //   test(() =>
-  //     (async () => {
-  //       await promise
-  //     })().then(() => {}),
-  //   )
-  //
-  //   // Via async function call
-  //   test(() =>
-  //     (async () => {
-  //       return promise
-  //     })().then(() => {}),
-  //   )
-  // })
-
   it(
     'setImmediate',
     async function () {
@@ -114,7 +36,7 @@ describe('waitMicrotasks', () => {
         funcs: [
           async () => {
             for (let i = 0; i < 16; i++) {
-              await Promise.resolve().then(() => {})
+              await Promise.resolve().then(EMPTY_FUNC)
             }
           },
           // () => {
