@@ -89,7 +89,7 @@
     "rollup-plugin-terser": "7.0.2",
     "ts-node": "=10.8.0",
     "tsconfig-paths": "4.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "4.7.4"
   },
   "dependencies": {
     "@flemist/abort-controller-fast": "^1.0.0",
