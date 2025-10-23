@@ -1,7 +1,7 @@
 import { createTestVariants } from '@flemist/test-variants'
 import { TimeControllerMock } from '@flemist/time-controller'
 import { toThrottled } from './toThrottled'
-import {timeControllerAwait, timeControllerAwaitPromise} from 'src/wait/timeControllerAwait'
+import {waitTimeControllerMock} from 'src/wait/waitTimeControllerMock'
 
 describe('toThrottled', () => {
   function checkTimeStamps({
@@ -95,10 +95,14 @@ describe('toThrottled', () => {
       const promises: Promise<any>[] = []
 
       for (let i = 0; i < 100; i++) {
-        await timeControllerAwait(timeController, {
-          iterations   : Math.floor(Math.random() * 10),
-          getAddTime   : () => Math.floor(Math.random() * 10),
-          getAwaitCount: () => Math.floor(Math.random() * 10),
+        // await timeControllerAwait(timeController, {
+        //   iterations   : Math.floor(Math.random() * 10),
+        //   getAddTime   : () => Math.floor(Math.random() * 10),
+        //   getAwaitCount: () => Math.floor(Math.random() * 10),
+        // })
+        await waitTimeControllerMock(timeController, null, {
+          timeout           : Math.floor(Math.random() * 10),
+          awaitsPerIteration: Math.floor(Math.random() * 100),
         })
 
         const throttleTime = throttleTimeRange
@@ -108,11 +112,14 @@ describe('toThrottled', () => {
         promises.push(throttleFunc(null, { throttleTime }))
       }
 
-      await timeControllerAwaitPromise(timeController, Promise.all(promises), {
-        iterations: 500,
+      // await timeControllerAwaitPromise(timeController, Promise.all(promises), {
+      //   iterations: 500,
+      // })
+      await waitTimeControllerMock(timeController, Promise.all(promises), {
+        awaitsPerIteration: 1,
       })
 
-      await Promise.all(promises)
+      // await Promise.all(promises)
 
       let throttleTimeMin = throttleTimeRange
         ? throttleTimeRange[0]

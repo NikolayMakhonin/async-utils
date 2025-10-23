@@ -94,6 +94,7 @@
   "dependencies": {
     "@flemist/abort-controller-fast": "^1.0.0",
     "@flemist/time-controller": "^1.0.4",
+    "setimmediate": "^1.0.5",
     "tslib": "^2.4.0"
   }
 }
