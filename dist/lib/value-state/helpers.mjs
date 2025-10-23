@@ -45,7 +45,7 @@ function resolveValueStatesFunc(values, func) {
             state.value = func.apply(void 0, state.value);
         }
         catch (error) {
-            console.error(error);
+            // console.error(error)
             state.value = void 0;
             state.hasValue = false;
             state.error = error;
@@ -105,7 +105,7 @@ function asyncToValueState(valueAsync, stateOrUpdater) {
             }
         }
         catch (error) {
-            console.error(error);
+            // console.error(error)
             updater((o) => {
                 state = o || createValueState();
                 state.error = error;

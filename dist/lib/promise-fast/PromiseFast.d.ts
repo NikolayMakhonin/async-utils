@@ -7,7 +7,7 @@ export declare type Executor<TValue> = (resolve: Resolve<TValue>, reject: Reject
 export declare type Status = 'pending' | 'fulfilled' | 'rejected';
 export declare class PromiseFast<TValue> implements Promise<TValue> {
     readonly status: Status;
-    readonly value: TValue | undefined | null;
+    readonly value: TValue | null | undefined;
     readonly reason: any;
     private _handlers;
     constructor(executor: Executor<TValue>);
@@ -17,9 +17,9 @@ export declare class PromiseFast<TValue> implements Promise<TValue> {
     private _reject;
     private _rejectAsync;
     private _rejectSync;
-    then<TResult1 = TValue, TResult2 = never>(onfulfilled?: OnFulfilled<TValue, TResult1> | undefined | null, onrejected?: OnFulfilled<TValue, TResult2> | undefined | null): Promise<TResult1 | TResult2>;
-    catch<TResult = never>(onrejected?: OnRejected<TResult> | undefined | null): Promise<TValue | TResult>;
-    finally(onfinally?: (() => PromiseLike<void> | void) | undefined | null): Promise<TValue>;
+    then<TResult1 = TValue, TResult2 = never>(onfulfilled?: OnFulfilled<TValue, TResult1> | null | undefined, onrejected?: OnFulfilled<TValue, TResult2> | null | undefined): Promise<TResult1 | TResult2>;
+    catch<TResult = never>(onrejected?: OnRejected<TResult> | null | undefined): Promise<TValue | TResult>;
+    finally(onfinally?: (() => PromiseLike<void> | void) | null | undefined): Promise<TValue>;
     static resolve<TValue>(value: PromiseLikeOrValue<TValue>): PromiseFast<TValue>;
     static reject(reason: PromiseLikeOrValue<any>): PromiseFast<never>;
     get [Symbol.toStringTag](): string;

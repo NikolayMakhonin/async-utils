@@ -1,4 +1,4 @@
-import { IAbortSignalFast } from '@flemist/abort-controller-fast';
+import { type IAbortSignalFast } from '@flemist/abort-controller-fast';
 export declare type CustomPromiseStatus = 'pending' | 'resolved' | 'rejected';
 export declare class CustomPromise<TResult = void> {
     readonly promise: Promise<TResult>;
