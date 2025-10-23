@@ -23,12 +23,12 @@ var time_Locker = require('./time/Locker.cjs');
 var time_toThrottled = require('./time/toThrottled.cjs');
 var wait_waitMicrotasks = require('./wait/waitMicrotasks.cjs');
 var wait_waitTimeControllerMock = require('./wait/waitTimeControllerMock.cjs');
+var constants = require('./constants.cjs');
 require('@flemist/time-controller');
 require('tslib');
 require('./promise-fast/PromiseFast.cjs');
 require('./promise-fast/promiseSchedulerEnqueue.cjs');
 require('@flemist/abort-controller-fast');
-require('./constants.cjs');
 require('setimmediate');
 
 
@@ -63,3 +63,4 @@ exports.Locker = time_Locker.Locker;
 exports.toThrottled = time_toThrottled.toThrottled;
 exports.waitMicrotasks = wait_waitMicrotasks.waitMicrotasks;
 exports.waitTimeControllerMock = wait_waitTimeControllerMock.waitTimeControllerMock;
+exports.EMPTY_FUNC = constants.EMPTY_FUNC;

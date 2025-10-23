@@ -175,26 +175,26 @@ throwIfAborted(){if(this.aborted)throw this.reason
 }}class S{constructor(){this.signal=new P}
 abort(t){
 this.signal.aborted||(void 0===t&&((t=new k("Aborted with no reason",t))._internal=!0),
-this.signal.abort(t))}}function A(){
+this.signal.abort(t))}}function T(){
 for(var t,e,n=[],r=0;r<arguments.length;r++)n[r]=arguments[r]
 ;function o(e){t.abort(e)}
 for(var i=0;i<n.length;i++){var u=n[i];if(u){
 if(u.aborted)return u
 ;e?(t||(t=new S,e.subscribe(o)),u.subscribe(o)):e=u
 }}return t?t.signal:e||(new S).signal}
-function T(t,e){return e?t.then(function(t){
+function A(t,e){return e?t.then(function(t){
 var n=e();return i(n)?n.then(function(){return t
 }):t},function(t){var n=e();if(!i(n))throw t
 ;return n.then(function(){throw t})}):t}
 function V(t,e,n){function r(t){if(!n)return e(t)
 ;try{var r=e(t)
-;return i(r)?T(r,n):i(o=n())?o.then(function(){
+;return i(r)?A(r,n):i(o=n())?o.then(function(){
 return r}):r}catch(t){var o;if(!i(o=n()))throw t
 ;return o.then(function(){throw t})}}
 var o=t?t():void 0;return i(o)?o.then(r):r(o)}
 function M(t,e){return e?function(){try{
 var n=t.apply(this,arguments)
-;return i(n)?T(n,e):(e(),n)}catch(t){throw e(),t}
+;return i(n)?A(n,e):(e(),n)}catch(t){throw e(),t}
 }:t}function x(t){
 if(t)return new Promise(function(e,n){
 t.subscribe(function(t){n(t)})})}function O(t){
@@ -257,8 +257,9 @@ e();break;case 1:e(n[0]);break;case 2:e(n[0],n[1])
 ;break;case 3:e(n[0],n[1],n[2]);break;default:
 e.apply(void 0,n)}}(e)}finally{f(t),a=!1}}}}
 })("undefined"==typeof self?q:self),
-t.CustomPromise=_,t.Locker=C,t.ValueState=I,
-t.abortSignalToPromise=x,t.asyncToValueState=function(t,e){
+t.CustomPromise=_,t.EMPTY_FUNC=U,t.Locker=C,
+t.ValueState=I,t.abortSignalToPromise=x,
+t.asyncToValueState=function(t,e){
 return n(this,void 0,void 0,function(){
 var n,o,u,s,a;return r(this,function(r){
 switch(r.label){case 0:
@@ -278,7 +279,7 @@ o.hasError=!1,o.loading=!1,o}),[3,6];case 5:
 return a=r.sent(),n(function(t){
 return(o=t||F()).error=a,o.hasError=!0,o.loading=!1,
 o}),[3,6];case 6:return[2,o]}})})
-},t.combineAbortSignals=A,t.createValueState=F,
+},t.combineAbortSignals=T,t.createValueState=F,
 t.delay=j,t.fixAsyncStackTrace=function(t){var e
 ;return n(this,void 0,void 0,function(){var n,o
 ;return r(this,function(r){switch(r.label){case 0:
@@ -298,7 +299,7 @@ return r.trys.push([1,,3,4]),[4,e(o.promise)]
 ;case 2:return[2,r.sent()];case 3:return i(),[7]
 ;case 4:return[2]}})})
 },t.isPromiseLike=i,t.promiseAll=l,t.promiseAllSettled=c,t.promiseAny=f,
-t.promiseFinally=T,
+t.promiseFinally=A,
 t.promiseRace=h,t.promiseRejected=w,t.promiseToAbortSignal=O,
 t.promiseToAbortable=function(t,e){
 return t?new Promise(function(n){var r,o
@@ -337,7 +338,7 @@ return null==t||t.throwIfAborted(),e=l.now(),f=function(t){
 if(null==b)return null
 ;var e=null!=h?h:0,n=null==p?null:null==v?t+p:t+Math.max(0,p-(t-v))
 ;return null!=n&&(e=Math.min(e,n)),e
-}(e),null==f||f<=l.now()?[3,4]:(c=new S,n=A(c.signal,t),
+}(e),null==f||f<=l.now()?[3,4]:(c=new S,n=T(c.signal,t),
 [4,j(f-e,n,l).catch(U)]);case 3:
 return r.sent(),[3,2];case 4:
 if(null==f)return[3,10]
