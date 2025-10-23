@@ -1,4 +1,4 @@
-import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {AbortControllerFast, type IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {runWithFinally} from 'src/promise/runWithFinally'
 
 export function useAbortController<T>(

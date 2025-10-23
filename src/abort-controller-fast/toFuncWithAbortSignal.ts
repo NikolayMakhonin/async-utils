@@ -1,4 +1,4 @@
-import {IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {type IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {toFuncWithFinally} from 'src/promise/toFuncWithFinally'
 import {FuncAny} from 'src/contracts'
 

@@ -1,4 +1,4 @@
-import {AbortControllerFast, IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {AbortControllerFast, type IAbortSignalFast} from '@flemist/abort-controller-fast'
 
 export function combineAbortSignals(...abortSignals: (IAbortSignalFast|null|undefined)[]): IAbortSignalFast {
   let abortController: AbortControllerFast|undefined

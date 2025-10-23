@@ -1,4 +1,4 @@
-import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
+import {type IAbortSignalFast, type IUnsubscribe} from '@flemist/abort-controller-fast'
 import {rejectAsResolve} from 'src/custom-promise'
 
 export function promiseToAbortable<T>(

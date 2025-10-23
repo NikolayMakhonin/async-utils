@@ -1,4 +1,4 @@
-import {IAbortSignalFast} from '@flemist/abort-controller-fast'
+import {type IAbortSignalFast} from '@flemist/abort-controller-fast'
 import {PromiseFast} from 'src/promise-fast'
 import {rejectAsResolve} from 'src/custom-promise/rejectAsResolve'
 

@@ -1,5 +1,5 @@
-import {IAbortSignalFast, IUnsubscribe} from '@flemist/abort-controller-fast'
-import {ITimeController, timeControllerDefault} from '@flemist/time-controller'
+import {type IAbortSignalFast, type IUnsubscribe} from '@flemist/abort-controller-fast'
+import {type ITimeController, timeControllerDefault} from '@flemist/time-controller'
 import {rejectAsResolve} from 'src/custom-promise'
 
 export function delay(milliseconds: number, abortSignal?: IAbortSignalFast, timeController?: ITimeController) {

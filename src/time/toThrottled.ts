@@ -1,10 +1,10 @@
 import {
   AbortControllerFast,
-  IAbortControllerFast,
-  IAbortSignalFast,
+  type IAbortControllerFast,
+  type IAbortSignalFast,
 } from '@flemist/abort-controller-fast'
 import {
-  ITimeController,
+  type ITimeController,
   timeControllerDefault,
 } from '@flemist/time-controller'
 import {PromiseOrValue} from 'src/types'
