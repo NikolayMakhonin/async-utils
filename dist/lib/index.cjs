@@ -10,6 +10,7 @@ var abortControllerFast_funcToAbortable = require('./abort-controller-fast/funcT
 var abortControllerFast_promiseToAbortable = require('./abort-controller-fast/promiseToAbortable.cjs');
 var abortControllerFast_useAbortController = require('./abort-controller-fast/useAbortController.cjs');
 var abortControllerFast_toFuncWithAbortSignal = require('./abort-controller-fast/toFuncWithAbortSignal.cjs');
+var abortControllerFast_abortSignalToPromise = require('./abort-controller-fast/abortSignalToPromise.cjs');
 var isPromiseLike = require('./isPromiseLike.cjs');
 var promise_helpers = require('./promise/helpers.cjs');
 var promise_promiseFinally = require('./promise/promiseFinally.cjs');
@@ -18,11 +19,17 @@ var promise_fixAsyncStackTrace = require('./promise/fixAsyncStackTrace.cjs');
 var promise_runWithFinally = require('./promise/runWithFinally.cjs');
 var valueState_ValueState = require('./value-state/ValueState.cjs');
 var valueState_helpers = require('./value-state/helpers.cjs');
+var time_Locker = require('./time/Locker.cjs');
+var time_toThrottled = require('./time/toThrottled.cjs');
+var wait_waitMicrotasks = require('./wait/waitMicrotasks.cjs');
+var wait_waitTimeControllerMock = require('./wait/waitTimeControllerMock.cjs');
 require('@flemist/time-controller');
 require('tslib');
 require('./promise-fast/PromiseFast.cjs');
 require('./promise-fast/promiseSchedulerEnqueue.cjs');
 require('@flemist/abort-controller-fast');
+require('./constants.cjs');
+require('setimmediate');
 
 
 
@@ -35,6 +42,8 @@ exports.funcToAbortable = abortControllerFast_funcToAbortable.funcToAbortable;
 exports.promiseToAbortable = abortControllerFast_promiseToAbortable.promiseToAbortable;
 exports.useAbortController = abortControllerFast_useAbortController.useAbortController;
 exports.toFuncWithAbortSignal = abortControllerFast_toFuncWithAbortSignal.toFuncWithAbortSignal;
+exports.abortSignalToPromise = abortControllerFast_abortSignalToPromise.abortSignalToPromise;
+exports.promiseToAbortSignal = abortControllerFast_abortSignalToPromise.promiseToAbortSignal;
 exports.isPromiseLike = isPromiseLike.isPromiseLike;
 exports.promiseAll = promise_helpers.promiseAll;
 exports.promiseAllSettled = promise_helpers.promiseAllSettled;
@@ -50,3 +59,7 @@ exports.createValueState = valueState_helpers.createValueState;
 exports.resolveValueStatesFunc = valueState_helpers.resolveValueStatesFunc;
 exports.toValueState = valueState_helpers.toValueState;
 exports.toValueStateError = valueState_helpers.toValueStateError;
+exports.Locker = time_Locker.Locker;
+exports.toThrottled = time_toThrottled.toThrottled;
+exports.waitMicrotasks = wait_waitMicrotasks.waitMicrotasks;
+exports.waitTimeControllerMock = wait_waitTimeControllerMock.waitTimeControllerMock;

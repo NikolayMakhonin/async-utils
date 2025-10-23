@@ -3,6 +3,7 @@ export { funcToAbortable } from './funcToAbortable.mjs';
 export { promiseToAbortable } from './promiseToAbortable.mjs';
 export { useAbortController } from './useAbortController.mjs';
 export { toFuncWithAbortSignal } from './toFuncWithAbortSignal.mjs';
+export { abortSignalToPromise, promiseToAbortSignal } from './abortSignalToPromise.mjs';
 import '@flemist/abort-controller-fast';
 import 'tslib';
 import '../custom-promise/CustomPromise.mjs';
