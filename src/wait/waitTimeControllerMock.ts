@@ -12,7 +12,6 @@ export type WaitTimeControllerMockOptions = {
    * - `null` - wait 1 macrotask per iteration
    */
   awaitsPerIteration?: null | number
-  dontThrow?: null | boolean
 }
 
 export async function waitTimeControllerMock<T = any>(
@@ -53,7 +52,7 @@ export async function waitTimeControllerMock<T = any>(
       }
     }
     else {
-      await waitMicrotasks(abortSignal, options)
+      await waitMicrotasks(abortSignal).catch(EMPTY_FUNC)
     }
     if (abortSignal?.aborted) {
       break
