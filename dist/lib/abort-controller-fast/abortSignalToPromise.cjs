@@ -4,13 +4,18 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var abortControllerFast = require('@flemist/abort-controller-fast');
 
-function abortSignalToPromise(abortSignal) {
+function abortSignalToPromise(abortSignal, options) {
     if (!abortSignal) {
         return;
     }
-    return new Promise((_, reject) => {
+    return new Promise((resolve, reject) => {
         abortSignal.subscribe(error => {
-            reject(error);
+            if (options === null || options === void 0 ? void 0 : options.dontThrow) {
+                resolve();
+            }
+            else {
+                reject(error);
+            }
         });
     });
 }

@@ -172,16 +172,16 @@ this._callbacks.add(t),()=>{var e
 ;this.aborted=!0,this.reason=t,null===(e=this._callbacks)||void 0===e||e.forEach(t=>{
 t.call(this,this.reason)}),this._callbacks=void 0}
 throwIfAborted(){if(this.aborted)throw this.reason
-}}class S{constructor(){this.signal=new P}
+}}class T{constructor(){this.signal=new P}
 abort(t){
 this.signal.aborted||(void 0===t&&((t=new k("Aborted with no reason",t))._internal=!0),
-this.signal.abort(t))}}function T(){
+this.signal.abort(t))}}function S(){
 for(var t,e,n=[],r=0;r<arguments.length;r++)n[r]=arguments[r]
 ;function o(e){t.abort(e)}
 for(var i=0;i<n.length;i++){var u=n[i];if(u){
 if(u.aborted)return u
-;e?(t||(t=new S,e.subscribe(o)),u.subscribe(o)):e=u
-}}return t?t.signal:e||(new S).signal}
+;e?(t||(t=new T,e.subscribe(o)),u.subscribe(o)):e=u
+}}return t?t.signal:e||(new T).signal}
 function A(t,e){return e?t.then(function(t){
 var n=e();return i(n)?n.then(function(){return t
 }):t},function(t){var n=e();if(!i(n))throw t
@@ -195,12 +195,13 @@ var o=t?t():void 0;return i(o)?o.then(r):r(o)}
 function M(t,e){return e?function(){try{
 var n=t.apply(this,arguments)
 ;return i(n)?A(n,e):(e(),n)}catch(t){throw e(),t}
-}:t}function x(t){
-if(t)return new Promise(function(e,n){
-t.subscribe(function(t){n(t)})})}function O(t){
-var e=new S;return t.then(function(){e.abort()
-},function(){e.abort()}),e.signal}
-var I=function(t){
+}:t}function x(t,e){
+if(t)return new Promise(function(n,r){
+t.subscribe(function(t){
+(null==e?void 0:e.dontThrow)?n():r(t)})})}
+function O(t){var e=new T
+;return t.then(function(){e.abort()},function(){
+e.abort()}),e.signal}var I=function(t){
 void 0===t&&(t={}),this.value=t.value,this.loading=t.loading||!1,
 this.hasValue=t.hasValue||!1,
 this.error=t.error,this.hasError=t.hasError||!1}
@@ -279,7 +280,7 @@ o.hasError=!1,o.loading=!1,o}),[3,6];case 5:
 return a=r.sent(),n(function(t){
 return(o=t||F()).error=a,o.hasError=!0,o.loading=!1,
 o}),[3,6];case 6:return[2,o]}})})
-},t.combineAbortSignals=T,t.createValueState=F,
+},t.combineAbortSignals=S,t.createValueState=F,
 t.delay=j,t.fixAsyncStackTrace=function(t){var e
 ;return n(this,void 0,void 0,function(){var n,o
 ;return r(this,function(r){switch(r.label){case 0:
@@ -338,7 +339,7 @@ return null==t||t.throwIfAborted(),e=l.now(),f=function(t){
 if(null==b)return null
 ;var e=null!=h?h:0,n=null==p?null:null==v?t+p:t+Math.max(0,p-(t-v))
 ;return null!=n&&(e=Math.min(e,n)),e
-}(e),null==f||f<=l.now()?[3,4]:(c=new S,n=T(c.signal,t),
+}(e),null==f||f<=l.now()?[3,4]:(c=new T,n=S(c.signal,t),
 [4,j(f-e,n,l).catch(U)]);case 3:
 return r.sent(),[3,2];case 4:
 if(null==f)return[3,10]
@@ -362,7 +363,7 @@ p=null!=i?i:null,[2,null!=_?_:m]):(null!=t&&(y=t),g(o,u),
 return F({value:t,hasValue:!0})
 },t.toValueStateError=function(t){return F({
 error:t,hasError:!0})
-},t.useAbortController=function(t){var e=new S
+},t.useAbortController=function(t){var e=new T
 ;return V(null,function(){return t(e.signal)
 },function(){e.abort()})
 },t.waitMicrotasks=L,t.waitTimeControllerMock=function(t,e,o){
@@ -377,7 +378,7 @@ return a<l?[4,Promise.resolve().then(U)]:[3,5]
 ;case 3:
 if(r.sent(),null==u?void 0:u.aborted)return[3,5]
 ;r.label=4;case 4:return a++,[3,2];case 5:
-return[3,8];case 6:return[4,L(u)];case 7:
+return[3,8];case 6:return[4,L(u).catch(U)];case 7:
 r.sent(),r.label=8;case 8:
 return(null==u?void 0:u.aborted)||null!=s&&t.now()>=s?[3,9]:null!=(c=t.nextQueuedTime)||n?((null==c||null!=s&&c>s)&&(c=s),
 null!=c&&t.setTime(c),[3,1]):[3,9];case 9:

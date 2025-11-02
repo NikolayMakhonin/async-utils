@@ -33,7 +33,7 @@ function waitTimeControllerMock(timeControllerMock, abortSignalOrPromise, option
                 }
             }
             else {
-                yield wait_waitMicrotasks.waitMicrotasks(abortSignal);
+                yield wait_waitMicrotasks.waitMicrotasks(abortSignal).catch(constants.EMPTY_FUNC);
             }
             if (abortSignal === null || abortSignal === void 0 ? void 0 : abortSignal.aborted) {
                 break;
