@@ -1,6 +1,7 @@
 import {isPromiseLike} from 'src/isPromiseLike'
 import {Reject, Resolve} from 'src/promise-fast/PromiseFast'
 import {PromiseConstructorBase} from 'src/promise/contracts'
+import {PromiseLikeOrValue, PromiseOrValue} from 'src/types'
 
 export function promiseAll<T>(
   values: readonly (T | PromiseLike<T>)[],
@@ -126,4 +127,27 @@ export function promiseRace<T>(
     }
   })
   return promise
+}
+
+export function promiseLikeToPromise<T>(
+  value: PromiseLike<T> | Promise<T>,
+): Promise<T>
+export function promiseLikeToPromise<T>(
+  value: PromiseLikeOrValue<T> | PromiseOrValue<T>,
+): PromiseOrValue<T>
+export function promiseLikeToPromise<T>(
+  value: T,
+): T
+export function promiseLikeToPromise<T>(
+  value: PromiseLikeOrValue<T> | PromiseOrValue<T>,
+): PromiseOrValue<T> {
+  if (value instanceof Promise) {
+    return value
+  }
+  if (isPromiseLike(value)) {
+    return new Promise((resolve, reject) => {
+      value.then(resolve, reject)
+    })
+  }
+  return value
 }
