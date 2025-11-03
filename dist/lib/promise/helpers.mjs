@@ -110,5 +110,16 @@ function promiseRace(values, PromiseClass) {
     });
     return promise;
 }
+function promiseLikeToPromise(value) {
+    if (value instanceof Promise) {
+        return value;
+    }
+    if (isPromiseLike(value)) {
+        return new Promise((resolve, reject) => {
+            value.then(resolve, reject);
+        });
+    }
+    return value;
+}
 
-export { promiseAll, promiseAllSettled, promiseAny, promiseRace };
+export { promiseAll, promiseAllSettled, promiseAny, promiseLikeToPromise, promiseRace };

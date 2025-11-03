@@ -8,7 +8,7 @@ export { useAbortController } from './abort-controller-fast/useAbortController.m
 export { toFuncWithAbortSignal } from './abort-controller-fast/toFuncWithAbortSignal.mjs';
 export { abortSignalToPromise, promiseToAbortSignal } from './abort-controller-fast/abortSignalToPromise.mjs';
 export { isPromiseLike } from './isPromiseLike.mjs';
-export { promiseAll, promiseAllSettled, promiseAny, promiseRace } from './promise/helpers.mjs';
+export { promiseAll, promiseAllSettled, promiseAny, promiseLikeToPromise, promiseRace } from './promise/helpers.mjs';
 export { promiseFinally } from './promise/promiseFinally.mjs';
 export { toFuncWithFinally } from './promise/toFuncWithFinally.mjs';
 export { fixAsyncStackTrace } from './promise/fixAsyncStackTrace.mjs';

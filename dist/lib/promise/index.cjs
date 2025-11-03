@@ -15,6 +15,7 @@ require('tslib');
 exports.promiseAll = promise_helpers.promiseAll;
 exports.promiseAllSettled = promise_helpers.promiseAllSettled;
 exports.promiseAny = promise_helpers.promiseAny;
+exports.promiseLikeToPromise = promise_helpers.promiseLikeToPromise;
 exports.promiseRace = promise_helpers.promiseRace;
 exports.promiseFinally = promise_promiseFinally.promiseFinally;
 exports.toFuncWithFinally = promise_toFuncWithFinally.toFuncWithFinally;
