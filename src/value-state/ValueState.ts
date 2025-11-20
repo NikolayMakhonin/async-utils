@@ -14,4 +14,8 @@ export class ValueState<TValue> implements IValueState<TValue> {
   hasValue?: boolean|null
   error?: any
   hasError?: boolean|null
+
+  get [Symbol.toStringTag]() {
+    return 'ValueState' as const
+  }
 }
