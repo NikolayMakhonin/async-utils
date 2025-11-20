@@ -6,6 +6,9 @@ class ValueState {
         this.error = props.error;
         this.hasError = props.hasError || false;
     }
+    get [Symbol.toStringTag]() {
+        return 'ValueState';
+    }
 }
 
 export { ValueState };
