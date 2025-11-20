@@ -133,13 +133,13 @@ configurable:!0}),e.all=function(t){return l(t,e)
 },e.any=function(t){return f(t,e)
 },e.race=function(t){return h(t,e)},e}()
 ;function m(e){return{then:function(t,n){n(e)}}}
-function y(e,t){e(m(t))}function w(e){
+function y(e,t){e(m(t))}function g(e){
 return Promise.resolve(m(e))}
-var g=function(){},_=function(){function e(e){
+var w=function(){},_=function(){function e(e){
 var t,n,r=this
 ;if(this._status="pending",e&&e.aborted)this.promise=p.reject(e.reason),
-this.resolve=g,
-this.reject=g;else if(this.promise=new Promise(function(e){
+this.resolve=w,
+this.reject=w;else if(this.promise=new Promise(function(e){
 t=e,n=function(t){y(e,t)}}),e){
 var o=e.subscribe(function(e){n(e)})
 ;this.resolve=function(e){o(),t(e)
@@ -172,16 +172,16 @@ this._callbacks.add(e),()=>{var t
 ;this.aborted=!0,this.reason=e,null===(t=this._callbacks)||void 0===t||t.forEach(e=>{
 e.call(this,this.reason)}),this._callbacks=void 0}
 throwIfAborted(){if(this.aborted)throw this.reason
-}}class T{constructor(){this.signal=new E}
+}}class S{constructor(){this.signal=new E}
 abort(e){
 this.signal.aborted||(void 0===e&&((e=new k("Aborted with no reason",e))._internal=!0),
-this.signal.abort(e))}}function S(){
+this.signal.abort(e))}}function T(){
 for(var e,t,n=[],r=0;r<arguments.length;r++)n[r]=arguments[r]
 ;function o(t){e.abort(t)}
 for(var i=0;i<n.length;i++){var u=n[i];if(u){
 if(u.aborted)return u
-;t?(e||(e=new T,t.subscribe(o)),u.subscribe(o)):t=u
-}}return e?e.signal:t||(new T).signal}
+;t?(e||(e=new S,t.subscribe(o)),u.subscribe(o)):t=u
+}}return e?e.signal:t||(new S).signal}
 function A(e,t){return t?e.then(function(e){
 var n=t();return i(n)?n.then(function(){return e
 }):e},function(e){var n=t();if(!i(n))throw e
@@ -199,13 +199,16 @@ var n=e.apply(this,arguments)
 if(e)return new Promise(function(n,r){
 e.subscribe(function(e){
 (null==t?void 0:t.dontThrow)?n():r(e)})})}
-function O(e){var t=new T
+function O(e){var t=new S
 ;return e.then(function(){t.abort()},function(){
-t.abort()}),t.signal}var I=function(e){
-void 0===e&&(e={}),this.value=e.value,this.loading=e.loading||!1,
-this.hasValue=e.hasValue||!1,
+t.abort()}),t.signal}var I=function(){
+function e(e){
+void 0===e&&(e={}),this.value=e.value,this.loading=e.loading||!1,this.hasValue=e.hasValue||!1,
 this.error=e.error,this.hasError=e.hasError||!1}
-;function F(e){return void 0===e&&(e={}),new I(e)}
+return Object.defineProperty(e.prototype,Symbol.toStringTag,{
+get:function(){return"ValueState"},enumerable:!1,
+configurable:!0}),e}();function F(e){
+return void 0===e&&(e={}),new I(e)}
 var C=function(){function e(){
 this._lockPromise=null}
 return e.prototype.lock=function(e){
@@ -280,7 +283,7 @@ o.hasError=!1,o.loading=!1,o}),[3,6];case 5:
 return a=r.sent(),n(function(e){
 return(o=e||F()).error=a,o.hasError=!0,o.loading=!1,
 o}),[3,6];case 6:return[2,o]}})})
-},e.combineAbortSignals=S,e.createValueState=F,
+},e.combineAbortSignals=T,e.createValueState=F,
 e.delay=j,e.fixAsyncStackTrace=function(e){var t
 ;return n(this,void 0,void 0,function(){var n,o
 ;return r(this,function(r){switch(r.label){case 0:
@@ -294,7 +297,7 @@ return n(this,void 0,void 0,function(){
 function n(e){o.reject(e)}var o,i
 ;return r(this,function(r){switch(r.label){case 0:
 if(!e)return[2,t()]
-;if(e.aborted)return[2,w(e.reason)]
+;if(e.aborted)return[2,g(e.reason)]
 ;o=new _,i=e.subscribe(n),r.label=1;case 1:
 return r.trys.push([1,,3,4]),[4,t(o.promise)]
 ;case 2:return[2,r.sent()];case 3:return i(),[7]
@@ -304,7 +307,7 @@ e.promiseFinally=A,
 e.promiseLikeToPromise=function(e){
 return e instanceof Promise?e:i(e)?new Promise(function(t,n){
 e.then(t,n)}):e
-},e.promiseRace=h,e.promiseRejected=w,e.promiseToAbortSignal=O,e.promiseToAbortable=function(e,t){
+},e.promiseRace=h,e.promiseRejected=g,e.promiseToAbortSignal=O,e.promiseToAbortable=function(e,t){
 return e?new Promise(function(n){var r,o
 ;e&&e.aborted?y(n,e.reason):(t.then(function(e){
 r&&r(),n(e)}).catch(i),e&&(r=e.subscribe(i)))
@@ -326,13 +329,13 @@ return e&&t?M(n,e.subscribe(t)):n
 var o=e.throttleTimeDefault,i=e.throttleTimeMax,u=e.func,s=e.skipFirst,a=e.abortSignal,l=e.timeController
 ;null==l&&(l=t)
 ;var c=null,f=null,h=null,v=null,d=!0,b=null,p=null,m=null,y=null
-;function w(){var e=l.now(),t=e+b
+;function g(){var e=l.now(),t=e+b
 ;null==v&&(v=e),null!=p&&(t=Math.min(t,v+p)),h=t,
 null!=f&&h<=f&&(c.abort(),c=null,f=null)}
-function g(e,t){!function(e,t){
+function w(e,t){!function(e,t){
 var n,r=null!==(n=null!=e?e:o)&&void 0!==n?n:0
 ;b=null==b?r:Math.min(b,r),p=null==t?null!=i?i:null:!1===t?null:t
-}(e,t),w()}var _=null;function k(e){
+}(e,t),g()}var _=null;function k(e){
 return n(this,void 0,void 0,function(){var t,n,o
 ;return r(this,function(r){switch(r.label){case 0:
 r.trys.push([0,,11,12]),r.label=1;case 1:r.label=2
@@ -341,17 +344,17 @@ return null==e||e.throwIfAborted(),t=l.now(),f=function(e){
 if(null==b)return null
 ;var t=null!=h?h:0,n=null==p?null:null==v?e+p:e+Math.max(0,p-(e-v))
 ;return null!=n&&(t=Math.min(t,n)),t
-}(t),null==f||f<=l.now()?[3,4]:(c=new T,n=S(c.signal,e),
+}(t),null==f||f<=l.now()?[3,4]:(c=new S,n=T(c.signal,e),
 [4,j(f-t,n,l).catch(U)]);case 3:
 return r.sent(),[3,2];case 4:
 if(null==f)return[3,10]
-;if(f=null,b=null,h=null,d&&(d=!1,s))return v=l.now(),w(),
+;if(f=null,b=null,h=null,d&&(d=!1,s))return v=l.now(),g(),
 [3,1];r.label=5;case 5:
 return r.trys.push([5,7,8,9]),[4,u(m,{
 abortSignal:e})];case 6:return y=r.sent(),[3,9]
 ;case 7:
 throw o=r.sent(),void 0===P&&console.error("[toThrottled]",o),o
-;case 8:return v=l.now(),w(),[7];case 9:
+;case 8:return v=l.now(),g(),[7];case 9:
 return[3,1];case 10:return[3,12];case 11:
 return _=null,[7];case 12:return[2,y]}})})}
 function P(e){return _||(_=k(e)),_}
@@ -360,12 +363,12 @@ return n(this,void 0,void 0,function(){var n,o,u
 ;return r(this,function(r){
 return o=(n=null!=t?t:{}).throttleTime,u=n.throttleTimeMax,
 !1===e||!1===o?(b=null,
-p=null!=i?i:null,[2,null!=_?_:y]):(null!=e&&(m=e),g(o,u),
+p=null!=i?i:null,[2,null!=_?_:y]):(null!=e&&(m=e),w(o,u),
 [2,P(a)])})})}},e.toValueState=function(e){
 return F({value:e,hasValue:!0})
 },e.toValueStateError=function(e){return F({
 error:e,hasError:!0})
-},e.useAbortController=function(e){var t=new T
+},e.useAbortController=function(e){var t=new S
 ;return V(null,function(){return e(t.signal)
 },function(){t.abort()})
 },e.waitMicrotasks=q,e.waitTimeControllerMock=function(e,t,o){
