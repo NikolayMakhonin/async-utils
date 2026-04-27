@@ -2,9 +2,19 @@ import {type IAbortSignalFast, type IUnsubscribe} from '@flemist/abort-controlle
 import {type ITimeController, timeControllerDefault} from '@flemist/time-controller'
 import {rejectAsResolve} from 'src/custom-promise'
 
-export function delay(milliseconds: number, abortSignal?: IAbortSignalFast, timeController?: ITimeController) {
+export function delay(
+  milliseconds: number | null | undefined,
+  abortSignal?: null | IAbortSignalFast,
+  timeController?: null | ITimeController,
+) {
+  if (milliseconds == null) {
+    return Promise.resolve()
+  }
   if (!Number.isFinite(milliseconds)) {
     throw new TypeError('milliseconds must be a finite number: ' + milliseconds)
+  }
+  if (milliseconds <= 0) {
+    return Promise.resolve()
   }
   return new Promise<void>(function executor(resolve) {
     if (abortSignal && abortSignal.aborted) {

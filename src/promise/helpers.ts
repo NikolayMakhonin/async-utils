@@ -5,7 +5,7 @@ import {PromiseLikeOrValue, PromiseOrValue} from 'src/types'
 
 export function promiseAll<T>(
   values: readonly (T | PromiseLike<T>)[],
-  PromiseClass?: PromiseConstructorBase,
+  PromiseClass?: null | PromiseConstructorBase,
 ): Promise<T[]> {
   if (!PromiseClass) {
     PromiseClass = Promise
@@ -39,7 +39,7 @@ export function promiseAll<T>(
 
 export function promiseAllSettled<T>(
   values: readonly (T | PromiseLike<T>)[],
-  PromiseClass?: PromiseConstructorBase,
+  PromiseClass?: null | PromiseConstructorBase,
 ): Promise<PromiseSettledResult<T>[]> {
   if (!PromiseClass) {
     PromiseClass = Promise
@@ -76,7 +76,7 @@ export function promiseAllSettled<T>(
 
 export function promiseAny<T>(
   values: readonly (T | PromiseLike<T>)[],
-  PromiseClass?: PromiseConstructorBase,
+  PromiseClass?: null | PromiseConstructorBase,
 ): Promise<T> {
   if (!PromiseClass) {
     PromiseClass = Promise
@@ -107,7 +107,7 @@ export function promiseAny<T>(
 
 export function promiseRace<T>(
   values: readonly (T | PromiseLike<T>)[],
-  PromiseClass?: PromiseConstructorBase,
+  PromiseClass?: null | PromiseConstructorBase,
 ): Promise<T> {
   if (!PromiseClass) {
     PromiseClass = Promise

@@ -35,7 +35,7 @@ export type ToThrottledArgs<Args, Result> = {
       abortSignal?: null | IAbortSignalFast
     },
   ) => PromiseOrValue<Result>
-  skipFirst?: boolean
+  skipFirst?: null | boolean
   abortSignal?: null | IAbortSignalFast
   timeController?: null | ITimeController
 }

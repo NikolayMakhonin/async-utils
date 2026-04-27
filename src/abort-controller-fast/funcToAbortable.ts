@@ -3,7 +3,7 @@ import {CustomPromise, promiseRejected} from 'src/custom-promise'
 
 export async function funcToAbortable<T>(
   abortSignal: IAbortSignalFast|null|undefined,
-  func: (abortPromise?: Promise<any>) => Promise<T>|T,
+  func: (abortPromise?: null | Promise<any>) => Promise<T>|T,
 ): Promise<T> {
   if (!abortSignal) {
     return func()

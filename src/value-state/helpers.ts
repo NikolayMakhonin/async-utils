@@ -80,7 +80,7 @@ export function resolveValueStatesFunc<TValues extends ValueState<any>[], TResul
 
 export async function asyncToValueState<TValue>(
   valueAsync: AsyncOrValue<TValue>,
-  stateOrUpdater?: ValueState<TValue>
+  stateOrUpdater?: null | ValueState<TValue>
     | Updater<ValueState<TValue>>,
 ): Promise<ValueState<TValue>> {
   const updater: Updater<ValueState<TValue>> = typeof stateOrUpdater === 'function'

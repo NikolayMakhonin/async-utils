@@ -2,11 +2,12 @@
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
-    },
+    }
   },
   "include": [
     "@types/**/*",
-    "src/**/*"
+    "src/**/*",
+    "tools/**/*"
   ],
   "exclude": [
     "node_modules/**/*",
@@ -24,7 +25,6 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "newLine": "LF",
-    "strictNullChecks": true,
     "importsNotUsedAsValues": "remove",
     "preserveValueImports": false,
     "typeRoots": [

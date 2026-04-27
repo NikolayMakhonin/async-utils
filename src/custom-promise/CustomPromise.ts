@@ -15,7 +15,7 @@ export class CustomPromise<TResult = void> {
     return this._status
   }
 
-  constructor(abortSignal?: IAbortSignalFast) {
+  constructor(abortSignal?: null | IAbortSignalFast) {
     if (abortSignal && abortSignal.aborted) {
       this.promise = PromiseFast.reject(abortSignal.reason)
       this.resolve = emptyFunc

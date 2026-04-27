@@ -76,7 +76,7 @@ describe('toThrottled', () => {
         timeStamps.push(timeController.now() - startTime)
       }
 
-      const throttleFunc = toThrottled({
+      const throttleFunc = toThrottled<any>({
         throttleTimeDefault,
         throttleTimeMax,
         func,
